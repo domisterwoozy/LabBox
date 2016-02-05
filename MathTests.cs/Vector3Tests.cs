@@ -102,7 +102,8 @@ namespace MathTests
                 yield return new ValueType[] { Vector3.I, Vector3.Zero, 0 };
                 yield return new ValueType[] { Vector3.I, Vector3.J, 0 };
                 yield return new ValueType[] { Vector3.I, Vector3.I, 1 };
-                yield return new ValueType[] { new Vector3(-0.5, 2.0, 1.0), new Vector3(5.0, 1.0, 0.5), -2.5 + 2 + 0.5 };
+                yield return new ValueType[] { new Vector3(-0.5, 2.0, 1.0), new Vector3(5.0, 1.0, 0.5), 0 };
+                yield return new ValueType[] { new Vector3(-0.5, 2.0, 1.0), new Vector3(5.0, 1.0, 0), -0.5 };
             }
         }
         #endregion
