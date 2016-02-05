@@ -53,11 +53,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Math3D\Math3D\Math3D.csproj">
+    <ProjectReference Include="..\Math3D\Math3D.csproj">
       <Project>{f0ff2bbc-425a-4deb-ab0d-590b54e02ef3}</Project>
       <Name>Math3D</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LabBoxEngine\Physics3D.csproj">
+    <ProjectReference Include="..\Physics3D\Physics3D.csproj">
       <Project>{ef091e27-1adc-438b-afe8-1b1bd11c43e1}</Project>
       <Name>Physics3D</Name>
     </ProjectReference>
