@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Physics3D", "LabBoxEngine\Physics3D.csproj", "{EF091E27-1ADC-438B-AFE8-1B1BD11C43E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Math3D", "..\Math3D\Math3D\Math3D.csproj", "{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicsIntegrationTests", "PhysicsIntegrationTests\PhysicsIntegrationTests.csproj", "{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathTests", "MathTests.cs\MathTests.csproj", "{9ED2F325-69A1-4150-A7DE-E9A992A528DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF091E27-1ADC-438B-AFE8-1B1BD11C43E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF091E27-1ADC-438B-AFE8-1B1BD11C43E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF091E27-1ADC-438B-AFE8-1B1BD11C43E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF091E27-1ADC-438B-AFE8-1B1BD11C43E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ED2F325-69A1-4150-A7DE-E9A992A528DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED2F325-69A1-4150-A7DE-E9A992A528DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED2F325-69A1-4150-A7DE-E9A992A528DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED2F325-69A1-4150-A7DE-E9A992A528DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
