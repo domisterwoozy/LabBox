@@ -85,8 +85,7 @@ namespace Physics3D
 
         // updated every frame
         public Vector3 L { get; private set; }     
-        public Vector3 P { get; private set; }
-        
+        public Vector3 P { get; private set; }        
 
         public RigidBody6DOF(IKinematics initialState, double mass, Matrix3 inertiaBody)
         {

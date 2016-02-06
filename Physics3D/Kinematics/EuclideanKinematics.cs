@@ -9,7 +9,8 @@ using Math3D;
 namespace Physics3D
 {
     /// <summary>
-    /// Might want to change to a struct after performance testing.
+    /// Represents the instantaneous state of a euclidean body.
+    /// Todo: Might want to change to a struct after performance testing.
     /// </summary>
     public class EuclideanKinematics : IKinematics
     {
