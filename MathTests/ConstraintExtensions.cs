@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace MathTests
 {
+    /// <summary>
+    /// Entry point to use the custom constraints. Wouldn't it be nice if we could implement static extension methods?
+    /// For now we will use 'Iz'.
+    /// </summary>
     public class Iz : Is
     {
         public static VectorEqualConstraint EqualTo(Vector3 expected)

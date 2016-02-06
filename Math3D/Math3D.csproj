@@ -44,6 +44,9 @@
     <Compile Include="CoordinateSystems\SphericalCoords.cs" />
     <Compile Include="Interfaces\ICoordinateSystem.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="VectorCalc\ClampedScalarField.cs" />
+    <Compile Include="VectorCalc\ClampedVectorField.cs" />
+    <Compile Include="VectorCalc\ConservativeVectorField.cs" />
     <Compile Include="VectorCalc\AbstractManifold.cs" />
     <Compile Include="VectorCalc\AbstractScalarField.cs" />
     <Compile Include="VectorCalc\AbstractVectorField.cs" />
@@ -60,13 +63,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorCalc\ProductScalarField.cs" />
     <Compile Include="VectorCalc\ProductVectorField.cs" />
+    <Compile Include="VectorCalc\ScalarFieldExtensions.cs" />
     <Compile Include="VectorCalc\ScalarFieldManifold.cs" />
     <Compile Include="VectorCalc\SphericalScalarField.cs" />
     <Compile Include="VectorCalc\SphericalVectorField.cs" />
     <Compile Include="VectorCalc\SumScalarField.cs" />
     <Compile Include="VectorCalc\SumVectorField.cs" />
-    <Compile Include="VectorCalc\TranslateableScalarField.cs" />
-    <Compile Include="VectorCalc\TranslateableVectorField.cs" />
+    <Compile Include="VectorCalc\TranslatedScalarField.cs" />
+    <Compile Include="VectorCalc\TranslatedVectorField.cs" />
     <Compile Include="VectorCalc\ZeroVectorField.cs" />
   </ItemGroup>
   <ItemGroup />

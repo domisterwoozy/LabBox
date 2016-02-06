@@ -26,17 +26,17 @@ namespace Math3D.Interfaces
         IVectorField ToVectorField();
 
         /// <summary>
-        /// Generates a manifold from this scalar field at a certain potential.
-        /// This is an equipotential surface of this scalar field.
-        /// </summary>
-        IManifold ToManifold(double potential);
-
-        /// <summary>
         /// Traverses a path of steepest ascent/descent until the desired potential is reached.
         /// </summary>
         /// <param name="pos">Starting point</param>
         /// <param name="desiredPotential">The field value you want to reach</param>
         /// <returns>The position the traversal ends at</returns>
         Vector3 GradientTraversal(Vector3 pos, double desiredPotential, double tolerance);
+
+        /// <summary>
+        /// Generates a manifold from this scalar field at a certain potential.
+        /// This is an equipotential surface of this scalar field.
+        /// </summary>
+        IManifold ToManifold(double potential);
     }
 }

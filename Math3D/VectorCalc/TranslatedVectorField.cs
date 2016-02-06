@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace Math3D.VectorCalc
 {
     /// <summary>
-    /// A mutable wrapper that allows you to move a vector field in 3D space.
+    /// A wrapper that allows you to move a vector field in 3D space.
     /// </summary>
-    public class TranslateableVectorField : AbstractVectorField
+    public class TranslatedVectorField : AbstractVectorField
     {
         /// <summary>
         /// The underlying vector field to move around.
@@ -20,11 +20,12 @@ namespace Math3D.VectorCalc
         /// <summary>
         /// The position in 3D space of the underlying vector field.
         /// </summary>
-        public Vector3 Position { get; set; }
+        public Vector3 Position { get; }
 
-        public TranslateableVectorField(IVectorField underlyingVectField)
+        public TranslatedVectorField(IVectorField underlyingVectField, Vector3 translation)
         {
             UnderlyingVectorField = underlyingVectField;
+            Position = translation;
         }
 
         public override Vector3 Curl(Vector3 pos) => UnderlyingVectorField.Curl(pos - Position);

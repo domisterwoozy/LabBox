@@ -56,8 +56,8 @@ namespace Physics3DTest
             );
 
             var grav = Potentials.InverseSquare(gravConstant * massOne * massTwo); // same underlying potential
-            var gravOne = new TranslateableScalarField(grav, () => bodyOne.Transform.Pos);
-            var gravTwo = new TranslateableScalarField(grav, () => bodyTwo.Transform.Pos);
+            var gravOne = new TranslatedScalarField(grav, () => bodyOne.Transform.Pos);
+            var gravTwo = new TranslatedScalarField(grav, () => bodyTwo.Transform.Pos);
 
             return new BasicUniverse
             {
