@@ -42,6 +42,10 @@
   <ItemGroup>
     <Compile Include="CoordinateSystems\CartesianCoords.cs" />
     <Compile Include="CoordinateSystems\SphericalCoords.cs" />
+    <Compile Include="Geometry\CollisionInterface.cs" />
+    <Compile Include="Geometry\IPrimitive.cs" />
+    <Compile Include="Geometry\Edge.cs" />
+    <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Interfaces\ICoordinateSystem.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="VectorCalc\ClampedScalarField.cs" />

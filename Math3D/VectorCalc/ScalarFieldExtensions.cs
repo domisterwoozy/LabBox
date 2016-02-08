@@ -9,18 +9,21 @@ namespace Math3D.VectorCalc
 {
     public static class ScalarFieldExtensions
     {
-        private const double dummyExponent = 10; // when the coefficient is zero the exponent does not matter but still needs to exist and cannot be zero or one
+        // when the coefficient is zero the exponent does not matter but still needs to exist and cannot be zero or one
+        private const double dummyExponent = 10; 
 
         /// <summary>
         /// A scalar field that varies solely with the distance from the origin.
         /// The value of the field is strength*radius^power.
         /// </summary>
-        public static IScalarField SphericalField(double strength, double power) => new SphericalScalarField(Tuple.Create(strength, 0.0, 0.0), Tuple.Create(power, dummyExponent, dummyExponent));
+        public static IScalarField SphericalField(double strength, double power) => 
+            new SphericalScalarField(Tuple.Create(strength, 0.0, 0.0), Tuple.Create(power, dummyExponent, dummyExponent));
 
         /// <summary>
         /// Returns a new scalar field only active inside a specified radius of influence.
         /// </summary>
-        public static IScalarField Within(this IScalarField f, double radOfInf) => new ClampedScalarField(f, pos => pos.MagSquared <= radOfInf * radOfInf);
+        public static IScalarField Within(this IScalarField f, double radOfInf) =>
+            new ClampedScalarField(f, pos => pos.MagSquared <= radOfInf * radOfInf);
 
         /// <summary>
         /// Adds this scalar field to another.

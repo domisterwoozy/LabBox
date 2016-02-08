@@ -44,7 +44,8 @@ namespace Math3D.CoordinateSystems
             );
         }              
 
-        public Vector3 SecondUnitVector(Coords3D<SphericalCoords> coords) =>new Vector3(-Math.Sin(coords.SecondComponent), Math.Cos(coords.SecondComponent), 0);       
+        public Vector3 SecondUnitVector(Coords3D<SphericalCoords> coords) => 
+            new Vector3(-Math.Sin(coords.SecondComponent), Math.Cos(coords.SecondComponent), 0);       
 
         public Vector3 ThirdUnitVector(Coords3D<SphericalCoords> coords)
         {
