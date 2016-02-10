@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Math3D.Geometry
 {
-    public interface IVolume
+    public interface IVolume : IIntersectable<IVolume>
     {
-
+        IEnumerable<Edge> Edges { get; }
+        IEnumerable<IPrimitive> Primitives { get; }
     }
 }

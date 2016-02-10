@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClampFuncTests.cs" />
     <Compile Include="ConstraintExtensions.cs" />
     <Compile Include="Matrix3Tests.cs" />
     <Compile Include="Program.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="RandomVector3Attribute.cs" />
     <Compile Include="ScalarFieldTests.cs" />
     <Compile Include="TransformTests.cs" />
+    <Compile Include="TriangleTests.cs" />
     <Compile Include="Vector3Tests.cs" />
     <Compile Include="Vector3TestsOld.cs" />
   </ItemGroup>

@@ -1,11 +1,6 @@
 ﻿using Math3D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Physics3D.Interfaces
+namespace Physics3D.Kinematics
 {
     /// <summary>
     /// An interface that represents how a transform changes over time. This describes the "geometry of motion".

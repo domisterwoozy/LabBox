@@ -1,15 +1,9 @@
-﻿using Math3D.Interfaces;
-using Math3D.VectorCalc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Math3D.VectorCalc;
 
 namespace Physics3D
 {
     public static class Potentials
     {
-        public static IScalarField InverseSquare(double strength) => ScalarFieldExtensions.SphericalField(-strength, -1);      
+        public static IScalarField InverseSquare(double strength) => FieldExtensions.SphericalField(-strength, -1);      
     }
 }

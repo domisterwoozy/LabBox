@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Math3D
 {
     /// <summary>
     /// An immutable 3 dimensional cartesian vector.
+    /// The default value of the struct is equal to Vector3.Zero;
     /// </summary>
     public struct Vector3
     {
         /// <summary>
         /// The zero vector. All elements are zero.
         /// </summary>
-        public static readonly Vector3 Zero = new Vector3(0, 0, 0);
+        public static readonly Vector3 Zero = default(Vector3);
 
         /// <summary>
         /// Unit vector in the positive x direction.

@@ -1,13 +1,8 @@
-﻿using Math3D.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Math3D.VectorCalc
 {
-    public static class ScalarFieldExtensions
+    public static class FieldExtensions
     {
         // when the coefficient is zero the exponent does not matter but still needs to exist and cannot be zero or one
         private const double dummyExponent = 10; 
@@ -22,8 +17,7 @@ namespace Math3D.VectorCalc
         /// <summary>
         /// Returns a new scalar field only active inside a specified radius of influence.
         /// </summary>
-        public static IScalarField Within(this IScalarField f, double radOfInf) =>
-            new ClampedScalarField(f, pos => pos.MagSquared <= radOfInf * radOfInf);
+        public static IScalarField Clamp(this IScalarField f, Func<Vector3, bool> clampFunction) => new ClampedScalarField(f, clampFunction);
 
         /// <summary>
         /// Adds this scalar field to another.

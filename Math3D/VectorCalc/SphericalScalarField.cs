@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Math3D.Interfaces;
 using Math3D.CoordinateSystems;
 
 namespace Math3D.VectorCalc

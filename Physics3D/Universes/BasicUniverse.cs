@@ -1,13 +1,9 @@
-﻿using Physics3D.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Math3D.Interfaces;
+﻿using System.Collections.Generic;
 using Math3D;
+using Math3D.VectorCalc;
+using Physics3D.Dynamics;
 
-namespace Physics3D
+namespace Physics3D.Universes
 {
     public class BasicUniverse : IUniverse
     {

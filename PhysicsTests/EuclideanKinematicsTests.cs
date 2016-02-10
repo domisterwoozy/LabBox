@@ -2,11 +2,8 @@
 using MathTests;
 using NUnit.Framework;
 using Physics3D;
+using Physics3D.Kinematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhysicsTests
 {

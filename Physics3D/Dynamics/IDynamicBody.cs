@@ -1,13 +1,10 @@
 ﻿using Math3D;
-using Math3D.Interfaces;
-using System;
+using Math3D.Geometry;
+using Physics3D.Kinematics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Physics3D.Interfaces
-{   
+namespace Physics3D.Dynamics
+{
     /// <summary>
     /// An interface for interacting with a kinematic body. Allows a client to enact external
     /// forces onto a kinematic body and encapsulates the state changes that occur from these forces.

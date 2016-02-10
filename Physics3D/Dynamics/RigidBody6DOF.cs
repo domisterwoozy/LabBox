@@ -1,14 +1,12 @@
-﻿using Physics3D.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Math3D;
-using Math3D.Interfaces;
 using System.Diagnostics;
+using Math3D.Geometry;
+using Physics3D.Kinematics;
 
-namespace Physics3D
+namespace Physics3D.Dynamics
 {
     public class RigidBody6DOF : IDynamicBody
     {

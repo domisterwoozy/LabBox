@@ -1,12 +1,7 @@
 ﻿using Math3D;
-using Physics3D.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Physics3D.Kinematics;
 
-namespace Physics3D
+namespace Physics3D.Kinematics
 {
     public class EuclideanKinematicBody : IKinematicBody
     {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Math3D.Interfaces;
-
-namespace Math3D.VectorCalc
+﻿namespace Math3D.VectorCalc
 {
     /// <summary>
     /// A wrapper that allows you to move a scalar field in the world.

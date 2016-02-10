@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Math3D.Geometry;
 
-namespace Math3D.Interfaces
+namespace Math3D.VectorCalc
 {
     public interface IScalarField
     {

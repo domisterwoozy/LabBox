@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Math3D.Interfaces
+﻿namespace Math3D.CoordinateSystems
 {
     /// <summary>
     /// An arbitrary container for coordinates in 3 dimensions.
