@@ -1,6 +1,9 @@
 ﻿namespace Math3D.VectorCalc
 {
-    public abstract class ConservativeVectorField : IVectorField
+    /// <summary>
+    /// A curl free vector field. Also called 'conservative' or 'irrotational'.
+    /// </summary>
+    public abstract class IrrotationalVectorField : IVectorField
     {
         /// <summary>
         /// The curl of a conservative vector field is always zero no matter the input.

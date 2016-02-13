@@ -4,7 +4,7 @@ namespace Math3D
 {
     /// <summary>
     /// An immutable 3 dimensional cartesian vector.
-    /// The default value of the struct is equal to Vector3.Zero;
+    /// The default value of the struct is equal to Vector3.Zero
     /// </summary>
     public struct Vector3
     {

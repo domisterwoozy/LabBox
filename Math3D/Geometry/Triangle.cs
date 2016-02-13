@@ -49,19 +49,19 @@ namespace Math3D.Geometry
             C = c;
         }        
 
-        public IEnumerable<CollisionInterface> IntersectEdge(Edge e)
+        public IEnumerable<Intersection> IntersectEdge(Edge e)
         {
             // points of edge reffered to as p and q
             Vector3 p = e.A;
             Vector3 q = e.B;
             Vector3 pq = q - p;
             double d = pq * N; // abs(d) is dist b/w p and q perp to triangle plane
-            if (d == 0) return Enumerable.Empty<CollisionInterface>(); // pq is paralell to the plane
+            if (d == 0) return Enumerable.Empty<Intersection>(); // pq is paralell to the plane
 
             Vector3 pa = A - p;
             double t = pa * N; // perp dist from triangle plane to p
-            if (t * d < 0) return Enumerable.Empty<CollisionInterface>(); // q is further from the plane than p is
-            if (Math.Abs(t) > Math.Abs(d)) return Enumerable.Empty<CollisionInterface>(); // pq does not intersect the plane
+            if (t * d < 0) return Enumerable.Empty<Intersection>(); // q is further from the plane than p is
+            if (Math.Abs(t) > Math.Abs(d)) return Enumerable.Empty<Intersection>(); // pq does not intersect the plane
 
             // at this point we know the edge intersects the plane that the triangle is in
             // but we don't know if it intersects the actual triangle
@@ -70,17 +70,17 @@ namespace Math3D.Geometry
 
             Vector3 ra = A - r;
             double rab = ra * ABN; // dist b/w intersection and segment ab
-            if (rab < 0) return Enumerable.Empty<CollisionInterface>(); // outside of segment ab
+            if (rab < 0) return Enumerable.Empty<Intersection>(); // outside of segment ab
 
             Vector3 rb = B - r;
             double rbc = rb * BCN;
-            if (rbc < 0) return Enumerable.Empty<CollisionInterface>(); // outside of segment bc
+            if (rbc < 0) return Enumerable.Empty<Intersection>(); // outside of segment bc
 
             Vector3 rc = C - r;
             double rac = rc * ACN;
-            if (rac < 0) return Enumerable.Empty<CollisionInterface>(); // outside of ac
+            if (rac < 0) return Enumerable.Empty<Intersection>(); // outside of ac
 
-            return new[] { new CollisionInterface(r, N) };
+            return new[] { new Intersection(r, N) };
         }
     }
 }

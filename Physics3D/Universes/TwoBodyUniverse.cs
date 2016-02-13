@@ -9,7 +9,7 @@ namespace Physics3D.Universes
     /// <summary>
     /// A universe that simulates the two-body central-force problem.
     /// </summary>
-    public class TwoBodyUniverse : IUniverse
+    public class TwoBodyUniverse// : IUniverse
     {
         public double GravitationalConstant { get; private set; } = 6.67408 * Math.Pow(10, -11);
         public IDynamicBody BodyOne { get; }

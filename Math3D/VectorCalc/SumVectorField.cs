@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the sum of two vector fields.
     /// </summary>
-    public class SumVectorField : AbstractVectorField
+    public class SumVectorField : IVectorField
     {
         /// <summary>
         /// The first vector field to sum.
@@ -20,10 +20,10 @@
             B = b;
         }
 
-        public override Vector3 Value(Vector3 pos) => A.Value(pos) + B.Value(pos);
+        public Vector3 Value(Vector3 pos) => A.Value(pos) + B.Value(pos);
 
-        public override Vector3 Curl(Vector3 pos) => A.Curl(pos) + B.Curl(pos);
+        public Vector3 Curl(Vector3 pos) => A.Curl(pos) + B.Curl(pos);
 
-        public override double Divergence(Vector3 pos) => A.Divergence(pos) + B.Divergence(pos); 
+        public double Divergence(Vector3 pos) => A.Divergence(pos) + B.Divergence(pos); 
     }
 }

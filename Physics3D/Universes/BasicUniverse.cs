@@ -2,28 +2,31 @@
 using Math3D;
 using Math3D.VectorCalc;
 using Physics3D.Dynamics;
+using Util;
+using System.Linq;
+using Physics3D.Forces;
 
 namespace Physics3D.Universes
 {
     public class BasicUniverse : IUniverse
     {
-        public ICollection<IDynamicBody> DynamicBodies { get; } = new List<IDynamicBody>();
-        public ICollection<IVectorField> ForceFields { get; } = new List<IVectorField>();
-        public ICollection<IScalarField> Potentials { get; } = new List<IScalarField>();
+        public ICollection<IBody> DynamicBodies { get; } = new List<IBody>();
+        public ICollection<ForceField> ForceFields { get; } = new List<ForceField>();
+        public ICollection<Generator<IVectorField>> BasicForces { get; } = new List<Generator<IVectorField>>();
 
         public void Update(double deltaTime)
         {
             // enact all the single frame forces on the bodies
-            foreach (IDynamicBody body in DynamicBodies)
+            foreach (IBody body in DynamicBodies)
             {
-                foreach (IVectorField field in ForceFields)
+                foreach (ForceField field in ForceFields)
                 {
-                    body.ThrustSingleFrame(field.Value(body.Kinematics.Transform.Pos),
+                    body.Dynamics.ThrustSingleFrame(field.GetForceOnBody(body),
                         Vector3.Zero); // possible non conservative torque component of vector fields are ignored
                 }
-                foreach (IScalarField potential in Potentials)
+                foreach (IVectorField force in BasicForces.Select(fb => fb()))
                 {
-                    body.ThrustSingleFrame(potential.ToVectorField().Value(body.Kinematics.Transform.Pos), Vector3.Zero);
+                    body.Dynamics.ThrustSingleFrame(force.Value(body.Dynamics.Transform.Pos), Vector3.Zero);
                 }                
             }
 

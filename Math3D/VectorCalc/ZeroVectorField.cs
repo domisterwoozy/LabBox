@@ -3,7 +3,7 @@
     /// <summary>
     /// A vector field that is the Zero Vector at all points.
     /// </summary>
-    public class ZeroVectorField : ConservativeVectorField
+    public class ZeroVectorField : IrrotationalVectorField
     {
         public static ZeroVectorField Instance { get { return instance; } }
         private static ZeroVectorField instance = new ZeroVectorField();

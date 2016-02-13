@@ -2,21 +2,21 @@
 
 namespace Math3D.VectorCalc
 {
-    public class ProductVectorField : AbstractVectorField
+    public class ProductVectorField : IVectorField
     {
-        public override Vector3 Curl(Vector3 pos)
+        public double Multiplier { get; }
+        public IVectorField UnderlyingVectorField { get; }
+
+        public ProductVectorField(double multiplier, IVectorField vectorField)
         {
-            throw new NotImplementedException();
+            Multiplier = multiplier;
+            UnderlyingVectorField = vectorField;
         }
 
-        public override double Divergence(Vector3 pos)
-        {
-            throw new NotImplementedException();
-        }
+        public Vector3 Curl(Vector3 pos) => Multiplier * UnderlyingVectorField.Curl(pos);
 
-        public override Vector3 Value(Vector3 pos)
-        {
-            throw new NotImplementedException();
-        }
+        public double Divergence(Vector3 pos) => Multiplier * UnderlyingVectorField.Divergence(pos);
+
+        public Vector3 Value(Vector3 pos) => Multiplier * UnderlyingVectorField.Value(pos);
     }
 }

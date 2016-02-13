@@ -43,7 +43,7 @@
     <Compile Include="CoordinateSystems\CartesianCoords.cs" />
     <Compile Include="CoordinateSystems\SphericalCoords.cs" />
     <Compile Include="Geometry\ClampFunctions.cs" />
-    <Compile Include="Geometry\CollisionInterface.cs" />
+    <Compile Include="Geometry\Intersection.cs" />
     <Compile Include="Geometry\IIntersectable.cs" />
     <Compile Include="Geometry\IPrimitive.cs" />
     <Compile Include="Geometry\Edge.cs" />
@@ -53,14 +53,14 @@
     <Compile Include="Transform.cs" />
     <Compile Include="VectorCalc\ClampedScalarField.cs" />
     <Compile Include="VectorCalc\ClampedVectorField.cs" />
-    <Compile Include="VectorCalc\ConservativeVectorField.cs" />
+    <Compile Include="VectorCalc\IrrotationalVectorField.cs" />
     <Compile Include="Geometry\AbstractManifold.cs" />
     <Compile Include="VectorCalc\AbstractScalarField.cs" />
-    <Compile Include="VectorCalc\AbstractVectorField.cs" />
     <Compile Include="VectorCalc\CartesianScalarField.cs" />
     <Compile Include="VectorCalc\CartesianVectorField.cs" />
     <Compile Include="VectorCalc\CentralInverseSquareVectorField.cs" />
     <Compile Include="Geometry\IManifold.cs" />
+    <Compile Include="VectorCalc\ConstantVectorField.cs" />
     <Compile Include="VectorCalc\IScalarField.cs" />
     <Compile Include="VectorCalc\IVectorField.cs" />
     <Compile Include="MathConstants.cs" />
@@ -72,6 +72,8 @@
     <Compile Include="VectorCalc\ProductVectorField.cs" />
     <Compile Include="VectorCalc\FieldExtensions.cs" />
     <Compile Include="VectorCalc\ScalarFieldManifold.cs" />
+    <Compile Include="VectorCalc\SimpleVectorField.cs" />
+    <Compile Include="VectorCalc\SolenoidalVectorField.cs" />
     <Compile Include="VectorCalc\SphericalScalarField.cs" />
     <Compile Include="VectorCalc\SphericalVectorField.cs" />
     <Compile Include="VectorCalc\SumScalarField.cs" />

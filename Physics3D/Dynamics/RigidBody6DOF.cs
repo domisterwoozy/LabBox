@@ -87,6 +87,7 @@ namespace Physics3D.Dynamics
 
         public RigidBody6DOF(IKinematics initialState, double mass, Matrix3 inertiaBody)
         {
+            if (mass <= 0) throw new ArgumentException(nameof(mass)  + " must be larger than zero");
             InvMass = 1.0 / mass;
             InvIBody = inertiaBody.InverseMatrix();
 

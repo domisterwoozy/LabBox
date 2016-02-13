@@ -4,19 +4,20 @@ namespace Math3D.VectorCalc
 {
     public class ProductScalarField : AbstractScalarField
     {
-        public override Vector3 Gradient(Vector3 pos)
+        public double Multiplier { get; }
+
+        public IScalarField UnderlyingScalarField { get; }
+
+        public ProductScalarField(double multiplier, IScalarField origField)
         {
-            throw new NotImplementedException();
+            Multiplier = multiplier;
+            UnderlyingScalarField = origField;
         }
 
-        public override IVectorField ToVectorField()
-        {
-            throw new NotImplementedException();
-        }
+        public override Vector3 Gradient(Vector3 pos) => Multiplier * UnderlyingScalarField.Gradient(pos);
 
-        public override double Value(Vector3 pos)
-        {
-            throw new NotImplementedException();
-        }
+        public override IVectorField ToVectorField() => new ProductVectorField(Multiplier, UnderlyingScalarField.ToVectorField());
+
+        public override double Value(Vector3 pos) => Multiplier * UnderlyingScalarField.Value(pos);
     }
 }

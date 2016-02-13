@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace MathTests
 {
+    [TestFixture]
     public class Vector3Tests
     {
         [DatapointSource]
@@ -24,8 +25,8 @@ namespace MathTests
         {
             public IEnumerator GetEnumerator()
             {
-                yield return new[] { Vector3.Zero, Vector3.Zero, Vector3.Zero };
-                yield return new[] { Vector3.I, Vector3.Zero, Vector3.I };
+                yield return new object[] { Vector3.Zero, Vector3.Zero, Vector3.Zero };
+                yield return new object[] { Vector3.I, Vector3.Zero, Vector3.I };
             }
         }
 

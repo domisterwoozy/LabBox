@@ -9,7 +9,7 @@ namespace Math3D.Geometry
     public interface IPrimitive : IIntersectable<Edge>
     {
         /// <summary>
-        /// The collection of edges that make up this primitive. These edges should completely
+        /// The collection of edges that make up this primitive.
         /// </summary>
         IEnumerable<Edge> Edges { get; }
 

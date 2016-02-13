@@ -3,12 +3,11 @@ using System;
 
 namespace Math3D.VectorCalc
 {
-    public class SphericalVectorField : AbstractVectorField
+    public class SphericalVectorField : IVectorField
     {
         public SphericalScalarField R { get; }
         public SphericalScalarField Theta { get; }
-        public SphericalScalarField Phi { get; }
-        
+        public SphericalScalarField Phi { get; }        
 
         public SphericalVectorField(SphericalScalarField r, SphericalScalarField theta, SphericalScalarField phi)
         {
@@ -17,24 +16,23 @@ namespace Math3D.VectorCalc
             Phi = phi;
         }
 
-        public override Vector3 Value(Vector3 pos)
+        public Vector3 Value(Vector3 pos)
         {
             var vectOrigin = SphericalCoords.System.FromCartesian(pos);
             var spherVect = new Coords3D<SphericalCoords>(SphericalCoords.System, R.Value(pos), Phi.Value(pos), Theta.Value(pos));
-            Vector3 test = spherVect.ToCartesianVector(vectOrigin);
             return spherVect.ToCartesianVector(vectOrigin);
         }
-
-        public override Vector3 Curl(Vector3 pos)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override double Divergence(Vector3 pos)
-        {
-            throw new NotImplementedException();
-        }
-
         
+        public Vector3 Curl(Vector3 pos)
+        {
+            // todo: implement curl for spherical coords
+            throw new NotImplementedException();
+        }
+
+        public double Divergence(Vector3 pos)
+        {
+            // todo: implement div for spherical coords
+            throw new NotImplementedException();
+        }
     }
 }
