@@ -77,38 +77,21 @@ namespace Physics3D.Forces
         public static ForceField Gravity(IDynamicBody sourceBody, double gravConstant) => Gravity(() => sourceBody.Transform.Pos, sourceBody.Mass * gravConstant);
         public static ForceField Gravity(Generator<Vector3> posGen, double strength)
         {
-            return new ForceField(FieldExtensions.SphericalScalarField(-strength, -1).Translate(posGen).ToVectorField(), GravityForceApplier);
+            return new ForceField(PhysicsFields.PointMassGravity(strength).Translate(posGen), GravityForceApplier);
         }
 
         public static ForceField ElectricCharge(IBody sourceBody, double electricConstant) => ElectricCharge(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.Charge, electricConstant);
         public static ForceField ElectricCharge(Generator<Vector3> posGen, double charge, double electricConstant)
         {
             if (electricConstant <= 0) throw new ArgumentException(nameof(electricConstant) + " must be positive");
-            return new ForceField(FieldExtensions.SphericalScalarField(charge * electricConstant, -1).Translate(posGen).ToVectorField(), ElectricForceApplier);
+            return new ForceField(PhysicsFields.PointChargeElectric(charge * electricConstant).Translate(posGen), ElectricForceApplier);
         }
 
-        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) =>
-            MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticMoment, magneticConstant);
-        /// <summary>
-        /// The first order approximation as seen here:
-        /// https://en.wikipedia.org/wiki/Magnetic_dipole#External_magnetic_field_produced_by_a_magnetic_dipole_moment
-        /// </summary>
+        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticMoment, magneticConstant);        
         public static ForceField MagneticDipole(Generator<Vector3> posGen, Vector3 magMoment, double magneticConstant)
         {
-            Vector3 constantVectOne = (-magneticConstant / (4 * Math.PI)) * magMoment;
-            IVectorField termOne = FieldExtensions.SphericalScalarField(1.0, -3).Multiply(constantVectOne);
-
-            double constantTwo = (magneticConstant / (4 * Math.PI)) * 3;
-            Func<Vector3, Vector3> termTwoFunc = r => Math.Pow(r.Magnitude, -5) * (magMoment * r) * r;
-            IVectorField termTwo = new CustomVectorField(termTwoFunc);
-
-            return new ForceField(termOne.Add(termTwo).Translate(posGen), MagnetismForceApplier, MagnetismTorqueApplier);
+            return new ForceField(PhysicsFields.MagneticDipole(magMoment, magneticConstant).Translate(posGen), MagnetismForceApplier, MagnetismTorqueApplier);
         }
         #endregion
-
-
     }
-
-    
-
 }

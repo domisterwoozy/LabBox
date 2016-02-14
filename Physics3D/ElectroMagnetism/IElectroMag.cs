@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Physics3D.ElectroMagnetism
 {
-    public class EMProperties
+    public interface IElectroMag
     {
-        public double Charge { get; }
-        public Vector3 MagneticMoment { get; }
+        double Charge { get; }
+        Vector3 MagneticMoment { get; }
     }
 }

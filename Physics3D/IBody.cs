@@ -14,7 +14,7 @@ namespace Physics3D
     {
         IDynamicBody Dynamics { get; }
         IVolume Shape { get; }
-        Material Material { get; }
-        EMProperties EMProps { get; }
+        IMaterial Material { get; }
+        IElectroMag EMProps { get; }
     }
 }

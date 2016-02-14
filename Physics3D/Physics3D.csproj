@@ -40,16 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElectroMagnetism\EMProperties.cs" />
+    <Compile Include="ElectroMagnetism\IElectroMag.cs" />
     <Compile Include="Forces\ForceField.cs" />
+    <Compile Include="Forces\PhysicsFields.cs" />
     <Compile Include="IBody.cs" />
-    <Compile Include="Materials\Material.cs" />
+    <Compile Include="Materials\IMaterial.cs" />
     <Compile Include="Universes\BasicUniverse.cs" />
     <Compile Include="Kinematics\EuclideanKinematicBody.cs" />
     <Compile Include="Kinematics\IKinematicBody.cs" />
     <Compile Include="Dynamics\IDynamicBody.cs" />
     <Compile Include="Universes\IUniverse.cs" />
-    <Compile Include="Forces\Potentials.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Kinematics\EuclideanKinematics.cs" />
     <Compile Include="Dynamics\RigidBody6DOF.cs" />
