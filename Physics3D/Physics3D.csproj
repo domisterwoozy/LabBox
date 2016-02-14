@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElectroMagnetism\ChargeGroup.cs" />
+    <Compile Include="ElectroMagnetism\ChargeLoop.cs" />
     <Compile Include="ElectroMagnetism\IElectroMag.cs" />
+    <Compile Include="ElectroMagnetism\PointCharge.cs" />
+    <Compile Include="ElectroMagnetism\Solenoid.cs" />
     <Compile Include="Forces\ForceField.cs" />
     <Compile Include="Forces\PhysicsFields.cs" />
     <Compile Include="IBody.cs" />

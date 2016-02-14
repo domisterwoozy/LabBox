@@ -50,6 +50,7 @@
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="CoordinateSystems\ICoordinateSystem.cs" />
     <Compile Include="Geometry\Triangle.cs" />
+    <Compile Include="MathExtensions.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="VectorCalc\ClampedScalarField.cs" />
     <Compile Include="VectorCalc\ClampedVectorField.cs" />

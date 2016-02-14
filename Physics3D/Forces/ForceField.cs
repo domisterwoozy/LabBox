@@ -58,13 +58,17 @@ namespace Physics3D.Forces
         /// </summary>
         public static Vector3 ElectricForceApplier(IBody body, Vector3 electricField) => body.EMProps.Charge * electricField;
         /// <summary>
+        /// T = p X E
+        /// </summary>
+        public static Vector3 ElectricTorqueApplier(IBody body, Vector3 electricField) => body.EMProps.ElectricDipoleMoment ^ electricField;
+        /// <summary>
         /// F = q * (V X B)
         /// </summary>
         public static Vector3 MagnetismForceApplier(IBody body, Vector3 magneticField) => body.EMProps.Charge * (body.Dynamics.Kinematics.V ^ magneticField);
         /// <summary>
-        /// T = mu X B
+        /// T = m X B
         /// </summary>
-        public static Vector3 MagnetismTorqueApplier(IBody body, Vector3 magneticField) => body.EMProps.MagneticMoment ^ magneticField;
+        public static Vector3 MagnetismTorqueApplier(IBody body, Vector3 magneticField) => body.EMProps.MagneticDipoleMoment ^ magneticField;
         #endregion
 
         #region Fields
@@ -82,12 +86,18 @@ namespace Physics3D.Forces
 
         public static ForceField ElectricCharge(IBody sourceBody, double electricConstant) => ElectricCharge(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.Charge, electricConstant);
         public static ForceField ElectricCharge(Generator<Vector3> posGen, double charge, double electricConstant)
-        {
-            if (electricConstant <= 0) throw new ArgumentException(nameof(electricConstant) + " must be positive");
-            return new ForceField(PhysicsFields.PointChargeElectric(charge * electricConstant).Translate(posGen), ElectricForceApplier);
+        {            
+            return new ForceField(PhysicsFields.PointChargeElectric(charge,  electricConstant).Translate(posGen), ElectricForceApplier, ElectricTorqueApplier);
         }
 
-        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticMoment, magneticConstant);        
+        public static ForceField ElectricDipole(IBody sourceBody, double electricConstant) =>
+            ElectricDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.ElectricDipoleMoment, electricConstant);
+        public static ForceField ElectricDipole(Generator<Vector3> posGen, Vector3 elecMoment, double electricConstant)
+        {
+            return new ForceField(PhysicsFields.ElectricDipole(elecMoment, electricConstant).Translate(posGen), ElectricForceApplier, ElectricTorqueApplier);
+        }
+
+        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticDipoleMoment, magneticConstant);        
         public static ForceField MagneticDipole(Generator<Vector3> posGen, Vector3 magMoment, double magneticConstant)
         {
             return new ForceField(PhysicsFields.MagneticDipole(magMoment, magneticConstant).Translate(posGen), MagnetismForceApplier, MagnetismTorqueApplier);

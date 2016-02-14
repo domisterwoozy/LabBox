@@ -66,7 +66,7 @@ namespace PhysicsIntegrationTests
                 Matrix3.Identity
             );
 
-            var sunGravity = Potentials.InverseSquare(gravConstant * solarMass * earthMass); // GMm / r^2
+            //var sunGravity = Potentials.InverseSquare(gravConstant * solarMass * earthMass); // GMm / r^2
 
             return new BasicUniverse
             {
