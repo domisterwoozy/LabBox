@@ -5,7 +5,7 @@ namespace Math3D.VectorCalc
     /// <summary>
     /// An implementation of IScalarField of the form f(x,y,z) = A*x^a + B*y^b + C*z^c.
     /// </summary>
-    public class CartesianScalarField : AbstractScalarField
+    public class CartesianScalarField : IScalarField
     {
         /// <summary>
         /// X componenet coefficient.
@@ -58,11 +58,11 @@ namespace Math3D.VectorCalc
             c = exponents.Item3;
         }
 
-        public override double Value(Vector3 point) => A * Math.Pow(point.X, a) + B * Math.Pow(point.Y, b) + C * Math.Pow(point.Z, c);       
+        public double Value(Vector3 point) => A * Math.Pow(point.X, a) + B * Math.Pow(point.Y, b) + C * Math.Pow(point.Z, c);       
 
-        public override Vector3 Gradient(Vector3 point) => new Vector3(dfdx(point), dfdy(point), dfdz(point));        
+        public Vector3 Gradient(Vector3 point) => new Vector3(dfdx(point), dfdy(point), dfdz(point));        
 
-        public override IVectorField ToVectorField()
+        public IVectorField ToVectorField()
         {
             return new CartesianVectorField(new CartesianScalarField(Tuple.Create(-a * A, 0.0, 0.0), Tuple.Create(a - 1, 0.0, 0.0)),
                     new CartesianScalarField(Tuple.Create(0.0, -b * B, 0.0), Tuple.Create(0.0, b - 1, 0.0)),
@@ -84,7 +84,6 @@ namespace Math3D.VectorCalc
         /// <summary>
         /// Derivative of the scalar field with respect to z.
         /// </summary>
-        public double dfdz(Vector3 point) => c * C * Math.Pow(point.Z, c - 1);
-        
+        public double dfdz(Vector3 point) => c * C * Math.Pow(point.Z, c - 1);        
     }
 }

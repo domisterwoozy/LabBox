@@ -15,11 +15,11 @@ namespace MathTests
         // the amount you have to multiply a random number b/w 0.0 and 1.0 to get a random number within the specified range
         private readonly double factor;
 
-        public RandomVector3Attribute(int count) : this(count, -1.0, 1.0)
+        public RandomVector3Attribute(int count) : this(-1.0, 1.0, count)
         {
         }
 
-        public RandomVector3Attribute(int count, double minComp, double maxComp)
+        public RandomVector3Attribute(double minComp, double maxComp, int count)
         {
             this.count = count;
             this.minComp = minComp;

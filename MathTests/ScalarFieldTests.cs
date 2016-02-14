@@ -25,7 +25,7 @@ namespace MathTests
             var centralForce = centralPotential.ToVectorField();
 
             Vector3 expectedForceValue = -(1.0 / point.MagSquared) * point.UnitDirection;
-            Assert.That(expectedForceValue, Iz.EqualTo(centralForce.Value(point)).Within(Math.Pow(10, -17)));
+            Assert.That(expectedForceValue, Izz.EqualTo(centralForce.Value(point)).Within(Math.Pow(10, -17)));
         }
     }
 }

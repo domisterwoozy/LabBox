@@ -7,9 +7,9 @@ namespace MathTests
 {
     /// <summary>
     /// Entry point to use the custom constraints. Wouldn't it be nice if we could implement static extension methods?
-    /// For now we will use 'Iz'.
+    /// For now we will use 'Izz'.
     /// </summary>
-    public class Iz : Is
+    public class Izz : Is
     {
         public static VectorEqualConstraint EqualTo(Vector3 expected)
         {

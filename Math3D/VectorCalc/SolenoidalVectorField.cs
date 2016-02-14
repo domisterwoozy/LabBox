@@ -9,7 +9,7 @@ namespace Math3D.VectorCalc
     /// <summary>
     /// A divergence free vector field. Sometimes called 'incompressible'.
     /// </summary>
-    public abstract class SolenoidalVectorField : IVectorField
+    public abstract class SolenoidalVectorField : IVectorCalcField
     {
         public abstract Vector3 Curl(Vector3 pos);
         public double Divergence(Vector3 pos) => 0;

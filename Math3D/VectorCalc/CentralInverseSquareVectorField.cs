@@ -6,7 +6,7 @@
     /// Where r is the distance between the field source position and a
     /// position in the field.
     /// </summary>
-    public class CentralInverseSquareVectorField : IVectorField
+    public class CentralInverseSquareVectorField : IVectorCalcField
     {
         public double ConstantFactor { get; set; }
 
@@ -29,7 +29,12 @@
 
         public double Divergence(Vector3 pos)
         {
-            if (pos == SourcePosition) return double.PositiveInfinity;
+            if (pos == SourcePosition)
+            {
+                if (ConstantFactor == 0) return 0;
+                else if (ConstantFactor > 0) return double.PositiveInfinity;
+                else return double.NegativeInfinity;
+            }
             else return 0;
         }
     }

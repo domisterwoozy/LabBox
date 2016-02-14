@@ -1,10 +1,13 @@
-﻿namespace Math3D.VectorCalc
+﻿using Util;
+
+namespace Math3D.VectorCalc
 {
     /// <summary>
     /// A wrapper that allows you to move a scalar field in the world.
     /// </summary>
-    public class TranslatedScalarField : AbstractScalarField
+    public class TranslatedScalarField : IScalarField
     {
+        private readonly Generator<Vector3> translationGen;
         /// <summary>
         /// The underlying scalar field that can be translated.
         /// </summary>
@@ -13,25 +16,18 @@
         /// <summary>
         /// The position in 3D space of the underlying scalar field.
         /// </summary>
-        public Vector3 Position { get; }
+        public Vector3 Position => translationGen();
 
-
-        public TranslatedScalarField(IScalarField underlyingScalarField, Vector3 translation)
+        public TranslatedScalarField(IScalarField underlyingScalarField, Generator<Vector3> translationGen)
         {
             UnderlyingScalarField = underlyingScalarField;
-            Position = translation;
+            this.translationGen = translationGen;
         }
 
-        public override double Value(Vector3 pos) => UnderlyingScalarField.Value(pos - Position);
+        public double Value(Vector3 pos) => UnderlyingScalarField.Value(pos - Position);
 
-        public override Vector3 Gradient(Vector3 pos) => UnderlyingScalarField.Gradient(pos - Position);
+        public Vector3 Gradient(Vector3 pos) => UnderlyingScalarField.Gradient(pos - Position);
 
-        public override IVectorField ToVectorField() => new TranslatedVectorField(UnderlyingScalarField.ToVectorField(), Position);
-
-        public override Vector3 GradientTraversal(Vector3 pos, double desiredPotential, double tolerance)
-        {
-            // use the underlying fields gradient traversal in case it overrode the abstract version
-            return UnderlyingScalarField.GradientTraversal(pos - Position, desiredPotential, tolerance);
-        }
+        public IVectorField ToVectorField() => new TranslatedVectorField(UnderlyingScalarField.ToVectorField(), translationGen);
     }
 }

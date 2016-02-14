@@ -37,20 +37,5 @@ namespace Math3D.VectorCalc
         {
             return new ClampedVectorField(UnderlyingScalarField.ToVectorField(), ClampFunction);
         }
-
-        public Vector3 GradientTraversal(Vector3 pos, double desiredPotential, double tolerance)
-        {
-            if (ClampFunction(pos)) throw new ArgumentException("Cannot start a gradient traversal at a clamped position.");
-            // todo: if any location at the desired potential is being clamped then throw a runtime exception
-            return UnderlyingScalarField.GradientTraversal(pos, desiredPotential, tolerance);
-        }
-
-        public IManifold ToManifold(double potential)
-        {
-            // todo: if any location at this potential is being clamped then throw a runtime exception
-            return UnderlyingScalarField.ToManifold(potential);
-        }
-
-
     }
 }

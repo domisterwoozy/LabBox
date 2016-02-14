@@ -5,11 +5,11 @@ namespace Math3D.VectorCalc
 {
     public class SphericalVectorField : IVectorField
     {
-        public SphericalScalarField R { get; }
-        public SphericalScalarField Theta { get; }
-        public SphericalScalarField Phi { get; }        
+        public IScalarField R { get; }
+        public IScalarField Theta { get; }
+        public IScalarField Phi { get; }        
 
-        public SphericalVectorField(SphericalScalarField r, SphericalScalarField theta, SphericalScalarField phi)
+        public SphericalVectorField(IScalarField r, IScalarField theta, IScalarField phi)
         {
             R = r;            
             Theta = theta;
@@ -23,16 +23,16 @@ namespace Math3D.VectorCalc
             return spherVect.ToCartesianVector(vectOrigin);
         }
         
-        public Vector3 Curl(Vector3 pos)
-        {
-            // todo: implement curl for spherical coords
-            throw new NotImplementedException();
-        }
+        //public Vector3 Curl(Vector3 pos)
+        //{
+        //    // todo: implement curl for spherical coords
+        //    throw new NotImplementedException();
+        //}
 
-        public double Divergence(Vector3 pos)
-        {
-            // todo: implement div for spherical coords
-            throw new NotImplementedException();
-        }
+        //public double Divergence(Vector3 pos)
+        //{
+        //    // todo: implement div for spherical coords
+        //    throw new NotImplementedException();
+        //}
     }
 }

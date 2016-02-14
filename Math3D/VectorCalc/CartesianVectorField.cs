@@ -1,6 +1,6 @@
 ﻿namespace Math3D.VectorCalc
 {
-    public class CartesianVectorField : IVectorField
+    public class CartesianVectorField : IVectorCalcField
     {
         public CartesianScalarField X { get; }
         public CartesianScalarField Y { get; }

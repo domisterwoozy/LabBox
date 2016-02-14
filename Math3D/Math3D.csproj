@@ -53,9 +53,10 @@
     <Compile Include="Transform.cs" />
     <Compile Include="VectorCalc\ClampedScalarField.cs" />
     <Compile Include="VectorCalc\ClampedVectorField.cs" />
+    <Compile Include="VectorCalc\ConstantDirectionVectorField.cs" />
+    <Compile Include="VectorCalc\CustomVectorField.cs" />
     <Compile Include="VectorCalc\IrrotationalVectorField.cs" />
     <Compile Include="Geometry\AbstractManifold.cs" />
-    <Compile Include="VectorCalc\AbstractScalarField.cs" />
     <Compile Include="VectorCalc\CartesianScalarField.cs" />
     <Compile Include="VectorCalc\CartesianVectorField.cs" />
     <Compile Include="VectorCalc\CentralInverseSquareVectorField.cs" />
@@ -80,9 +81,15 @@
     <Compile Include="VectorCalc\SumVectorField.cs" />
     <Compile Include="VectorCalc\TranslatedScalarField.cs" />
     <Compile Include="VectorCalc\TranslatedVectorField.cs" />
+    <Compile Include="VectorCalc\ZeroScalarField.cs" />
     <Compile Include="VectorCalc\ZeroVectorField.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{af19557c-9ea0-415e-831a-0f14c243ff8b}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,8 +8,8 @@ namespace Physics3D.Materials
 {
     public class Material
     {
-        public double DynamicFrictionCoef { get; }
-        public double StaticFrictionCoef { get; }
-        public double DragCoef { get; }
+        public double DynamicFrictionCoef { get; set; }
+        public double StaticFrictionCoef { get; set; }
+        public double DragCoef { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace Math3D.VectorCalc
     /// A generic scalar field in the spherical coordinate system (r, theta, phi)
     /// f(r,theta,phi) = A*r^a + B*theta^b + C*phi^c.
     /// </summary>
-    public class SphericalScalarField : AbstractScalarField
+    public class SphericalScalarField : IScalarField
     {
         private const double arbitraryZeroExponent = 10; // if the coeffient is zero the exponent can be anything besides zero or one
 
@@ -67,13 +67,13 @@ namespace Math3D.VectorCalc
             c = exponents.Item3;
         }
 
-        public override double Value(Vector3 point)
+        public double Value(Vector3 point)
         {
             var spherCoords = SphericalCoords.System.FromCartesian(point);
             return A * Math.Pow(spherCoords.FirstComponent, a) + B * Math.Pow(spherCoords.SecondComponent, b) + C * Math.Pow(spherCoords.ThirdComponent, c);
         }
 
-        public override Vector3 Gradient(Vector3 point)
+        public Vector3 Gradient(Vector3 point)
         {
             Coords3D<SphericalCoords> coords = SphericalCoords.System.FromCartesian(point);
             var gradient = new Coords3D<SphericalCoords>(SphericalCoords.System, 
@@ -84,7 +84,7 @@ namespace Math3D.VectorCalc
             return SphericalCoords.System.ToCartesian(gradient);
         }
 
-        public override IVectorField ToVectorField()
+        public IVectorField ToVectorField()
         {
             return new SphericalVectorField(
                 new SphericalScalarField(Tuple.Create(-a * A, 0.0, 0.0), Tuple.Create(a - 1, 0.0, 0.0)),

@@ -18,17 +18,5 @@ namespace Math3D.VectorCalc
             if (ClampFunction(pos)) return Vector3.Zero;
             return UnderlyingVectorField.Value(pos);
         }
-
-        public Vector3 Curl(Vector3 pos)
-        {
-            if (ClampFunction(pos)) return Vector3.Zero;
-            return UnderlyingVectorField.Curl(pos);
-        }
-
-        public double Divergence(Vector3 pos)
-        {
-            if (ClampFunction(pos)) return 0;
-            return UnderlyingVectorField.Divergence(pos);
-        }
     }
 }

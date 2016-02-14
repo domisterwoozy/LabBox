@@ -4,7 +4,7 @@ namespace Physics3D
 {
     public static class Potentials
     {
-        public static IScalarField InverseSquare(double strength) => FieldExtensions.SphericalField(-strength, -1);      
+        public static IScalarField InverseSquare(double strength) => FieldExtensions.SphericalScalarField(-strength, -1);      
 
     }
 }

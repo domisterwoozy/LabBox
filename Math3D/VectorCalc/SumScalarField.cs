@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the sum of two arbitrary scalar fields.
     /// </summary>
-    public class SumScalarField : AbstractScalarField
+    public class SumScalarField : IScalarField
     {
         /// <summary>
         /// The first scalar field to sum.
@@ -20,10 +20,10 @@
             B = b;
         }
 
-        public override double Value(Vector3 pos) => A.Value(pos) + B.Value(pos);
+        public double Value(Vector3 pos) => A.Value(pos) + B.Value(pos);
 
-        public override Vector3 Gradient(Vector3 pos) => A.Gradient(pos) + B.Gradient(pos);
+        public Vector3 Gradient(Vector3 pos) => A.Gradient(pos) + B.Gradient(pos);
 
-        public override IVectorField ToVectorField() => new SumVectorField(A.ToVectorField(), B.ToVectorField());    
+        public IVectorField ToVectorField() => new SumVectorField(A.ToVectorField(), B.ToVectorField());    
     }
 }

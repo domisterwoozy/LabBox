@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Math3D;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace Physics3D.ElectroMagnetism
     public class EMProperties
     {
         public double Charge { get; }
+        public Vector3 MagneticMoment { get; }
     }
 }

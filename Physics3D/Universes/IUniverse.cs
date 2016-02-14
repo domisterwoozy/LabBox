@@ -8,9 +8,8 @@ namespace Physics3D.Universes
 {
     public interface IUniverse
     {
-        ICollection<IBody> DynamicBodies { get; }
+        ICollection<IBody> Bodies { get; }
         ICollection<ForceField> ForceFields { get; }
-        ICollection<Generator<IVectorField>> BasicForces { get; }
 
         void Update(double deltaTime);
     }

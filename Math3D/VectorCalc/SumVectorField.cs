@@ -22,8 +22,8 @@
 
         public Vector3 Value(Vector3 pos) => A.Value(pos) + B.Value(pos);
 
-        public Vector3 Curl(Vector3 pos) => A.Curl(pos) + B.Curl(pos);
+        //public Vector3 Curl(Vector3 pos) => A.Curl(pos) + B.Curl(pos);
 
-        public double Divergence(Vector3 pos) => A.Divergence(pos) + B.Divergence(pos); 
+        //public double Divergence(Vector3 pos) => A.Divergence(pos) + B.Divergence(pos); 
     }
 }

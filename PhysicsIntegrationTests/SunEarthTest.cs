@@ -70,8 +70,8 @@ namespace PhysicsIntegrationTests
 
             return new BasicUniverse
             {
-                DynamicBodies = { earth },
-                Potentials = { sunGravity }
+                //DynamicBodies = { earth },
+                //Potentials = { sunGravity }
             };
         }
 
@@ -81,8 +81,8 @@ namespace PhysicsIntegrationTests
             double timeStep = halfYear / numSteps;
 
             IUniverse sunEarthUni = SunEarthUniverse();
-            var earth = sunEarthUni.DynamicBodies.First();
-            Vector3 earthStartPos = earth.Kinematics.Transform.Pos;
+            var earth = sunEarthUni.Bodies.First();
+            Vector3 earthStartPos = earth.Dynamics.Kinematics.Transform.Pos;
             Vector3 expectedHalfway = new Vector3(-earthStartPos.X, earthStartPos.Y, earthStartPos.Z);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -92,7 +92,7 @@ namespace PhysicsIntegrationTests
             }
             stopwatch.Stop();
             double halfwayTime = stopwatch.Elapsed.TotalSeconds;
-            double halfwayDiff =( expectedHalfway - earth.Kinematics.Transform.Pos).Magnitude;
+            double halfwayDiff =( expectedHalfway - earth.Dynamics.Kinematics.Transform.Pos).Magnitude;
 
             stopwatch.Start();
             for (int i = 0; i < numSteps; i++)
@@ -101,7 +101,7 @@ namespace PhysicsIntegrationTests
             }
             stopwatch.Stop();
             double endTime = stopwatch.Elapsed.TotalSeconds;
-            double endDiff = (earthStartPos - earth.Kinematics.Transform.Pos).Magnitude;
+            double endDiff = (earthStartPos - earth.Dynamics.Kinematics.Transform.Pos).Magnitude;
 
             return new SimResults(numSteps, halfwayTime, halfwayDiff, endTime, endDiff);
         }

@@ -5,8 +5,11 @@
         /// <summary>
         /// That value of the VectorField at a certain global position.
         /// </summary>
-        Vector3 Value(Vector3 pos);
+        Vector3 Value(Vector3 pos);        
+    }
 
+    public interface IVectorCalcField : IVectorField
+    {
         /// <summary>
         /// Evalutes the curl of this vector field at a certain global position.
         /// </summary>
