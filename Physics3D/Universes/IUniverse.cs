@@ -11,7 +11,6 @@ namespace Physics3D.Universes
 {
     public interface IUniverse
     {
-        ICollection<IMeasurement> Measurements { get; }
         ICollection<IBody> Bodies { get; }
         ICollection<ForceField> ForceFields { get; }
         ICollisionEngine CollisionEngine { get; }

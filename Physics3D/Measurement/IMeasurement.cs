@@ -8,5 +8,11 @@ namespace Physics3D.Measurement
 {
     public interface IMeasurement
     {
+        IReading CurrentReading { get; }
+        IReading CumulativeReading { get; }
+    }
+
+    public interface IReading
+    {
     }
 }

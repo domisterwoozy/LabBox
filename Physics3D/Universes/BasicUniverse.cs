@@ -18,9 +18,7 @@ namespace Physics3D.Universes
 
         public ICollisionEngine CollisionEngine { get; }
 
-        public ICollection<ForceField> ForceFields { get; } = new List<ForceField>();
-
-        public ICollection<IMeasurement> Measurements { get; } = new List<IMeasurement>();
+        public ICollection<ForceField> ForceFields { get; } = new List<ForceField>();        
 
         public void Update(double deltaTime)
         {
