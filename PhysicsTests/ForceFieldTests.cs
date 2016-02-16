@@ -4,6 +4,7 @@ using Math3D.Geometry;
 using MathTests;
 using NUnit.Framework;
 using Physics3D;
+using Physics3D.Bodies;
 using Physics3D.Dynamics;
 using Physics3D.Forces;
 using Physics3D.Kinematics;

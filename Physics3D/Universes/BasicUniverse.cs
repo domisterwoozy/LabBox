@@ -5,6 +5,7 @@ using Physics3D.Dynamics;
 using Util;
 using System.Linq;
 using Physics3D.Forces;
+using Physics3D.Bodies;
 
 namespace Physics3D.Universes
 {

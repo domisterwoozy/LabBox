@@ -1,5 +1,6 @@
 ﻿using Math3D;
 using Math3D.VectorCalc;
+using Physics3D.Bodies;
 using Physics3D.Dynamics;
 using System;
 using System.Collections.Generic;
@@ -97,7 +98,8 @@ namespace Physics3D.Forces
             return new ForceField(PhysicsFields.ElectricDipole(elecMoment, electricConstant).Translate(posGen), ElectricForceApplier, ElectricTorqueApplier);
         }
 
-        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticDipoleMoment, magneticConstant);        
+        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant)
+            => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticDipoleMoment, magneticConstant);        
         public static ForceField MagneticDipole(Generator<Vector3> posGen, Vector3 magMoment, double magneticConstant)
         {
             return new ForceField(PhysicsFields.MagneticDipole(magMoment, magneticConstant).Translate(posGen), MagnetismForceApplier, MagnetismTorqueApplier);

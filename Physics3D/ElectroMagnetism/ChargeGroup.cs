@@ -27,9 +27,14 @@ namespace Physics3D.ElectroMagnetism
         private readonly List<ChargeGroupMember> charges;
 
         public double Charge => this.Sum(c => c.Charge);
-        public Vector3 ElectricDipoleMoment { get; }
+        /// <summary>
+        /// Summation of q * r.
+        /// See Griffiths 3.100
+        /// </summary>
+        public Vector3 ElectricDipoleMoment => this.Sum(c => c.Charge * c.Pos);
         /// <summary>
         /// Summation of 0.5 * q * r X V
+        /// See: https://en.wikipedia.org/wiki/Magnetic_moment#Integral_representation
         /// </summary>
         public Vector3 MagneticDipoleMoment => 0.5 * this.Sum(c => c.Charge * (c.Pos ^ c.Vel));
 

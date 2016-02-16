@@ -22,6 +22,9 @@ namespace Physics3D.ElectroMagnetism
 
         public double Charge => Current;
         public Vector3 ElectricDipoleMoment => Vector3.Zero;
+        /// <summary>
+        /// Griffiths 5.84
+        /// </summary>
         public Vector3 MagneticDipoleMoment => Current * Area * Dir.UnitDirection;
     }
 }

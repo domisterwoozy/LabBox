@@ -87,6 +87,7 @@ namespace Physics3D.Dynamics
 
         public RigidBody6DOF(IKinematics initialState, double mass, Matrix3 inertiaBody)
         {
+            if (initialState == null) throw new ArgumentNullException(nameof(initialState));
             if (mass <= 0) throw new ArgumentException(nameof(mass)  + " must be larger than zero");
             InvMass = 1.0 / mass;
             InvIBody = inertiaBody.InverseMatrix();
@@ -133,6 +134,7 @@ namespace Physics3D.Dynamics
 
         public void FixAxes(ISet<Axis> axes)
         {
+            if (axes == null) throw new ArgumentNullException(nameof(axes));
             if (axes.Count == 0) return;
 
             Vector3[] rowVects = InvIBody.RowVectors;

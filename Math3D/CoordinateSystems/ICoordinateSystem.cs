@@ -1,9 +1,11 @@
-﻿namespace Math3D.CoordinateSystems
+﻿using System;
+
+namespace Math3D.CoordinateSystems
 {
     /// <summary>
     /// An arbitrary container for coordinates in 3 dimensions.
     /// </summary>
-    public struct Coords3D<T> where T : ICoordinateSystem<T>
+    public struct Coords3D<T> : IEquatable<Coords3D<T>> where T : ICoordinateSystem<T>
     {
         public double FirstComponent { get; }
         public double SecondComponent { get; }
@@ -17,6 +19,37 @@
             SecondComponent = second;
             ThirdComponent = third;
         }
+
+        #region Equality
+        public bool Equals(Coords3D<T> v)
+        {
+            if (FirstComponent != v.FirstComponent) return false;
+            if (SecondComponent != v.SecondComponent) return false;
+            if (ThirdComponent != v.ThirdComponent) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int result = 17;
+            result = 31 * result + FirstComponent.GetHashCode();
+            result = 31 * result + SecondComponent.GetHashCode();
+            result = 31 * result + ThirdComponent.GetHashCode();
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Coords3D<T> v;
+            if (obj is Coords3D<T>) v = (Coords3D<T>)obj;
+            else return false;
+            return Equals(v);
+        }
+
+        public static bool operator ==(Coords3D<T> a, Coords3D<T> b) => a.Equals(b);
+        public static bool operator !=(Coords3D<T> a, Coords3D<T> b) => !(a == b);
+        #endregion
     }
 
     /// <summary>

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bodies\BasicBody.cs" />
     <Compile Include="ElectroMagnetism\ChargeGroup.cs" />
     <Compile Include="ElectroMagnetism\ChargeLoop.cs" />
     <Compile Include="ElectroMagnetism\IElectroMag.cs" />
@@ -47,7 +49,7 @@
     <Compile Include="ElectroMagnetism\Solenoid.cs" />
     <Compile Include="Forces\ForceField.cs" />
     <Compile Include="Forces\PhysicsFields.cs" />
-    <Compile Include="IBody.cs" />
+    <Compile Include="Bodies\IBody.cs" />
     <Compile Include="Materials\IMaterial.cs" />
     <Compile Include="Universes\BasicUniverse.cs" />
     <Compile Include="Kinematics\EuclideanKinematicBody.cs" />

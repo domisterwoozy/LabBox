@@ -42,12 +42,16 @@ namespace MathTests.cs
             {
                 yield return new object[] { new Vector3(1, 1, 2.71), true };
                 yield return new object[] { new Vector3(2, 2, 7), true };
-                yield return new object[] { new Vector3(2, -3, 7), false };
+                yield return new object[] { new Vector3(2, -3, 7), true };
                 yield return new object[] { new Vector3(7, 2, 7), true };
                 yield return new object[] { new Vector3(2, 2, -3), true };
-                yield return new object[] { new Vector3(2, 7, -3), false };
+                yield return new object[] { new Vector3(2, 7, -3), true };
                 yield return new object[] { new Vector3(-3, 2, -3), true };
                 yield return new object[] { new Vector3(2, 2, 2), false };
+                yield return new object[] { new Vector3(2, 3, 3), false };
+                yield return new object[] { new Vector3(2, -1.535, -1.535), false };
+                yield return new object[] { new Vector3(2, -1.536, -1.536), true };
+                yield return new object[] { new Vector3(2, -4, -3), true };
             }
         }
 

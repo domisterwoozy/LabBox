@@ -6,7 +6,7 @@ namespace Math3D
     /// An immutable 3 dimensional cartesian vector.
     /// The default value of the struct is equal to Vector3.Zero
     /// </summary>
-    public struct Vector3
+    public struct Vector3 : IEquatable<Vector3>
     {
         /// <summary>
         /// The zero vector. All elements are zero.
@@ -237,17 +237,9 @@ namespace Math3D
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-
             Vector3 v;
-            if (obj is Vector3)
-            {
-                v = (Vector3)obj;
-            }
-            else
-            {
-                return false;
-            }
-
+            if (obj is Vector3) v = (Vector3)obj;            
+            else return false;           
             return Equals(v);
         }
         #endregion

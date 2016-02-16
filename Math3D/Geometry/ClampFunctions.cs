@@ -40,7 +40,7 @@ namespace Math3D.Geometry
             {
                 Vector3 r = (pos - center).Rotate(rot);
                 if (Math.Sqrt(r.X * r.X + r.Y * r.Y) > radius) return true;
-                if (Math.Abs(r.Z) > height) return true;
+                if (Math.Abs(r.Z) > (height / 2)) return true;
                 return false;
             };
         }

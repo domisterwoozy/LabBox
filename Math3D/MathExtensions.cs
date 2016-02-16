@@ -8,9 +8,18 @@ namespace Math3D
 {
     public static class MathExtensions
     {
-        public static Vector3 Sum<T>(this IEnumerable<T> enumerable, Func<T, Vector3> selector)
+        public static Vector3 Sum(this IEnumerable<Vector3> source)
         {
-            throw new NotImplementedException();
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            Vector3 sum = Vector3.Zero;
+            checked
+            {
+                foreach (Vector3 v in source) sum += v;
+            }
+            return sum;
         }
+
+        public static Vector3 Sum<T>(this IEnumerable<T> enumerable, Func<T, Vector3> selector) => Sum(enumerable.Select(selector));
+        
     }
 }
