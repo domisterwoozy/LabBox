@@ -10,7 +10,6 @@ namespace Physics3D.Experiments
 {
     public interface IExperiment
     {
-        IUniverse Universe { get; }
-        IEnumerable<IMeasurement> Measurements { get; }
+
     }
 }

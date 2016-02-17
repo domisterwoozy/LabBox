@@ -14,6 +14,10 @@ namespace Physics3D.Universes
 {
     public class BasicUniverse : IUniverse
     {
+        public event EventHandler<FrameLengthArgs> FrameFinished;
+
+        public double UniversalTime { get; private set; }
+
         public ICollection<IBody> Bodies { get; } = new List<IBody>();
 
         public ICollisionEngine CollisionEngine { get; }
@@ -36,6 +40,9 @@ namespace Physics3D.Universes
             {
                 body.Dynamics.Update(deltaTime);
             }
+
+            UniversalTime += deltaTime;
+            FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));
         }
     }
 }

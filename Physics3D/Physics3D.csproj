@@ -53,7 +53,14 @@
     <Compile Include="Forces\PhysicsFields.cs" />
     <Compile Include="Bodies\IBody.cs" />
     <Compile Include="Materials\IMaterial.cs" />
-    <Compile Include="Measurement\IMeasurement.cs" />
+    <Compile Include="Measurement\FrameProcessor.cs" />
+    <Compile Include="Measurement\ICumulativeMeasurement.cs" />
+    <Compile Include="Measurement\IFrameMeasurement.cs" />
+    <Compile Include="Measurement\IInstantMeasurement.cs" />
+    <Compile Include="Measurement\BodyCountMeasurement.cs" />
+    <Compile Include="Measurement\MassDensityMeasurement.cs" />
+    <Compile Include="Measurement\MassFlowMeasurement.cs" />
+    <Compile Include="Measurement\TotalMassMeasurement.cs" />
     <Compile Include="Universes\BasicUniverse.cs" />
     <Compile Include="Kinematics\EuclideanKinematicBody.cs" />
     <Compile Include="Kinematics\IKinematicBody.cs" />

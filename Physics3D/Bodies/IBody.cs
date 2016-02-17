@@ -13,7 +13,7 @@ namespace Physics3D.Bodies
     public interface IBody
     {
         IDynamicBody Dynamics { get; }
-        IVolume Shape { get; }
+        IPrimitiveVolume Shape { get; }
         IMaterial Material { get; }
         IElectroMag EMProps { get; }
     }

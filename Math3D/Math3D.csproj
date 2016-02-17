@@ -48,8 +48,9 @@
     <Compile Include="Geometry\IIntersectable.cs" />
     <Compile Include="Geometry\IPrimitive.cs" />
     <Compile Include="Geometry\Edge.cs" />
-    <Compile Include="Geometry\IVolume.cs" />
+    <Compile Include="Geometry\IPrimitiveVolume.cs" />
     <Compile Include="CoordinateSystems\ICoordinateSystem.cs" />
+    <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Transform.cs" />

@@ -15,9 +15,9 @@ namespace Physics3D.Bodies
         public IDynamicBody Dynamics { get; }
         public IElectroMag EMProps { get; }
         public IMaterial Material { get; }
-        public IVolume Shape { get; }
+        public IPrimitiveVolume Shape { get; }
 
-        public BasicBody(IDynamicBody dynamics, IElectroMag em, IMaterial mat, IVolume shape)
+        public BasicBody(IDynamicBody dynamics, IElectroMag em, IMaterial mat, IPrimitiveVolume shape)
         {
             Dynamics = dynamics;
             EMProps = em;

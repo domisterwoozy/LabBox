@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public interface IVolume : IIntersectable<IVolume>
+    public interface IVolume
     {
-        IEnumerable<Edge> OuterEdges { get; }
-        IEnumerable<IPrimitive> Primitives { get; }
-        double CrossSectionalArea(Vector3 cutPos, Vector3 cutNormal);
+        Func<Vector3, bool> VolumeFunc { get; }
+        double TotalVolume { get; }
     }
 }
