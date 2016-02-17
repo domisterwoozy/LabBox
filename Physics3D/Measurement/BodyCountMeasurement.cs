@@ -18,6 +18,6 @@ namespace Physics3D.Measurement
             Volume = vol;
         }
 
-        public int TakeMeasurement(IUniverse uni) => uni.Bodies.Count(b => Volume.VolumeFunc(b.Dynamics.Transform.Pos));
+        public int TakeMeasurement(IUniverse uni) => uni.BodiesWithin(Volume).Count();
     } 
 }

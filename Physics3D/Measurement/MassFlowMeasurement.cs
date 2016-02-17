@@ -23,14 +23,14 @@ namespace Physics3D.Measurement
             Volume = vol;
         }
 
-        protected override void ProcessBefore(IUniverse uni)
+        protected override void ProcessBeforeFrame(IUniverse uni)
         {
-            massBefore = uni.Bodies.Where(b => Volume.VolumeFunc(b.Dynamics.Transform.Pos)).Sum(b => b.Dynamics.Mass);
+            massBefore = uni.BodiesWithin(Volume).Sum(b => b.Dynamics.Mass);
         }
 
-        protected override double ProcessAfter(IUniverse uni)
+        protected override double ProcessAfterFrame(IUniverse uni)
         {
-            double massAfter = uni.Bodies.Where(b => Volume.VolumeFunc(b.Dynamics.Transform.Pos)).Sum(b => b.Dynamics.Mass);
+            double massAfter = uni.BodiesWithin(Volume).Sum(b => b.Dynamics.Mass);
             return massAfter - massBefore;
         }        
     }

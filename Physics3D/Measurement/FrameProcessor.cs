@@ -20,15 +20,15 @@ namespace Physics3D.Measurement
 
         public void Listen(IUniverse uni)
         {
-            ProcessBefore(uni);
+            ProcessBeforeFrame(uni);
             uni.FrameFinished += (sender, e) =>
             {
-                T res = ProcessAfter(uni);
+                T res = ProcessAfterFrame(uni);
                 ReadingComplete?.Invoke(this, new FrameReading<T>(res, e.FrameLength));
             };
         }
 
-        protected abstract void ProcessBefore(IUniverse uni);
-        protected abstract T ProcessAfter(IUniverse uni);
+        protected abstract void ProcessBeforeFrame(IUniverse uni);
+        protected abstract T ProcessAfterFrame(IUniverse uni);
     }
 }

@@ -20,5 +20,11 @@ namespace Physics3D.Measurement
         T TakeMeasurement(IUniverse uni);
     }
 
+    public interface IInstantBodyMeasurement<T>
+    {
+        string Name { get; }
+        T TakeMeasurement(IBody body);
+    }
+
     
 }
