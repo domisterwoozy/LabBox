@@ -12,7 +12,7 @@ namespace Util
         public static Func<D, R> Memoize<D, R>(this Func<D, R> f)
         {
             var cache = new ConcurrentDictionary<D, R>();
-            return arg => cache.GetOrAdd(arg, f);
+            return d => cache.GetOrAdd(d, f);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PhysicsTests
             var mat = A.Fake<IMaterial>();
 
             A.CallTo(() => body.Dynamics).Returns(dyn);
-            A.CallTo(() => body.Shape).Returns(shape);
+            A.CallTo(() => body.CollisionShape).Returns(shape);
             A.CallTo(() => body.Material).Returns(mat);
             A.CallTo(() => dyn.Kinematics).Returns(kin);
             A.CallTo(() => kin.V).Returns(vel);

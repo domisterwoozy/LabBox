@@ -90,7 +90,7 @@ namespace PhysicsIntegrationTests
             Vector3 planetStartPos = planet.Dynamics.Kinematics.Transform.Pos;
             Vector3 expectedHalfway = new Vector3(-planetStartPos.X, planetStartPos.Y, planetStartPos.Z);
             double expectedRadius = planet.Dynamics.Kinematics.Transform.Pos.Magnitude;
-            double expectedEnergy = planet.Dynamics.Energy;
+            double expectedEnergy = planet.Dynamics.KineticEnergy;
             double maxEnergyDifference = 0;
             double maxRadiusDifference = 0;
 
@@ -99,7 +99,7 @@ namespace PhysicsIntegrationTests
             {
                 sunEarthUni.Update(timeStep);
                 maxRadiusDifference = Math.Max(maxRadiusDifference, Math.Abs(expectedRadius - planet.Dynamics.Kinematics.Transform.Pos.Magnitude));
-                maxEnergyDifference = Math.Max(maxEnergyDifference, Math.Abs(expectedEnergy - planet.Dynamics.Energy));
+                maxEnergyDifference = Math.Max(maxEnergyDifference, Math.Abs(expectedEnergy - planet.Dynamics.KineticEnergy));
             }
             stopwatch.Stop();
             double halfwayDiff = (expectedHalfway - planet.Dynamics.Kinematics.Transform.Pos).Magnitude;
@@ -109,7 +109,7 @@ namespace PhysicsIntegrationTests
             {
                 sunEarthUni.Update(timeStep);
                 maxRadiusDifference = Math.Max(maxRadiusDifference, Math.Abs(expectedRadius - planet.Dynamics.Kinematics.Transform.Pos.Magnitude));
-                maxEnergyDifference = Math.Max(maxEnergyDifference, Math.Abs(expectedEnergy - planet.Dynamics.Energy));
+                maxEnergyDifference = Math.Max(maxEnergyDifference, Math.Abs(expectedEnergy - planet.Dynamics.KineticEnergy));
             }
             stopwatch.Stop();
             double endTime = stopwatch.Elapsed.TotalSeconds;

@@ -2,6 +2,7 @@
 using Physics3D.Dynamics;
 using Physics3D.ElectroMagnetism;
 using Physics3D.Materials;
+using Physics3D.Universes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,9 @@ namespace Physics3D.Bodies
 {
     public interface IBody
     {
+        event EventHandler<FrameLengthArgs> FrameFinished;
         IDynamicBody Dynamics { get; }
-        IPrimitiveVolume Shape { get; }
+        IPrimitiveVolume CollisionShape { get; }
         IMaterial Material { get; }
         IElectroMag EMProps { get; }
     }

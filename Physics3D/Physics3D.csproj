@@ -54,6 +54,7 @@
     <Compile Include="Bodies\IBody.cs" />
     <Compile Include="Materials\IMaterial.cs" />
     <Compile Include="Measurement\BasicBodyMeasurement.cs" />
+    <Compile Include="Measurement\PressureMeasurement.cs" />
     <Compile Include="Measurement\FrameProcessor.cs" />
     <Compile Include="Measurement\ICumulativeMeasurement.cs" />
     <Compile Include="Measurement\IFrameMeasurement.cs" />

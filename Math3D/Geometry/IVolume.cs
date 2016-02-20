@@ -10,5 +10,6 @@ namespace Math3D.Geometry
     {
         Func<Vector3, bool> VolumeFunc { get; }
         double TotalVolume { get; }
+        double SurfaceArea { get; }
     }
 }

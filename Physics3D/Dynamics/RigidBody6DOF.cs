@@ -5,11 +5,14 @@ using Math3D;
 using System.Diagnostics;
 using Math3D.Geometry;
 using Physics3D.Kinematics;
+using Physics3D.Universes;
 
 namespace Physics3D.Dynamics
 {
     public class RigidBody6DOF : IDynamicBody
     {
+        public event EventHandler<FrameLengthArgs> FrameFinished;
+
         // a temp force/torque (a thrust)
         private class TempForce
         {
@@ -41,7 +44,7 @@ namespace Physics3D.Dynamics
         public Matrix3 I => InvI.InverseMatrix();
         public Matrix3 InvI => InvIBody.Rotate(kinematicBody.Transform.R);
         public double Mass => 1 / InvMass;
-        public double Energy
+        public double KineticEnergy
         {
             get
             {
@@ -197,6 +200,7 @@ namespace Physics3D.Dynamics
             kinematicBody.UpdateTransform(deltaTime);
 
             UpdateTempForces(deltaTime);
+            FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));
         }
 
         private void UpdateTempForces(double deltaTime)

@@ -15,9 +15,9 @@ namespace Physics3D.Measurement
 
         public IVolume Volume { get; }
 
-        public SpeedDistribMeasurement(IVolume vol)
+        public SpeedDistribMeasurement(IVolume vol = null)
         {
-            Volume = vol;
+            Volume = vol ?? Everything.Instance;
         }
 
         public ContinuousDistribution TakeMeasurement(IUniverse uni) => new ContinuousDistribution(uni.BodiesWithin(Volume).Select(b => b.Dynamics.Kinematics.V.Magnitude));

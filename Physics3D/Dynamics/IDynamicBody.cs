@@ -1,6 +1,8 @@
 ﻿using Math3D;
 using Math3D.Geometry;
 using Physics3D.Kinematics;
+using Physics3D.Universes;
+using System;
 using System.Collections.Generic;
 
 namespace Physics3D.Dynamics
@@ -11,6 +13,8 @@ namespace Physics3D.Dynamics
     /// </summary>
     public interface IDynamicBody
     {
+        event EventHandler<FrameLengthArgs> FrameFinished;
+
         #region Getters
         /// <summary>
         /// The underlying 3D state of the body.
@@ -25,7 +29,7 @@ namespace Physics3D.Dynamics
         /// <summary>
         /// The total kinetic energy of the body. Includes translational and rotational energy.
         /// </summary>
-        double Energy { get; }
+        double KineticEnergy { get; }
 
         /// <summary>
         /// Linear momentum of the body.

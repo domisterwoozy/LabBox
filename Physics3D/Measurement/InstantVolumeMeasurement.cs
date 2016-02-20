@@ -26,6 +26,6 @@ namespace Physics3D.Measurement
             FinalizeFunc = finalizeFunc ?? (r => r);
         }
 
-        public T TakeMeasurement(IUniverse uni) => uni.BodiesWithin(Volume).Aggregate(default(T), AccumulationFunc);
+        public T TakeMeasurement(IUniverse uni) => FinalizeFunc(uni.BodiesWithin(Volume).Aggregate(default(T), AccumulationFunc));
     }
 }

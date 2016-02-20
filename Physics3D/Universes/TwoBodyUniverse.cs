@@ -33,8 +33,8 @@ namespace Physics3D.Universes
         // vary over time
         public Vector3 RelativePosition => BodyOne.Transform.Pos - BodyTwo.Transform.Pos;
         public Vector3 CenterOfMass => (1.0 / TotalMass) * (BodyOne.Mass * BodyOne.Transform.Pos + BodyTwo.Mass * BodyTwo.Transform.Pos);
-        public double Legrangian => BodyTwo.Energy + BodyTwo.Energy - GravitationalPotential.Value(RelativePosition);
-        public double TotalKineticEnergy => BodyOne.Energy + BodyTwo.Energy;
+        public double Legrangian => BodyTwo.KineticEnergy + BodyTwo.KineticEnergy - GravitationalPotential.Value(RelativePosition);
+        public double TotalKineticEnergy => BodyOne.KineticEnergy + BodyTwo.KineticEnergy;
         public Vector3 RelativePositionVel { get; private set; }
 
         // the next two properties come from the equation 8.12 in Classical Mechanics (Taylor)

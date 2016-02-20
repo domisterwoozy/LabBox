@@ -13,9 +13,9 @@ namespace Physics3D.Measurement
         public string Name => "Number Bodies [#]";
         public IVolume Volume { get; }
 
-        public BodyCountMeasurement(IVolume vol)
+        public BodyCountMeasurement(IVolume vol = null)
         {
-            Volume = vol;
+            Volume = vol ?? Everything.Instance;
         }
 
         public int TakeMeasurement(IUniverse uni) => uni.BodiesWithin(Volume).Count();

@@ -48,6 +48,7 @@
     <Compile Include="CoordinateSystems\CartesianCoords.cs" />
     <Compile Include="CoordinateSystems\SphericalCoords.cs" />
     <Compile Include="Geometry\ClampFunctions.cs" />
+    <Compile Include="Geometry\Everything.cs" />
     <Compile Include="Geometry\Intersection.cs" />
     <Compile Include="Geometry\IIntersectable.cs" />
     <Compile Include="Geometry\IPrimitive.cs" />
