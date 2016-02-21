@@ -16,7 +16,7 @@ namespace Physics3D.Measurement
 
         public IVolume Volume { get; }
 
-        public PressureMeasurement(IVolume vol) : base("Impulse [momentum / time]")
+        public PressureMeasurement(IVolume vol) : base("Pressure [force / area]")
         {
             Volume = vol;
         }
@@ -26,7 +26,7 @@ namespace Physics3D.Measurement
             initialMomentums = uni.BodiesWithin(Volume).ToDictionary(b => b, b => b.Dynamics.P);
         }
 
-        // the sum of the magnitude of the difference b/w each individual momentum
-        protected override double ProcessAfterFrame(IUniverse uni) => initialMomentums.Sum(kv => (kv.Key.Dynamics.P - kv.Value).Magnitude);              
+        // force = the sum of the magnitude of the difference b/w each individual momentum
+        protected override double ProcessAfterFrame(IUniverse uni) => initialMomentums.Sum(kv => (kv.Key.Dynamics.P - kv.Value).Magnitude) / Volume.SurfaceArea;              
     }
 }

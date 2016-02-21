@@ -20,6 +20,9 @@ namespace Math3D
         }
 
         public static Vector3 Sum<T>(this IEnumerable<T> enumerable, Func<T, Vector3> selector) => Sum(enumerable.Select(selector));
+
+        public static float[] ToArray(this Vector3 v) => new[] { (float)v.X, (float)v.Y, (float)v.Z };
+
         
     }
 }
