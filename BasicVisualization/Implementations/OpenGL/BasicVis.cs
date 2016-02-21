@@ -1,4 +1,6 @@
-﻿using OpenTK;
+﻿using BasicVisualization.Universe;
+using BasicVisualization.Universe.ViewModel;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
@@ -7,10 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BasicVisualization.HUD;
+using BasicVisualization.Input;
 
-namespace BasicVisualization
+namespace BasicVisualization.Implementations.OpenGL
 {
-    public class BasicVis : GameWindow
+    public class BasicVis : GameWindow, ILabBoxVis
     {
         // program addresses
         private int pgmID;
@@ -28,15 +32,27 @@ namespace BasicVisualization
         private int vboPos;
         private int vboColor;
 
-        public ICollection<IGraphicalBody> GraphicalBodies { get; }
+        public ICollection<IGraphicalBody> Bodies { get; }
+
+        public IInputHandler InputHandler { get; }
+
+        public IActionHandler ActionHandler => null;
+        public ICollection<IHUDView> HUDs => null;
 
         public BasicVis(params IGraphicalBody[] graphicalBodies) : base()
         {
+            InputHandler = new OpenGLInputHandler(this);
+
             Load += BasicVis_Load;
             UpdateFrame += BasicVis_UpdateFrame;
             RenderFrame += BasicVis_RenderFrame;
 
-            GraphicalBodies = graphicalBodies.ToList();
+            Bodies = graphicalBodies.ToList();
+        }
+
+        public void RunVis()
+        {
+            Run();
         }
 
         private void BasicVis_Load(object sender, EventArgs e)
@@ -52,17 +68,17 @@ namespace BasicVisualization
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
-        {          
-            // update physics
-            foreach (var body in GraphicalBodies)
-            {
-                body.Translation -= e.Time * Math3D.Vector3.K;
-                body.Orientation *= Math3D.Quaternion.UnitQuaternion(e.Time, new Math3D.Vector3(1, 1, 1));
-            }
+        {
+            //// update physics
+            //foreach (var body in Bodies)
+            //{
+            //    body.Translation -= e.Time * Math3D.Vector3.K;
+            //    body.Orientation *= Math3D.Quaternion.UnitQuaternion(e.Time, new Math3D.Vector3(1, 1, 1));
+            //}
 
             // fill all of the verts and colors onto two large buffers
-            var verts = GraphicalBodies.SelectMany(gb => gb.Vertices()).ToArray();
-            var colors = GraphicalBodies.SelectMany(gb => gb.Colors()).ToArray();
+            var verts = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
+            var colors = Bodies.SelectMany(gb => gb.Colors()).ToArray();
             
             // send the vertexes
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboPos); // tell opengl were about to use the vertex position buffer
@@ -92,12 +108,12 @@ namespace BasicVisualization
             Matrix4 view = Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, new Vector3(0, 1, 0)); // camera state
 
             int startIndex = 0;
-            foreach (IGraphicalBody body in GraphicalBodies)
+            foreach (MoveableBody body in Bodies)
             {
                 // send the transformation
                 Matrix4 scale = Matrix4.Identity;
                 Matrix4 rotation = Matrix4.CreateFromQuaternion(body.Orientation.ToGLQuaternion());
-                Matrix4 translation = Matrix4.CreateTranslation((float)body.Translation.X, (float)body.Translation.Y, (float)body.Translation.Z);
+                Matrix4 translation = Matrix4.CreateTranslation(body.Translation.ToGLVector3());
                 Matrix4 model = scale * rotation * translation;
                 GL.UniformMatrix4(vsModel, false, ref model);
                 GL.UniformMatrix4(vsView, false, ref view);
@@ -111,15 +127,13 @@ namespace BasicVisualization
             GL.DisableVertexAttribArray(vsColor);
 
             SwapBuffers();
-        }
-
-        
+        }        
 
         private void InitProgram()
         {
             pgmID = GL.CreateProgram();
-            vsID = LoadShader("vs.glsl", ShaderType.VertexShader, pgmID);
-            fsID = LoadShader("fs.glsl", ShaderType.FragmentShader, pgmID);
+            vsID = LoadShader("Implementations\\OpenGL\\Shaders\\vs.glsl", ShaderType.VertexShader, pgmID);
+            fsID = LoadShader("Implementations\\OpenGL\\Shaders\\fs.glsl", ShaderType.FragmentShader, pgmID);
             GL.LinkProgram(pgmID);
             Console.WriteLine(GL.GetProgramInfoLog(pgmID));
 

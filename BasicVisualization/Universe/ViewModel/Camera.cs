@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization
+namespace BasicVisualization.Universe.ViewModel
 {
     public class Camera
     {
