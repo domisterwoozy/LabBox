@@ -13,7 +13,7 @@ namespace BasicVisualization
     {
         ICollection<IGraphicalBody> Bodies { get; }
         IInputHandler InputHandler { get; }
-        IActionHandler ActionHandler { get; }
+        ICamera Camera { get; }
         ICollection<IHUDView> HUDs { get; }
 
         void RunVis();

@@ -8,6 +8,8 @@ using Physics3D.Dynamics;
 using Physics3D.ElectroMagnetism;
 using Physics3D.Materials;
 using Physics3D.Universes;
+using Physics3D.Kinematics;
+using Math3D;
 
 namespace Physics3D.Bodies
 {
@@ -27,6 +29,6 @@ namespace Physics3D.Bodies
             CollisionShape = shape;
 
             Dynamics.FrameFinished += (sender, e) => FrameFinished?.Invoke(sender, e);
-        }
+        }        
     }
 }

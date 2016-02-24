@@ -58,27 +58,9 @@ namespace Physics3D.Dynamics
         public bool IsFixed => IsPositionFixed && IsRotationFixed;
         public bool IsPositionFixed => InvMass == 0;
         public bool IsRotationFixed => InvI == Matrix3.Zero;
-        public Vector3 NetCurrentForce
-        {
-            get
-            {
-                Vector3 tempSum = Vector3.Zero;
-                foreach (Vector3 force in tempForces.Select(tf => tf.Force)) tempSum += force;
-                foreach (Vector3 force in singleFrameForces) tempSum += force;
-                return netForce + tempSum;
-            }
 
-        }
-        public Vector3 NetCurrentTorque
-        {
-            get
-            {
-                Vector3 tempSum = Vector3.Zero;
-                foreach (Vector3 torque in tempTorques.Select(tt => tt.Force)) tempSum += torque;
-                foreach (Vector3 torque in singleFrameTorques) tempSum += torque;
-                return netTorque + tempSum;
-            }
-        }
+        public Vector3 NetCurrentForce => netForce + tempForces.Sum(tf => tf.Force) + singleFrameForces.Sum();     
+        public Vector3 NetCurrentTorque =>netTorque + tempTorques.Sum(tt => tt.Force) + singleFrameTorques.Sum();
 
         // updated when major structural changes occur
         public Matrix3 InvIBody { get; private set; }

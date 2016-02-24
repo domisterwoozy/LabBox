@@ -56,7 +56,7 @@ namespace BasicVisualization.Universe.ViewModel
         public BasicGraphicalBody(IBody body)
         {
             Body = body;
-            Triangles = GraphicsFactory.NewCuboid(1, 1, 1);
+            Triangles = GraphicsFactory.NewCuboid(0.2, 0.2, 0.2);
         }
     }
 }

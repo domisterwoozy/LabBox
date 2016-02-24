@@ -11,7 +11,7 @@ using Util;
 
 namespace Physics3D.Forces
 {
-    public delegate Vector3 ForceApplicationFunc(IBody body, Vector3 rawForce);
+    public delegate Vector3 ForceApplicationFunc(IBody body, Vector3 rawField);
 
     /// <summary>
     /// Nearly all forces are not completely independent of the body they are acting on (ex: classical gravity, electromagnetism, drag, etc)
@@ -24,9 +24,14 @@ namespace Physics3D.Forces
         public ForceApplicationFunc ForceApplicationFunc { get; }
         public ForceApplicationFunc TorqueApplicationFunc { get; }
 
-        public ForceField(IVectorField rawField) : this(rawField, (body, force) => force, (body, torque) => torque) { }
-
-        public ForceField(IVectorField rawField, ForceApplicationFunc applFunc) : this(rawField, applFunc, (body, torque) => torque) { }
+        /// <summary>
+        /// Directly applies the raw field as a force and applies zero torque.
+        /// </summary>
+        public ForceField(IVectorField rawField) : this(rawField, ForceFields.DirectApplier) { }
+        /// <summary>
+        /// Always applies zero torque and applies the specified force.
+        /// </summary>
+        public ForceField(IVectorField rawField, ForceApplicationFunc applFunc) : this(rawField, applFunc, ForceFields.NullApplier) { }
 
         public ForceField(IVectorField rawField, ForceApplicationFunc forApplFunc, ForceApplicationFunc torqueApplFunc)
         {
@@ -42,6 +47,14 @@ namespace Physics3D.Forces
     public static class ForceFields
     {
         #region Application Functions
+        /// <summary>
+        /// Directly applies the rawField as a force/torque with no modification.
+        /// </summary>
+        public static Vector3 DirectApplier(IBody body, Vector3 rawField) => rawField;
+        /// <summary>
+        /// Always applies a force/torque of zero.
+        /// </summary>
+        public static Vector3 NullApplier(IBody body, Vector3 rawField) => Vector3.Zero;
         /// <summary>
         /// F = |V|^2 * cd * area * W
         /// </summary>
@@ -70,6 +83,10 @@ namespace Physics3D.Forces
         /// T = m X B
         /// </summary>
         public static Vector3 MagnetismTorqueApplier(IBody body, Vector3 magneticField) => body.EMProps.MagneticDipoleMoment ^ magneticField;
+        /// <summary>
+        /// Returns a new force application function that ignores a specified body called source.
+        /// </summary>
+        public static ForceApplicationFunc IgnoreSource(IBody source, ForceApplicationFunc f) => (body, field) => body == source ? Vector3.Zero : f(body, field);
         #endregion
 
         #region Fields
@@ -78,8 +95,12 @@ namespace Physics3D.Forces
         /// </summary>
         public static ForceField BasicForce(IVectorField forceField) => new ForceField(forceField);
         public static ForceField Drag(IVectorField windField) => new ForceField(windField, DragForceApplier);
-
-        public static ForceField Gravity(IDynamicBody sourceBody, double gravConstant) => Gravity(() => sourceBody.Transform.Pos, sourceBody.Mass * gravConstant);
+        public static ForceField Gravity(IBody sourceBody, double gravConstant)
+        {
+            return new ForceField(
+                PhysicsFields.PointMassGravity(sourceBody.Dynamics.Mass * gravConstant).Translate(() => sourceBody.Dynamics.Transform.Pos),
+                IgnoreSource(sourceBody, GravityForceApplier));
+        }
         public static ForceField Gravity(Generator<Vector3> posGen, double strength)
         {
             return new ForceField(PhysicsFields.PointMassGravity(strength).Translate(posGen), GravityForceApplier);

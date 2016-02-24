@@ -51,8 +51,11 @@
     <Compile Include="HUD\IHUDView.cs" />
     <Compile Include="ILabBoxVis.cs" />
     <Compile Include="Implementations\OpenGL\OpenGLInputHandler.cs" />
-    <Compile Include="Input\IActionHandler.cs" />
-    <Compile Include="Universe\ViewModel\Camera.cs" />
+    <Compile Include="Implementations\WPF\WPFInputHandler.cs" />
+    <Compile Include="Input\IInputHandler.cs" />
+    <Compile Include="Input\IInput.cs" />
+    <Compile Include="Universe\ViewModel\FreeCamera.cs" />
+    <Compile Include="Universe\ViewModel\ICamera.cs" />
     <Compile Include="Universe\ViewModel\GraphicsFactory.cs" />
     <Compile Include="Universe\ViewModel\GraphicalBody.cs" />
     <Compile Include="Implementations\OpenGL\OpenGLExtensions.cs" />

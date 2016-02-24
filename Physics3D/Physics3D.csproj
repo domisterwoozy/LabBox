@@ -42,16 +42,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bodies\BasicBody.cs" />
+    <Compile Include="Bodies\BodyFactory.cs" />
     <Compile Include="Collisions\ICollisionEngine.cs" />
     <Compile Include="ElectroMagnetism\ChargeGroup.cs" />
     <Compile Include="ElectroMagnetism\ChargeLoop.cs" />
     <Compile Include="ElectroMagnetism\IElectroMag.cs" />
+    <Compile Include="ElectroMagnetism\None.cs" />
     <Compile Include="ElectroMagnetism\PointCharge.cs" />
     <Compile Include="ElectroMagnetism\Solenoid.cs" />
     <Compile Include="Experiments\IExperiment.cs" />
     <Compile Include="Forces\ForceField.cs" />
     <Compile Include="Forces\PhysicsFields.cs" />
     <Compile Include="Bodies\IBody.cs" />
+    <Compile Include="Materials\BasicMaterial.cs" />
     <Compile Include="Materials\IMaterial.cs" />
     <Compile Include="Measurement\BasicBodyMeasurement.cs" />
     <Compile Include="Measurement\PressureMeasurement.cs" />

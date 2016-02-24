@@ -12,87 +12,75 @@ namespace BasicVisualization.Implementations.OpenGL
     public class OpenGLInputHandler : IInputHandler
     {
         private readonly GameWindow glWindow;
+        private readonly Dictionary<Key, KeyboardInput> keys = new Dictionary<Key, KeyboardInput>();      
 
-        private KeyboardInput down { get; }
-        private KeyboardInput left { get; }
-        private KeyboardInput right { get; }
-        private KeyboardInput up { get; }
+        public IInput Down { get; }
+        public IInput Left { get; }
+        public IInput Right { get; }
+        public IInput Up { get; }
+        public IInput Forward { get; }
+        public IInput Backward { get; }
 
-        public IInput Down => down;
-        public IInput Left => left;
-        public IInput Right => right;
-        public IInput Up => up;
+        public IInput TurnLeft { get; }
+        public IInput TurnRight { get; }
+        public IInput TurnUp { get; }
+        public IInput TurnDown { get; }
 
         public OpenGLInputHandler(GameWindow glWindow)
         {
             this.glWindow = glWindow;
             glWindow.KeyDown += GlWindow_KeyDown;
             glWindow.KeyUp += GlWindow_KeyUp;
-        }
 
-        private void GlWindow_KeyUp(object sender, KeyboardKeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Left:
-                    left.RaiseStart();
-                    break;
-                case Key.Right:
-                    right.RaiseStart();
-                    break;
-                case Key.Up:
-                    up.RaiseStart();
-                    break;
-                case Key.Down:
-                    down.RaiseStart();
-                    break;
-                default:
-                    break;
-            }
+            // key bindings here
+            Down = keys[Key.Keypad9] = new KeyboardInput(Key.Keypad9);
+            Left = keys[Key.Keypad4] = new KeyboardInput(Key.Keypad4);
+            Right = keys[Key.Keypad6] = new KeyboardInput(Key.Keypad6);
+            Up = keys[Key.Keypad7] = new KeyboardInput(Key.Keypad7);
+            Forward = keys[Key.Keypad8] = new KeyboardInput(Key.Keypad8);
+            Backward = keys[Key.Keypad5] = new KeyboardInput(Key.Keypad5);
+
+            TurnLeft = keys[Key.Left] = new KeyboardInput(Key.S);
+            TurnRight = keys[Key.Right] = new KeyboardInput(Key.S);
+            TurnUp = keys[Key.Up] = new KeyboardInput(Key.S);
+            TurnDown = keys[Key.Down] = new KeyboardInput(Key.S);
         }
 
         private void GlWindow_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            switch (e.Key)
-            {
-                case Key.Left:
-                    left.RaiseFinish();
-                    break;
-                case Key.Right:
-                    right.RaiseFinish();
-                    break;
-                case Key.Up:
-                    up.RaiseFinish();
-                    break;
-                case Key.Down:
-                    down.RaiseFinish();
-                    break;
-                default:
-                    break;
-            }
+            if (!keys.ContainsKey(e.Key)) return;
+            keys[e.Key].RaiseStart();
+        }
+
+        private void GlWindow_KeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            if (!keys.ContainsKey(e.Key)) return;
+            keys[e.Key].RaiseFinish();
         }
 
         private class KeyboardInput : IInput
         {
-            private readonly Key glKey;
+            public Key GLKey { get; }
 
-            public bool IsActive => Keyboard.GetState()[glKey];
+            public bool IsActive { get; private set; } = false;
             public double Weight => IsActive ? 1.0 : 0.0;
             public event EventHandler Finish;
             public event EventHandler Start;
 
             public KeyboardInput(Key glKey)
             {
-                this.glKey = glKey;
+                this.GLKey = glKey;
             }
 
             public void RaiseStart()
             {
+                IsActive = true;
                 Start?.Invoke(this, EventArgs.Empty);
             }
 
             public void RaiseFinish()
             {
+                IsActive = false;
                 Finish?.Invoke(this, EventArgs.Empty);
             }
         }

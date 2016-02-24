@@ -33,15 +33,16 @@ namespace BasicVisualization.Implementations.OpenGL
         private int vboColor;
 
         public ICollection<IGraphicalBody> Bodies { get; }
-
+        private FreeCamera freeCam;
+        public ICamera Camera => freeCam;
         public IInputHandler InputHandler { get; }
-
-        public IActionHandler ActionHandler => null;
         public ICollection<IHUDView> HUDs => null;
 
         public BasicVis(params IGraphicalBody[] graphicalBodies) : base()
         {
+            // todo: make sure these two are injected
             InputHandler = new OpenGLInputHandler(this);
+            freeCam = new FreeCamera(InputHandler);
 
             Load += BasicVis_Load;
             UpdateFrame += BasicVis_UpdateFrame;
@@ -59,23 +60,17 @@ namespace BasicVisualization.Implementations.OpenGL
         {
             InitProgram();
             Title = "Basic Vis";
+            freeCam.Enabled = true;
             GL.GenBuffers(1, out vboPos);
             GL.GenBuffers(1, out vboColor);
             GL.UseProgram(pgmID);
             GL.Enable(EnableCap.DepthTest);
-            GL.ClearColor(Color.Blue);
+            GL.ClearColor(Color.White);
             GL.PointSize(5.0f);
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
         {
-            //// update physics
-            //foreach (var body in Bodies)
-            //{
-            //    body.Translation -= e.Time * Math3D.Vector3.K;
-            //    body.Orientation *= Math3D.Quaternion.UnitQuaternion(e.Time, new Math3D.Vector3(1, 1, 1));
-            //}
-
             // fill all of the verts and colors onto two large buffers
             var verts = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
             var colors = Bodies.SelectMany(gb => gb.Colors()).ToArray();
@@ -104,11 +99,11 @@ namespace BasicVisualization.Implementations.OpenGL
             GL.EnableVertexAttribArray(vsPos);
             GL.EnableVertexAttribArray(vsColor);
 
-            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView((float)(Math.PI / 2), (float)Width / Height, 0.1f, 100.0f); // camera props
-            Matrix4 view = Matrix4.LookAt(new Vector3(0, 0, 10), Vector3.Zero, new Vector3(0, 1, 0)); // camera state
+            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Camera.VertFOV, Camera.AspectRatio, Camera.MinRange, Camera.MaxRange); // camera props
+            Matrix4 view = Matrix4.LookAt(Camera.Pos.ToGLVector3(), Camera.LookAtPos.ToGLVector3(), Camera.UpDir.ToGLVector3()); // camera state
 
             int startIndex = 0;
-            foreach (MoveableBody body in Bodies)
+            foreach (IGraphicalBody body in Bodies)
             {
                 // send the transformation
                 Matrix4 scale = Matrix4.Identity;
