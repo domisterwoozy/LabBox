@@ -25,6 +25,14 @@ namespace BasicVisualization.Implementations.WPF
             }
         }
 
+        public IInput Exit
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public IInput Forward
         {
             get
@@ -34,6 +42,14 @@ namespace BasicVisualization.Implementations.WPF
         }
 
         public IInput Left
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IInput Pause
         {
             get
             {

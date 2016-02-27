@@ -19,5 +19,8 @@ namespace BasicVisualization.Input
         IInput TurnRight { get; }
         IInput TurnUp { get; }
         IInput TurnDown { get; }
+
+        IInput Exit { get; }
+        IInput Pause { get; }
     }
 }

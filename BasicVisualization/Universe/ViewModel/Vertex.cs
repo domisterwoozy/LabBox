@@ -26,5 +26,11 @@ namespace BasicVisualization.Universe.ViewModel
             Pos = new Vector3(x, y, z);
             Color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
         }
+
+        public Vertex(double x, double y, double z, Color color)
+        {
+            Pos = new Vector3(x, y, z);
+            Color = color;
+        }
     }
 }

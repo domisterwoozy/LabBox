@@ -27,11 +27,11 @@ namespace Physics3D.Forces
         /// <summary>
         /// Directly applies the raw field as a force and applies zero torque.
         /// </summary>
-        public ForceField(IVectorField rawField) : this(rawField, ForceFields.DirectApplier) { }
+        public ForceField(IVectorField rawField) : this(rawField, ForceFieldFactory.DirectApplier) { }
         /// <summary>
         /// Always applies zero torque and applies the specified force.
         /// </summary>
-        public ForceField(IVectorField rawField, ForceApplicationFunc applFunc) : this(rawField, applFunc, ForceFields.NullApplier) { }
+        public ForceField(IVectorField rawField, ForceApplicationFunc applFunc) : this(rawField, applFunc, ForceFieldFactory.NullApplier) { }
 
         public ForceField(IVectorField rawField, ForceApplicationFunc forApplFunc, ForceApplicationFunc torqueApplFunc)
         {
@@ -44,7 +44,7 @@ namespace Physics3D.Forces
         public Vector3 GetTorqueOnBody(IBody body) => TorqueApplicationFunc(body, RawField.Value(body.Dynamics.Transform.Pos));
     }
 
-    public static class ForceFields
+    public static class ForceFieldFactory
     {
         #region Application Functions
         /// <summary>

@@ -75,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Kinematics\EuclideanKinematics.cs" />
     <Compile Include="Dynamics\RigidBody6DOF.cs" />
+    <Compile Include="Universes\SampleUniverses.cs" />
     <Compile Include="Universes\TwoBodyUniverse.cs" />
   </ItemGroup>
   <ItemGroup>

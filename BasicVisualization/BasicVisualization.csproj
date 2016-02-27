@@ -54,6 +54,8 @@
     <Compile Include="Implementations\WPF\WPFInputHandler.cs" />
     <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\IInput.cs" />
+    <Compile Include="Universe\PausablePhysicsRunner.cs" />
+    <Compile Include="Universe\ViewModel\BasicGraphicalBody.cs" />
     <Compile Include="Universe\ViewModel\FreeCamera.cs" />
     <Compile Include="Universe\ViewModel\ICamera.cs" />
     <Compile Include="Universe\ViewModel\GraphicsFactory.cs" />
@@ -61,7 +63,7 @@
     <Compile Include="Implementations\OpenGL\OpenGLExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implementations\OpenGL\BasicVis.cs" />
+    <Compile Include="Implementations\OpenGL\OpenGLVisualization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

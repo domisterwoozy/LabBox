@@ -9,6 +9,8 @@ namespace BasicVisualization.Universe.ViewModel
 {
     public interface ICamera
     {
+        bool IsLocked { get; set; }
+
         // camera focal properties
         float VertFOV { get; }
         float MaxRange { get; }

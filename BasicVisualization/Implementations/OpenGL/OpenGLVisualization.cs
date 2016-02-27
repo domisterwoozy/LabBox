@@ -11,11 +11,13 @@ using System.Text;
 using System.Threading.Tasks;
 using BasicVisualization.HUD;
 using BasicVisualization.Input;
+using System.Runtime.InteropServices;
 
 namespace BasicVisualization.Implementations.OpenGL
 {
-    public class BasicVis : GameWindow, ILabBoxVis
-    {
+    public class OpenGLVisualization : GameWindow, ILabBoxVis
+    {       
+
         // program addresses
         private int pgmID;
         private int vsID;
@@ -28,27 +30,39 @@ namespace BasicVisualization.Implementations.OpenGL
         private int vsView;
         private int vsProj;
 
-        // vertex buffer components
-        private int vboPos;
-        private int vboColor;
+        // vertex buffer object
+        private int vbo;
 
         public ICollection<IGraphicalBody> Bodies { get; }
-        private FreeCamera freeCam;
-        public ICamera Camera => freeCam;
+        public ICamera Camera { get;}
         public IInputHandler InputHandler { get; }
-        public ICollection<IHUDView> HUDs => null;
+        public ICollection<IHUDView> HUDs => null;        
 
-        public BasicVis(params IGraphicalBody[] graphicalBodies) : base()
+        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, params IGraphicalBody[] graphicalBodies) : base()
         {
-            // todo: make sure these two are injected
-            InputHandler = new OpenGLInputHandler(this);
-            freeCam = new FreeCamera(InputHandler);
+            InputHandler = inputHandler;
+            Camera = camera;
+            Bodies = graphicalBodies.ToList();
 
+            BindEvents();
+        }
+
+        public OpenGLVisualization(params IGraphicalBody[] graphicalBodies) : base()
+        {
+            // use opengl defaults
+            InputHandler = new OpenGLInputHandler(this);
+            Camera = new FreeCamera(InputHandler);
+            Bodies = graphicalBodies.ToList();
+
+            BindEvents();           
+        }
+
+
+        private void BindEvents()
+        {
             Load += BasicVis_Load;
             UpdateFrame += BasicVis_UpdateFrame;
-            RenderFrame += BasicVis_RenderFrame;
-
-            Bodies = graphicalBodies.ToList();
+            RenderFrame += BasicVis_RenderFrame;            
         }
 
         public void RunVis()
@@ -56,36 +70,52 @@ namespace BasicVisualization.Implementations.OpenGL
             Run();
         }
 
+        public void EndVis()
+        {
+            Exit();
+        }
+
         private void BasicVis_Load(object sender, EventArgs e)
         {
-            InitProgram();
+            // window setup
             Title = "Basic Vis";
-            freeCam.Enabled = true;
-            GL.GenBuffers(1, out vboPos);
-            GL.GenBuffers(1, out vboColor);
+            WindowBorder = WindowBorder.Hidden;
+            WindowState = WindowState.Fullscreen;
+            CursorVisible = false;
+
+            // my model setup
+            Camera.IsLocked = false;
+
+            // opengl setup
+            /// use our program and buffers
+            InitProgram();            
+            GL.GenBuffers(1, out vbo);
             GL.UseProgram(pgmID);
+            // z ordering
             GL.Enable(EnableCap.DepthTest);
-            GL.ClearColor(Color.White);
+            //// transparency
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            // background color
+            GL.ClearColor(Color.Black);
+            // smallest point diameter
             GL.PointSize(5.0f);
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
         {
-            // fill all of the verts and colors onto two large buffers
+            // fill all of the positions and colors into one large vertex
             var verts = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
-            var colors = Bodies.SelectMany(gb => gb.Colors()).ToArray();
-            
+
             // send the vertexes
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboPos); // tell opengl were about to use the vertex position buffer
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(verts.Length * Vector3.SizeInBytes), verts, BufferUsageHint.StaticDraw); // send the vertex position to the buffer
-            GL.VertexAttribPointer(vsPos, 3, VertexAttribPointerType.Float, false, 0, 0); // bind teh buffer to the vertex shader position attirbute
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo); // tell opengl what buffer were using for the frame
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(verts.Length * OpenGLVertex.Stride), verts, BufferUsageHint.StaticDraw); // send the vertex data to the array buffer so drawarrays can use it
+            GL.VertexAttribPointer(vsPos, 3, VertexAttribPointerType.Float, false, OpenGLVertex.Stride, OpenGLVertex.PositionOffset); // bind teh buffer to the vertex shader position attirbute
+            GL.VertexAttribPointer(vsColor, 4, VertexAttribPointerType.Float, false, OpenGLVertex.Stride, OpenGLVertex.ColorOffset); // bind teh buffer to the vertex shader color attirbute
 
-            // send the colors        
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboColor);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(colors.Length * Vector3.SizeInBytes), colors, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(vsColor, 3, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            // tell opengl were using these attributes
+            GL.EnableVertexAttribArray(vsPos);
+            GL.EnableVertexAttribArray(vsColor);
         }
 
         private void BasicVis_RenderFrame(object sender, FrameEventArgs e)
@@ -93,34 +123,29 @@ namespace BasicVisualization.Implementations.OpenGL
             GL.Viewport(0, 0, Width, Height); // set view prot to cover full window
 
             // clear the frame
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-           // GL.Enable(EnableCap.DepthTest);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);            
 
-            GL.EnableVertexAttribArray(vsPos);
-            GL.EnableVertexAttribArray(vsColor);
-
+            // constant view/proj transformations and send them to opengl
             Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Camera.VertFOV, Camera.AspectRatio, Camera.MinRange, Camera.MaxRange); // camera props
             Matrix4 view = Matrix4.LookAt(Camera.Pos.ToGLVector3(), Camera.LookAtPos.ToGLVector3(), Camera.UpDir.ToGLVector3()); // camera state
+            GL.UniformMatrix4(vsView, false, ref view); // send to opengl
+            GL.UniformMatrix4(vsProj, false, ref proj); // send to opengl
 
             int startIndex = 0;
             foreach (IGraphicalBody body in Bodies)
             {
-                // send the transformation
+                // get the model matrix and send it
                 Matrix4 scale = Matrix4.Identity;
                 Matrix4 rotation = Matrix4.CreateFromQuaternion(body.Orientation.ToGLQuaternion());
                 Matrix4 translation = Matrix4.CreateTranslation(body.Translation.ToGLVector3());
                 Matrix4 model = scale * rotation * translation;
-                GL.UniformMatrix4(vsModel, false, ref model);
-                GL.UniformMatrix4(vsView, false, ref view);
-                GL.UniformMatrix4(vsProj, false, ref proj);
+                GL.UniformMatrix4(vsModel, false, ref model);                
+
                 int numVerts = body.Triangles.Length * 3;
-                GL.DrawArrays(PrimitiveType.Triangles, startIndex, startIndex + numVerts);
+                GL.DrawArrays(PrimitiveType.Triangles, startIndex, numVerts);
                 startIndex += numVerts;                
-            }            
-
-            GL.DisableVertexAttribArray(vsPos);
-            GL.DisableVertexAttribArray(vsColor);
-
+            }
+                       
             SwapBuffers();
         }        
 

@@ -25,8 +25,8 @@ namespace BasicVisualization.Universe.ViewModel
         public float MinRange { get; set; } = 0.1f;
         public float AspectRatio { get; } = 16.0f / 9.0f;
 
-        public Vector3 Pos { get; private set; } = new Vector3(0, 0, 10);
-        public Vector3 UpDir { get; private set; } = Vector3.J;
+        public Vector3 Pos { get; private set; } = new Vector3(10, 10, 10);
+        public Vector3 UpDir { get; private set; } = Vector3.K;
         public Vector3 LookAtPos { get; private set; } = Vector3.Zero;        
         
         /// <summary>
@@ -34,23 +34,23 @@ namespace BasicVisualization.Universe.ViewModel
         /// </summary>
         public IInputHandler CameraInput { get; }
         /// <summary>
-        /// Use to tune the lateral movement speed of the camera. The default is 1.0
+        /// Use to tune the lateral movement speed of the camera.
         /// </summary>
         public float MoveSpeed { get; set; } = 10.0f;
         /// <summary>
-        /// Use to tune the rotation speed of the camera. The default is 1.0
+        /// Use to tune the rotation speed of the camera.
         /// </summary>
-        public float TurnSpeed { get; set; } = 10.0f;
+        public float TurnSpeed { get; set; } = 35.0f;
         /// <summary>
         /// Whether the input controlled camera is currently accepting input.
         /// </summary>
-        public bool Enabled
+        public bool IsLocked
         {
-            get { return inputPollTimer == null; }
+            get { return inputPollTimer != null; }
             set
             {
-                if (value) StartPollHeartBeat();
-                else StopPollHeartBeat();
+                if (value) StopPollHeartBeat();
+                else StartPollHeartBeat();
             }
         }
 
@@ -70,8 +70,8 @@ namespace BasicVisualization.Universe.ViewModel
             inputPollTimer = null;
         }
 
-        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.J).UnitDirection;
-        private Vector3 HorizontalRight() => HorizontalForward() ^ Vector3.J;
+        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.K).UnitDirection;
+        private Vector3 HorizontalRight() => HorizontalForward() ^ Vector3.K;
 
         private void PollInput(object timerState)
         {
@@ -102,23 +102,23 @@ namespace BasicVisualization.Universe.ViewModel
             // float up and down
             if (CameraInput.Up.IsActive)
             {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
+                Pos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
+                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
             }
             if (CameraInput.Down.IsActive)
             {
-                Pos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
-                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
+                Pos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
+                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
             }
 
             // turning
             if (CameraInput.TurnUp.IsActive)
             {
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
+                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
             }
             if (CameraInput.TurnDown.IsActive)
             {
-                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.J;
+                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
             }
             if (CameraInput.TurnLeft.IsActive)
             {
@@ -129,9 +129,5 @@ namespace BasicVisualization.Universe.ViewModel
                 LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight();
             }
         }
-
-        
-
-
     }
 }

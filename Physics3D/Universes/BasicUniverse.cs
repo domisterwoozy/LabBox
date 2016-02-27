@@ -26,6 +26,7 @@ namespace Physics3D.Universes
 
         public void Update(double deltaTime)
         {
+            if (deltaTime == 0) return;
             // enact all the single frame forces on the bodies
             foreach (IBody body in Bodies)
             {

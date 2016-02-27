@@ -37,7 +37,7 @@ namespace PhysicsTests
             A.CallTo(() => mat.DragCoef).Returns(cd);
 
             var coeff = vel.MagSquared * cd * area;
-            Assert.That(ForceFields.DragForceApplier(body, windVect), Izz.EqualTo(coeff * windVect).Within(Math.Pow(10, -12)));
+            Assert.That(ForceFieldFactory.DragForceApplier(body, windVect), Izz.EqualTo(coeff * windVect).Within(Math.Pow(10, -12)));
         }
     }
 }

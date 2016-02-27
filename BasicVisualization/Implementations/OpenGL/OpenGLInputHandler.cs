@@ -12,7 +12,11 @@ namespace BasicVisualization.Implementations.OpenGL
     public class OpenGLInputHandler : IInputHandler
     {
         private readonly GameWindow glWindow;
-        private readonly Dictionary<Key, KeyboardInput> keys = new Dictionary<Key, KeyboardInput>();      
+        private readonly Dictionary<Key, KeyboardInput> keys = new Dictionary<Key, KeyboardInput>();
+        //private readonly MouseInput mouseUp = new MouseInput();
+        //private readonly MouseInput mouseDown = new MouseInput();
+        //private readonly MouseInput mouseLeft = new MouseInput();
+        //private readonly MouseInput mouseRight = new MouseInput();
 
         public IInput Down { get; }
         public IInput Left { get; }
@@ -26,11 +30,15 @@ namespace BasicVisualization.Implementations.OpenGL
         public IInput TurnUp { get; }
         public IInput TurnDown { get; }
 
+        public IInput Exit { get; }
+        public IInput Pause { get; }
+
         public OpenGLInputHandler(GameWindow glWindow)
         {
             this.glWindow = glWindow;
             glWindow.KeyDown += GlWindow_KeyDown;
             glWindow.KeyUp += GlWindow_KeyUp;
+            //glWindow.Mouse.Move += Mouse_Move;
 
             // key bindings here
             Down = keys[Key.Keypad9] = new KeyboardInput(Key.Keypad9);
@@ -44,6 +52,28 @@ namespace BasicVisualization.Implementations.OpenGL
             TurnRight = keys[Key.Right] = new KeyboardInput(Key.S);
             TurnUp = keys[Key.Up] = new KeyboardInput(Key.S);
             TurnDown = keys[Key.Down] = new KeyboardInput(Key.S);
+            //TurnLeft = mouseLeft;
+            //TurnRight = mouseRight;
+            //TurnUp = mouseUp;
+            //TurnDown = mouseDown;
+
+            Exit = keys[Key.Escape] = new KeyboardInput(Key.Escape);
+            Pause = keys[Key.P] = new KeyboardInput(Key.P);
+        }
+
+        private void Mouse_Move(object sender, MouseMoveEventArgs e)
+        {
+            //if (e.XDelta > 0) mouseLeft.RaiseStart(e.XDelta);
+            //else mouseLeft.NotActive();
+
+            //if (e.XDelta < 0) mouseRight.RaiseStart(-e.XDelta);
+            //else mouseRight.NotActive();
+
+            //if (e.YDelta > 0) mouseUp.RaiseStart(e.YDelta);
+            //mouseUp.NotActive();
+            
+            //if (e.YDelta < 0) mouseDown.RaiseStart(-e.YDelta);
+            //mouseDown.NotActive();            
         }
 
         private void GlWindow_KeyDown(object sender, KeyboardKeyEventArgs e)
@@ -58,6 +88,29 @@ namespace BasicVisualization.Implementations.OpenGL
             keys[e.Key].RaiseFinish();
         }
 
+        private class MouseInput : IInput
+        {
+            public bool IsActive { get; private set; }
+            public double Weight { get; private set; }
+
+            public event EventHandler Finish;
+            public event EventHandler Start;
+
+            public void RaiseStart(float weight)
+            {
+                IsActive = true;
+                Weight = weight;
+                Start?.Invoke(this, EventArgs.Empty);
+            }
+
+            public void NotActive()
+            {
+                if (IsActive) Finish?.Invoke(this, EventArgs.Empty);
+                IsActive = false;
+                Weight = 0;                
+            }
+        }
+
         private class KeyboardInput : IInput
         {
             public Key GLKey { get; }
@@ -69,7 +122,7 @@ namespace BasicVisualization.Implementations.OpenGL
 
             public KeyboardInput(Key glKey)
             {
-                this.GLKey = glKey;
+                GLKey = glKey;
             }
 
             public void RaiseStart()
