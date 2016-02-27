@@ -1,5 +1,5 @@
-﻿using BasicVisualization.Universe;
-using BasicVisualization.Universe.ViewModel;
+﻿using LabBox.Visualization.Universe;
+using LabBox.Visualization.Universe.ViewModel;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
@@ -9,11 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BasicVisualization.HUD;
-using BasicVisualization.Input;
+using LabBox.Visualization.HUD;
+using LabBox.Visualization.Input;
 using System.Runtime.InteropServices;
+using BasicVisualization;
 
-namespace BasicVisualization.Implementations.OpenGL
+namespace LabBox.OpenGLVisualization
 {
     public class OpenGLVisualization : GameWindow, ILabBoxVis
     {       
@@ -152,8 +153,8 @@ namespace BasicVisualization.Implementations.OpenGL
         private void InitProgram()
         {
             pgmID = GL.CreateProgram();
-            vsID = LoadShader("Implementations\\OpenGL\\Shaders\\vs.glsl", ShaderType.VertexShader, pgmID);
-            fsID = LoadShader("Implementations\\OpenGL\\Shaders\\fs.glsl", ShaderType.FragmentShader, pgmID);
+            vsID = LoadShader("Shaders\\vs.glsl", ShaderType.VertexShader, pgmID);
+            fsID = LoadShader("Shaders\\fs.glsl", ShaderType.FragmentShader, pgmID);
             GL.LinkProgram(pgmID);
             Console.WriteLine(GL.GetProgramInfoLog(pgmID));
 

@@ -1,23 +1,25 @@
-﻿using BasicVisualization.Implementations.OpenGL;
-using BasicVisualization.Input;
-using BasicVisualization.Universe;
-using BasicVisualization.Universe.ViewModel;
+﻿using BasicVisualization;
+using LabBox.Visualization.Universe;
+using LabBox.Visualization.Universe.ViewModel;
 using Math3D;
 using Physics3D.Universes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Util;
 
-namespace BasicVisualization
+namespace LabBox.OpenGLVisualization
 {
-    public class Program
+    static class Program
     {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
         [STAThread]
-        public static void Main()
+        static void Main()
         {
             var uni = SampleUniverses.SunEarth(10, 100.0);
             IEnumerable<IGraphicalBody> bodies = BasicGraphicalBody.FromPhysicsBodies(uni.Bodies);
@@ -29,8 +31,8 @@ namespace BasicVisualization
                 vis.InputHandler.Pause.Start += (sender, e) => physicsRunner.TogglePause();
                 vis.InputHandler.Exit.Start += (sender, e) => vis.EndVis();
                 physicsRunner.StartPhysics();
-                vis.RunVis(); 
+                vis.RunVis();
             }
         }
-    }   
+    }
 }

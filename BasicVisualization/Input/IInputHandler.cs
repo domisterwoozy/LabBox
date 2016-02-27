@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Input
+namespace LabBox.Visualization.Input
 {   
     public interface IInputHandler
     {

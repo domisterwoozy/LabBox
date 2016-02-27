@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Math3D;
 using System.Drawing;
 
-namespace BasicVisualization.Universe.ViewModel
+namespace LabBox.Visualization.Universe.ViewModel
 {
     public static class FlatFactory
     {

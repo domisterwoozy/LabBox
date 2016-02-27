@@ -1,4 +1,4 @@
-﻿using BasicVisualization.Universe.ViewModel;
+﻿using LabBox.Visualization.Universe.ViewModel;
 using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Implementations.OpenGL
+namespace LabBox.OpenGLVisualization
 {
     public struct OpenGLVertex
     {

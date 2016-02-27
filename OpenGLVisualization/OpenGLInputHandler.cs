@@ -1,4 +1,4 @@
-﻿using BasicVisualization.Input;
+﻿using LabBox.Visualization.Input;
 using OpenTK;
 using OpenTK.Input;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Implementations.OpenGL
+namespace LabBox.OpenGLVisualization
 {
     public class OpenGLInputHandler : IInputHandler
     {

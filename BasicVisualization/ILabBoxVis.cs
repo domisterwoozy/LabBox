@@ -1,6 +1,6 @@
-﻿using BasicVisualization.HUD;
-using BasicVisualization.Input;
-using BasicVisualization.Universe.ViewModel;
+﻿using LabBox.Visualization.HUD;
+using LabBox.Visualization.Input;
+using LabBox.Visualization.Universe.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

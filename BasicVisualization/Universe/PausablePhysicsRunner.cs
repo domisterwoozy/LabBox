@@ -1,5 +1,4 @@
-﻿using BasicVisualization.Input;
-using Physics3D.Universes;
+﻿using Physics3D.Universes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Universe
+namespace LabBox.Visualization.Universe
 {
     // Todo: use a ManualResetEvent to actually pause the thread instead of just passing 0
     public class PausablePhysicsRunner

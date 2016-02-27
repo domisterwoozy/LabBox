@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Universe.ViewModel
+namespace LabBox.Visualization.Universe.ViewModel
 {
     public interface ICamera
     {

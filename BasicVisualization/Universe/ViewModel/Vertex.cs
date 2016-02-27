@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Universe.ViewModel
+namespace LabBox.Visualization.Universe.ViewModel
 {
     public struct Vertex
     {
@@ -24,7 +24,7 @@ namespace BasicVisualization.Universe.ViewModel
         public Vertex(double x, double y, double z)
         {
             Pos = new Vector3(x, y, z);
-            Color = Color.FromArgb(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
+            Color = Color.FromArgb(255, rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
         }
 
         public Vertex(double x, double y, double z, Color color)

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Universe.ViewModel
+namespace LabBox.Visualization.Universe.ViewModel
 {
     /// <summary>
     /// A simple body that is backed by a body from the physics engine.
@@ -25,6 +25,7 @@ namespace BasicVisualization.Universe.ViewModel
         {
             Body = body;
             Triangles = SphereFactory.NewUnitSphere(2, 3);
+            //Triangles = FlatFactory.NewCuboid(1, 1, 1);
         }
 
         public static IEnumerable<BasicGraphicalBody> FromPhysicsBodies(IEnumerable<IBody> bodies)

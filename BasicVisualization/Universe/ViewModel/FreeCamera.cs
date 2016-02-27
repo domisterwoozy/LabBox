@@ -1,4 +1,4 @@
-﻿using BasicVisualization.Input;
+﻿using LabBox.Visualization.Input;
 using Math3D;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.Universe.ViewModel
+namespace LabBox.Visualization.Universe.ViewModel
 {
     /// <summary>
     /// A camera controlled by user input.

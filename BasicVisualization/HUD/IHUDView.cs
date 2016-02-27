@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicVisualization.HUD
+namespace LabBox.Visualization.HUD
 {
     /// <summary>
     /// A view that shows up on the HUD.
