@@ -12,17 +12,17 @@ namespace LabBox.Visualization.Universe.ViewModel
 {
     public static class FlatFactory
     {
-        public static PrimitiveTriangle[] NewCuboid(double x, double y, double z)
+        public static PrimitiveTriangle[] NewCuboid(double x, double y, double z, Color c)
         {
             List<Vertex> verts = new List<Vertex>();
-            verts.Add(new Vertex(x, y, z));
-            verts.Add(new Vertex(-x, y, z));
-            verts.Add(new Vertex(-x, -y, z));
-            verts.Add(new Vertex(x, -y, z));
-            verts.Add(new Vertex(x, y, -z));
-            verts.Add(new Vertex(-x, y, -z));
-            verts.Add(new Vertex(-x, -y, -z));
-            verts.Add(new Vertex(x, -y, -z));
+            verts.Add(new Vertex(x, y, z, c));
+            verts.Add(new Vertex(-x, y, z, c));
+            verts.Add(new Vertex(-x, -y, z, c));
+            verts.Add(new Vertex(x, -y, z, c));
+            verts.Add(new Vertex(x, y, -z, c));
+            verts.Add(new Vertex(-x, y, -z, c));
+            verts.Add(new Vertex(-x, -y, -z, c));
+            verts.Add(new Vertex(x, -y, -z, c));
 
             List<PrimitiveTriangle> prims = new List<PrimitiveTriangle>();
             prims.Add(new PrimitiveTriangle(verts[0], verts[1], verts[2]));
@@ -59,7 +59,7 @@ namespace LabBox.Visualization.Universe.ViewModel
 
     public class SphereFactory
     {
-        public static PrimitiveTriangle[] NewUnitSphere(double radius, int level)
+        public static PrimitiveTriangle[] NewSphere(Color color, double radius, int level)
         {
             double t = (1.0 + Math.Sqrt(5.0)) / 2.0;
             List<Vertex> verts = new List<Vertex>();
@@ -80,32 +80,32 @@ namespace LabBox.Visualization.Universe.ViewModel
 
             List<PrimitiveTriangle> faces = new List<PrimitiveTriangle>();
             // 5 faces around point 0
-            faces.Add(new PrimitiveTriangle(verts[0], verts[11], verts[5]));
-            faces.Add(new PrimitiveTriangle(verts[0], verts[5], verts[1]));
-            faces.Add(new PrimitiveTriangle(verts[0], verts[1], verts[7]));
-            faces.Add(new PrimitiveTriangle(verts[0], verts[7], verts[10]));
-            faces.Add(new PrimitiveTriangle(verts[0], verts[10], verts[11]));
+            faces.Add(new PrimitiveTriangle(verts[0], verts[11], verts[5], false));
+            faces.Add(new PrimitiveTriangle(verts[0], verts[5], verts[1], false));
+            faces.Add(new PrimitiveTriangle(verts[0], verts[1], verts[7], false));
+            faces.Add(new PrimitiveTriangle(verts[0], verts[7], verts[10], false));
+            faces.Add(new PrimitiveTriangle(verts[0], verts[10], verts[11], false));
 
             // 5 adjacent faces
-            faces.Add(new PrimitiveTriangle(verts[1], verts[5], verts[9]));
-            faces.Add(new PrimitiveTriangle(verts[5], verts[11], verts[4]));
-            faces.Add(new PrimitiveTriangle(verts[11], verts[10], verts[2]));
-            faces.Add(new PrimitiveTriangle(verts[10], verts[7], verts[6]));
-            faces.Add(new PrimitiveTriangle(verts[7], verts[1], verts[8]));
+            faces.Add(new PrimitiveTriangle(verts[1], verts[5], verts[9], false));
+            faces.Add(new PrimitiveTriangle(verts[5], verts[11], verts[4], false));
+            faces.Add(new PrimitiveTriangle(verts[11], verts[10], verts[2], false));
+            faces.Add(new PrimitiveTriangle(verts[10], verts[7], verts[6], false));
+            faces.Add(new PrimitiveTriangle(verts[7], verts[1], verts[8], false));
 
             // 5 faces around point 3
-            faces.Add(new PrimitiveTriangle(verts[3], verts[9], verts[4]));
-            faces.Add(new PrimitiveTriangle(verts[3], verts[4], verts[2]));
-            faces.Add(new PrimitiveTriangle(verts[3], verts[2], verts[6]));
-            faces.Add(new PrimitiveTriangle(verts[3], verts[6], verts[8]));
-            faces.Add(new PrimitiveTriangle(verts[3], verts[8], verts[9]));
+            faces.Add(new PrimitiveTriangle(verts[3], verts[9], verts[4], false));
+            faces.Add(new PrimitiveTriangle(verts[3], verts[4], verts[2], false));
+            faces.Add(new PrimitiveTriangle(verts[3], verts[2], verts[6], false));
+            faces.Add(new PrimitiveTriangle(verts[3], verts[6], verts[8], false));
+            faces.Add(new PrimitiveTriangle(verts[3], verts[8], verts[9], false));
 
             // 5 adjacent faces
-            faces.Add(new PrimitiveTriangle(verts[4], verts[9], verts[5]));
-            faces.Add(new PrimitiveTriangle(verts[2], verts[4], verts[11]));
-            faces.Add(new PrimitiveTriangle(verts[6], verts[2], verts[10]));
-            faces.Add(new PrimitiveTriangle(verts[8], verts[6], verts[7]));
-            faces.Add(new PrimitiveTriangle(verts[9], verts[8], verts[1]));
+            faces.Add(new PrimitiveTriangle(verts[4], verts[9], verts[5], false));
+            faces.Add(new PrimitiveTriangle(verts[2], verts[4], verts[11], false));
+            faces.Add(new PrimitiveTriangle(verts[6], verts[2], verts[10], false));
+            faces.Add(new PrimitiveTriangle(verts[8], verts[6], verts[7], false));
+            faces.Add(new PrimitiveTriangle(verts[9], verts[8], verts[1], false));
 
             for (int i = 0; i < level; i++)
             {
@@ -117,10 +117,10 @@ namespace LabBox.Visualization.Universe.ViewModel
                     Vertex b = SetVectorLength(GetMiddlePoint(tri.B, tri.C), radius);
                     Vertex c = SetVectorLength(GetMiddlePoint(tri.C, tri.A), radius);
 
-                    faces2.Add(new PrimitiveTriangle(tri.A, a, c));
-                    faces2.Add(new PrimitiveTriangle(tri.B, b, a));
-                    faces2.Add(new PrimitiveTriangle(tri.C, c, b));
-                    faces2.Add(new PrimitiveTriangle(a, b, c));
+                    faces2.Add(new PrimitiveTriangle(tri.A, a, c, false));
+                    faces2.Add(new PrimitiveTriangle(tri.B, b, a, false));
+                    faces2.Add(new PrimitiveTriangle(tri.C, c, b, false));
+                    faces2.Add(new PrimitiveTriangle(a, b, c, false));
                 }
                 faces = faces2;
             }
@@ -128,12 +128,12 @@ namespace LabBox.Visualization.Universe.ViewModel
             return faces.ToArray();
         }
 
-        private static Vertex SetVectorLength(Vertex v, double length) => new Vertex(length * v.Pos.UnitDirection, v.Color);
+        private static Vertex SetVectorLength(Vertex v, double length) => new Vertex(length * v.Pos.UnitDirection, v.Color, v.Pos.UnitDirection);
 
         private static Vertex GetMiddlePoint(Vertex a, Vertex b)
         {
             return new Vertex(0.5 * (a.Pos + b.Pos),
-                Color.FromArgb((a.Color.A + b.Color.A) / 2, (a.Color.R + b.Color.R) / 2, (a.Color.G + b.Color.G) / 2, (a.Color.B + b.Color.B) / 2));
+                Color.FromArgb((a.Color.A + b.Color.A) / 2, (a.Color.R + b.Color.R) / 2, (a.Color.G + b.Color.G) / 2, (a.Color.B + b.Color.B) / 2), 0.5 * (a.Normal + b.Normal));
         }   
         
     }

@@ -53,6 +53,8 @@
     <Compile Include="Input\IInput.cs" />
     <Compile Include="Universe\PausablePhysicsRunner.cs" />
     <Compile Include="Universe\ViewModel\BasicGraphicalBody.cs" />
+    <Compile Include="Universe\ViewModel\LightSource.cs" />
+    <Compile Include="Universe\ViewModel\PointLight.cs" />
     <Compile Include="Universe\ViewModel\FreeCamera.cs" />
     <Compile Include="Universe\ViewModel\ICamera.cs" />
     <Compile Include="Universe\ViewModel\GraphicsFactory.cs" />
@@ -61,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="Universe\ViewModel\Material.cs" />
     <Compile Include="Universe\ViewModel\PrimitiveTriangle.cs" />
     <Compile Include="Universe\ViewModel\Vertex.cs" />
   </ItemGroup>

@@ -21,16 +21,16 @@ namespace LabBox.Visualization.Universe.ViewModel
 
         public PrimitiveTriangle[] Triangles { get; }
 
-        public BasicGraphicalBody(IBody body)
+        public BasicGraphicalBody(IBody body, Color c)
         {
             Body = body;
-            Triangles = SphereFactory.NewUnitSphere(2, 3);
+            Triangles = SphereFactory.NewSphere(c, 2, 3);
             //Triangles = FlatFactory.NewCuboid(1, 1, 1);
         }
 
-        public static IEnumerable<BasicGraphicalBody> FromPhysicsBodies(IEnumerable<IBody> bodies)
+        public static IEnumerable<BasicGraphicalBody> FromPhysicsBodies(IEnumerable<IBody> bodies, Color c)
         {
-            foreach (var b in bodies) yield return new BasicGraphicalBody(b);
+            foreach (var b in bodies) yield return new BasicGraphicalBody(b, c);
         }
     }
 }

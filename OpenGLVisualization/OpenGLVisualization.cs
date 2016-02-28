@@ -13,26 +13,17 @@ using LabBox.Visualization.HUD;
 using LabBox.Visualization.Input;
 using System.Runtime.InteropServices;
 using BasicVisualization;
+using LabBox.OpenGLVisualization.Shaders;
 
 namespace LabBox.OpenGLVisualization
 {
     public class OpenGLVisualization : GameWindow, ILabBoxVis
-    {       
+    {
+        //private int vertexArrayID;
+        private int vertexBufferID;
 
-        // program addresses
-        private int pgmID;
-        private int vsID;
-        private int fsID;
+        private LitMaterialProgram myProgram;
 
-        // vertex shader components
-        private int vsPos;
-        private int vsColor;
-        private int vsModel;
-        private int vsView;
-        private int vsProj;
-
-        // vertex buffer object
-        private int vbo;
 
         public ICollection<IGraphicalBody> Bodies { get; }
         public ICamera Camera { get;}
@@ -87,50 +78,53 @@ namespace LabBox.OpenGLVisualization
             // my model setup
             Camera.IsLocked = false;
 
-            // opengl setup
-            /// use our program and buffers
-            InitProgram();            
-            GL.GenBuffers(1, out vbo);
-            GL.UseProgram(pgmID);
-            // z ordering
-            GL.Enable(EnableCap.DepthTest);
-            //// transparency
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            // background color
             GL.ClearColor(Color.Black);
-            // smallest point diameter
-            GL.PointSize(5.0f);
+            GL.Enable(EnableCap.DepthTest); // enable depth testing
+            GL.DepthFunc(DepthFunction.Less); // only accept fragment if it is closer to the camera than whats in there already
+
+            //vertexArrayID = OpenGLUtil.CreateVertexArrayObject();
+            //OpenGLUtil.UseVertexArrayObject(vertexArrayID);
+
+            vertexBufferID = OpenGLUtil.CreateBufferObject();
+            OpenGLUtil.PopulateBuffer(vertexBufferID, Bodies.SelectMany(gb => gb.Vertices()).ToArray());
+
+            myProgram = new LitMaterialProgram();
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
         {
-            // fill all of the positions and colors into one large vertex
-            var verts = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
-
-            // send the vertexes
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo); // tell opengl what buffer were using for the frame
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(verts.Length * OpenGLVertex.Stride), verts, BufferUsageHint.StaticDraw); // send the vertex data to the array buffer so drawarrays can use it
-            GL.VertexAttribPointer(vsPos, 3, VertexAttribPointerType.Float, false, OpenGLVertex.Stride, OpenGLVertex.PositionOffset); // bind teh buffer to the vertex shader position attirbute
-            GL.VertexAttribPointer(vsColor, 4, VertexAttribPointerType.Float, false, OpenGLVertex.Stride, OpenGLVertex.ColorOffset); // bind teh buffer to the vertex shader color attirbute
-
-            // tell opengl were using these attributes
-            GL.EnableVertexAttribArray(vsPos);
-            GL.EnableVertexAttribArray(vsColor);
         }
 
         private void BasicVis_RenderFrame(object sender, FrameEventArgs e)
         {
             GL.Viewport(0, 0, Width, Height); // set view prot to cover full window
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            // clear the frame
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);            
+            myProgram.UseProgram();          
 
-            // constant view/proj transformations and send them to opengl
+            // camera properties
             Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Camera.VertFOV, Camera.AspectRatio, Camera.MinRange, Camera.MaxRange); // camera props
             Matrix4 view = Matrix4.LookAt(Camera.Pos.ToGLVector3(), Camera.LookAtPos.ToGLVector3(), Camera.UpDir.ToGLVector3()); // camera state
-            GL.UniformMatrix4(vsView, false, ref view); // send to opengl
-            GL.UniformMatrix4(vsProj, false, ref proj); // send to opengl
+            myProgram.SetCameraPosition(Camera.Pos.ToGLVector3());
+
+            // light properties
+            var light = new LightSource(new Math3D.Vector3(0, 10, 5));
+            light.ConeDir = new Math3D.Vector3(0, 0, -1);
+            light.DiffusePower = 10.0f;
+
+            var light2 = new LightSource(new Math3D.Vector3(0, -10, 5));
+            light2.ConeDir = new Math3D.Vector3(0, 0, -1);
+            light2.LightColor = Color.Red;
+            light2.DiffusePower = 10.0f;
+            myProgram.AddLights(light.ToGLLight(), light2.ToGLLight());
+
+            // material properties
+            float shininess = 50.0f;
+            Vector3 specularColor = (Color.Red.ToGLVector3());
+            myProgram.SetMaterialProperties(specularColor, shininess);
+
+            myProgram.EnableAttributes();
+            myProgram.LoadBuffer(vertexBufferID);
 
             int startIndex = 0;
             foreach (IGraphicalBody body in Bodies)
@@ -140,51 +134,16 @@ namespace LabBox.OpenGLVisualization
                 Matrix4 rotation = Matrix4.CreateFromQuaternion(body.Orientation.ToGLQuaternion());
                 Matrix4 translation = Matrix4.CreateTranslation(body.Translation.ToGLVector3());
                 Matrix4 model = scale * rotation * translation;
-                GL.UniformMatrix4(vsModel, false, ref model);                
+                myProgram.SetMVP(model, view, proj);              
 
                 int numVerts = body.Triangles.Length * 3;
                 GL.DrawArrays(PrimitiveType.Triangles, startIndex, numVerts);
                 startIndex += numVerts;                
             }
+
+            myProgram.DisableAttributes();
                        
             SwapBuffers();
-        }        
-
-        private void InitProgram()
-        {
-            pgmID = GL.CreateProgram();
-            vsID = LoadShader("Shaders\\vs.glsl", ShaderType.VertexShader, pgmID);
-            fsID = LoadShader("Shaders\\fs.glsl", ShaderType.FragmentShader, pgmID);
-            GL.LinkProgram(pgmID);
-            Console.WriteLine(GL.GetProgramInfoLog(pgmID));
-
-            vsPos = GL.GetAttribLocation(pgmID, "vPosition");
-            vsColor = GL.GetAttribLocation(pgmID, "vColor");
-            vsModel = GL.GetUniformLocation(pgmID, "model");
-            vsView = GL.GetUniformLocation(pgmID, "view");
-            vsProj = GL.GetUniformLocation(pgmID, "proj");
-
-            if (vsPos == -1 || vsColor == -1 || vsModel == -1 || vsView == -1 || vsProj == -1)
-            {
-                Console.WriteLine("Error binding attributes");
-            }            
-        }
-
-        /// <summary>
-        /// Loads a shader into the OpenGL pipeline.
-        /// It loads the shader from a file, compiles the shader, attaches the shader to a program, and then returns the shaders address.
-        /// </summary>
-        private static int LoadShader(string filename, ShaderType shaderType, int programAddr)
-        {
-            int shaderAddr = GL.CreateShader(shaderType); // create the new address
-            using (var sr = new StreamReader(filename)) // apply the file source code to that address
-            {
-                GL.ShaderSource(shaderAddr, sr.ReadToEnd());
-            }
-            GL.CompileShader(shaderAddr); // compile the source code
-            GL.AttachShader(programAddr, shaderAddr); // attach the shader to the program
-            Console.WriteLine(GL.GetShaderInfoLog(shaderAddr));
-            return shaderAddr;
-        }
+        }      
     }
 }
