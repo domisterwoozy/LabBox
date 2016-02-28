@@ -9,21 +9,68 @@ using System.Threading.Tasks;
 namespace LabBox.Visualization.Universe.ViewModel
 {
     public enum LightType { Spotlight, Directional }
+
     public class LightSource
     {
         public LightType LightType { get; set; } = LightType.Spotlight;
         public Vector3 Pos { get; set; }
         public Color LightColor { get; set; } = Color.White;
-        public float DiffusePower { get; set; } = 1.0f;
-        public float AttenuationCoef { get; set; } = 0.2f;
-        public float AmbientIntensity { get; set; } = 0.1f;
 
+        private float diffusePower = 10.0f;
+        public float DiffusePower
+        {
+            get { return diffusePower; }
+            set
+            {
+                if (value < 0) throw new ArgumentException(nameof(value) + "must be larger than 0");
+                diffusePower = value;
+            }
+        }
+
+        private float attenuationCoef = 0.2f;
+        public float AttenuationCoef
+        {
+            get { return attenuationCoef; }
+            set
+            {
+                if (value < 0 || value > 1) throw new ArgumentException(nameof(value) + "must be between 0 and 1");
+                attenuationCoef = value;
+            }
+        }
+
+        private float ambientIntensity = 0.1f;
+        public float AmbientIntensity
+        {
+            get { return ambientIntensity; }
+            set
+            {
+                if (value < 0 || value > 1) throw new ArgumentException(nameof(value) + "must be between 0 and 1");
+                ambientIntensity = value;
+            }
+        } 
+
+        /// <summary>
+        /// Not relevant for directional lights.
+        /// </summary>
         public float ConeAngle { get; set; } = (float)Math.PI;
-        public Vector3 ConeDir { get; set; }
 
-        public LightSource(Vector3 pos)
+        /// <summary>
+        /// Not rele
+        /// </summary>
+        public Vector3 LightDir { get; set; } = -Vector3.K;
+
+        private LightSource(Vector3 pos)
         {
             Pos = pos;
         }
+
+        public static LightSource PointLight(Vector3 pos, float power) => new LightSource(pos) { DiffusePower = power };
+
+        public static LightSource SpotLight(Vector3 pos, Vector3 dir, double coneAngle) => SpotLight(pos, dir, (float)coneAngle);
+        public static LightSource SpotLight(Vector3 pos, Vector3 dir, float coneAngle) => new LightSource(pos) { LightDir = dir, ConeAngle = coneAngle, AmbientIntensity = 0.0f };
+
+        public static LightSource Directional(Vector3 dir) => 
+            new LightSource(Vector3.Zero) { LightDir = dir, DiffusePower = 0.25f, LightType = LightType.Directional };
+               
     }
 }

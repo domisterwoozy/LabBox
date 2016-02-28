@@ -108,19 +108,18 @@ namespace LabBox.OpenGLVisualization
             myProgram.SetCameraPosition(Camera.Pos.ToGLVector3());
 
             // light properties
-            var light = new LightSource(new Math3D.Vector3(0, 10, 5));
-            light.ConeDir = new Math3D.Vector3(0, 0, -1);
-            light.DiffusePower = 10.0f;
+            var light = LightSource.Directional(new Math3D.Vector3(1, 1, -1));
 
-            var light2 = new LightSource(new Math3D.Vector3(0, -10, 5));
-            light2.ConeDir = new Math3D.Vector3(0, 0, -1);
-            light2.LightColor = Color.Red;
-            light2.DiffusePower = 10.0f;
-            myProgram.AddLights(light.ToGLLight(), light2.ToGLLight());
+            var light2 = LightSource.SpotLight(new Math3D.Vector3(10, 0, 5), new Math3D.Vector3(0, 0, -1), Math.PI / 6.5);
+
+            var light3 = LightSource.PointLight(new Math3D.Vector3(-10, 0, -3), 10.0f);
+ 
+            var test = light2.ToGLLight();
+            myProgram.AddLights(light.ToGLLight(), light2.ToGLLight(), light3.ToGLLight());
 
             // material properties
             float shininess = 50.0f;
-            Vector3 specularColor = (Color.Red.ToGLVector3());
+            Vector3 specularColor = (Color.White.ToGLVector3());
             myProgram.SetMaterialProperties(specularColor, shininess);
 
             myProgram.EnableAttributes();

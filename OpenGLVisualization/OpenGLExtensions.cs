@@ -62,9 +62,9 @@ namespace LabBox.OpenGLVisualization
                 AttenuationCoef = light.AttenuationCoef,
                 DiffusePower = light.DiffusePower,
                 ConeAngle = light.ConeAngle,
-                Pos = new Vector4(light.Pos.ToGLVector3(), light.LightType == LightType.Directional ? 0.0f : 1.0f),
+                Pos = light.LightType == LightType.Directional ? new Vector4(-light.LightDir.ToGLVector3(), 0.0f) : new Vector4(light.Pos.ToGLVector3(), 1.0f),
                 Color = light.LightColor.ToGLVector3(),
-                ConeDir = light.ConeDir.ToGLVector3()
+                ConeDir = light.LightDir.ToGLVector3()
             };
         }
     }
@@ -108,6 +108,37 @@ namespace LabBox.OpenGLVisualization
             return bufferID;
         }
 
+        public static int CreateTexture()
+        {
+            int textureID;
+            GL.GenTextures(1, out textureID);
+            return textureID;
+        }
+
+        public static int CreateFrameBuffer()
+        {
+            int frameBufferID;
+            GL.GenFramebuffers(1, out frameBufferID);
+            return frameBufferID;
+        }
+
+        public static int CreateRenderBuffer()
+        {
+            int renderBufferID;
+            GL.GenRenderbuffers(1, out renderBufferID);
+            return renderBufferID;
+        }
+
+        public static void UseTexture(int textureID)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, textureID);
+        }
+
+        public static void UseFrameBuffer(int frameBufferID)
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferID);
+        }
+
         /// <summary>
         /// Sets the specified Vertex Array Object as the current one.
         /// </summary>
@@ -116,11 +147,14 @@ namespace LabBox.OpenGLVisualization
             GL.BindVertexArray(vaoID);
         }
 
+
         public static void PopulateBuffer(int bufferID, OpenGLVertex[] data)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, bufferID); //sets the specified Buffer Object as the current one.
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * OpenGLVertex.Stride), data, BufferUsageHint.StaticDraw);
         }
+
+       
 
     }
 }

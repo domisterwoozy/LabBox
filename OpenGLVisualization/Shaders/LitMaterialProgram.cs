@@ -10,7 +10,7 @@ namespace LabBox.OpenGLVisualization.Shaders
 {
     public class LitMaterialProgram : OpenGLProgram
     {
-        public LitMaterialProgram() : base("plvs.glsl", "plfs.glsl") { }
+        public LitMaterialProgram() : base("vs.glsl", "fs.glsl") { }
 
         public void SetCameraPosition(Vector3 pos)
         {
@@ -39,6 +39,8 @@ namespace LabBox.OpenGLVisualization.Shaders
             GL.Uniform1(GetUniformID("lightPowers"), lights.Length, lights.Select(l => l.DiffusePower).ToArray());
             GL.Uniform1(GetUniformID("coneAngles"), lights.Length, lights.Select(l => l.ConeAngle).ToArray());
 
+            // this is very gross and not very well documented but in order to pass an array of vectors to a shader
+            // you just flatten it into one long array and use the below functions
             GL.Uniform4(GetUniformID("lightPositions"), lights.Length, lights.SelectMany(l => new[] { l.Pos.X, l.Pos.Y, l.Pos.Z, l.Pos.W }).ToArray());
             GL.Uniform3(GetUniformID("lightColors"), lights.Length, lights.SelectMany(l => new[] { l.Color.X, l.Color.Y, l.Color.Z }).ToArray());            
             GL.Uniform3(GetUniformID("coneDirections"), lights.Length, lights.SelectMany(l => new[] { l.ConeDir.X, l.ConeDir.Y, l.ConeDir.Z }).ToArray());            

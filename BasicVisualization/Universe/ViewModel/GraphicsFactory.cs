@@ -44,14 +44,14 @@ namespace LabBox.Visualization.Universe.ViewModel
         public static PrimitiveTriangle[] NewWall(double x, double y, Color color)
         {
             List<Vertex> verts = new List<Vertex>();
-            verts.Add(new Vertex(x / 2, y / 2, 0, color));
-            verts.Add(new Vertex(-x / 2, y / 2, 0, color));
-            verts.Add(new Vertex(-x / 2, -y / 2, 0, color));
-            verts.Add(new Vertex(x / 2, -y / 2, 0, color));
+            verts.Add(new Vertex(x / 2, y / 2, 0, color, Vector3.K));
+            verts.Add(new Vertex(-x / 2, y / 2, 0, color, Vector3.K));
+            verts.Add(new Vertex(-x / 2, -y / 2, 0, color, Vector3.K));
+            verts.Add(new Vertex(x / 2, -y / 2, 0, color, Vector3.K));
 
             List<PrimitiveTriangle> prims = new List<PrimitiveTriangle>();
-            prims.Add(new PrimitiveTriangle(verts[0], verts[1], verts[3]));
-            prims.Add(new PrimitiveTriangle(verts[1], verts[2], verts[3]));
+            prims.Add(new PrimitiveTriangle(verts[0], verts[1], verts[3], false));
+            prims.Add(new PrimitiveTriangle(verts[1], verts[2], verts[3], false));
 
             return prims.ToArray();
         }
