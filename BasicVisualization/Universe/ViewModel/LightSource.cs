@@ -50,7 +50,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         } 
 
         /// <summary>
-        /// Not relevant for directional lights.
+        /// Not relevant for directional lights. The 'half angle'.
         /// </summary>
         public float ConeAngle { get; set; } = (float)Math.PI;
 
@@ -58,6 +58,8 @@ namespace LabBox.Visualization.Universe.ViewModel
         /// Not rele
         /// </summary>
         public Vector3 LightDir { get; set; } = -Vector3.K;
+
+        public bool CastsDynamicShadows { get; set; } = false;
 
         private LightSource(Vector3 pos)
         {
@@ -70,7 +72,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         public static LightSource SpotLight(Vector3 pos, Vector3 dir, float coneAngle) => new LightSource(pos) { LightDir = dir, ConeAngle = coneAngle, AmbientIntensity = 0.0f };
 
         public static LightSource Directional(Vector3 dir) => 
-            new LightSource(Vector3.Zero) { LightDir = dir, DiffusePower = 0.25f, LightType = LightType.Directional };
+            new LightSource(Vector3.Zero) { LightDir = dir, DiffusePower = 1.0f, LightType = LightType.Directional };
                
     }
 }

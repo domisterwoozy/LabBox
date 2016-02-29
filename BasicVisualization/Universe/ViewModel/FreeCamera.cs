@@ -21,7 +21,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         private Timer inputPollTimer = null;
 
         public float VertFOV { get; set; } = (float)Math.PI / 3;
-        public float MaxRange { get; set; } = 100.0f;
+        public float MaxRange { get; set; } = 70.0f;
         public float MinRange { get; set; } = 0.1f;
         public float AspectRatio { get; } = 16.0f / 9.0f;
 

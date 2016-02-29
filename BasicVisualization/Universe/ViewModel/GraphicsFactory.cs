@@ -59,7 +59,7 @@ namespace LabBox.Visualization.Universe.ViewModel
 
     public class SphereFactory
     {
-        public static PrimitiveTriangle[] NewSphere(Color color, double radius, int level)
+        public static PrimitiveTriangle[] NewSphere(double radius, int level)
         {
             double t = (1.0 + Math.Sqrt(5.0)) / 2.0;
             List<Vertex> verts = new List<Vertex>();

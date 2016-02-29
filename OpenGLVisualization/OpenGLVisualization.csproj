@@ -56,11 +56,16 @@
     <Compile Include="DebugVis.cs" />
     <Compile Include="OpenGLExtensions.cs" />
     <Compile Include="OpenGLInputHandler.cs" />
-    <Compile Include="OpenGLProgram.cs" />
+    <Compile Include="Shaders\OpenGLProgram.cs" />
+    <Compile Include="OpenGLUtil.cs" />
     <Compile Include="OpenGLVisualization.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shaders\DepthMapProgram.cs" />
     <Compile Include="Shaders\LitMaterialProgram.cs" />
+    <Compile Include="Shaders\SimpleTextureProgram.cs" />
+    <Compile Include="ViewModel\OpenGLLightSource.cs" />
+    <Compile Include="ViewModel\OpenGLVertex.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -73,6 +78,18 @@
     </Compile>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Shaders\texturefs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\depthfs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\passvs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\depthvs.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\fs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

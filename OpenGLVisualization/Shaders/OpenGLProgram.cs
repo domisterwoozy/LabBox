@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using LabBox.OpenGLVisualization.ViewModel;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabBox.OpenGLVisualization
+namespace LabBox.OpenGLVisualization.Shaders
 {
     public class OpenGLProgram
     {
@@ -23,11 +24,26 @@ namespace LabBox.OpenGLVisualization
             VertexShaderID = OpenGLUtil.LoadShader($"Shaders\\{vertexShaderFileName}", ShaderType.VertexShader, ProgramID);
             FragmentShaderID = OpenGLUtil.LoadShader($"Shaders\\{fragmentShaderFileName}", ShaderType.FragmentShader, ProgramID);
             GL.LinkProgram(ProgramID);
+            CheckErrors();
+        }
+
+        public void CheckErrors()
+        {
             string logInfo = GL.GetProgramInfoLog(ProgramID);
             if (!string.IsNullOrEmpty(logInfo))
             {
                 throw new ArgumentException("Error creating program from specified shaders: " + logInfo);
-            }        
+            }
+            string vShaderInfo = GL.GetShaderInfoLog(VertexShaderID);
+            if (!string.IsNullOrEmpty(logInfo))
+            {
+                throw new ArgumentException("Error with vertex shader: " + vShaderInfo);
+            }
+            string fShaderInfo = GL.GetShaderInfoLog(FragmentShaderID);
+            if (!string.IsNullOrEmpty(logInfo))
+            {
+                throw new ArgumentException("Error with vertex shader: " + fShaderInfo);
+            }
         }
 
         public void UseProgram()
@@ -73,7 +89,7 @@ namespace LabBox.OpenGLVisualization
             }
         }
 
-        public void LoadBuffer(int vertexBufferID)
+        public virtual void LoadBuffer(int vertexBufferID)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferID);
             GL.VertexAttribPointer(GetAttribID("vertexPos"), 3, VertexAttribPointerType.Float, false, OpenGLVertex.Stride, OpenGLVertex.PositionOffset);

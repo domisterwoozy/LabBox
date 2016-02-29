@@ -1,11 +1,13 @@
-﻿#version 330
+﻿#version 330 core
 #define MAX_LIGHTS 10
 
 uniform mat4 model;
 uniform vec3 cameraPos;
+uniform sampler2DShadow shadowMaps[MAX_LIGHTS];
 
 // light properties
 uniform int numLights;
+uniform int castsShadows[MAX_LIGHTS];
 uniform vec4 lightPositions[MAX_LIGHTS]; // world coords
 uniform vec3 lightColors[MAX_LIGHTS];
 uniform float lightPowers[MAX_LIGHTS];
@@ -21,11 +23,13 @@ uniform vec3 materialSpecularColor;
 in vec4 fragColor;
 in vec3 fragNormal;
 in vec3 fragPos;
+in vec4 shadowPositions[MAX_LIGHTS];
 
 out vec4 finalColor;
 
-vec3 ApplyLight(vec4 lightPos, vec3 lightColor, float lightPower, float attenuationCoef, vec3 coneDir, float coneAngle,
-				float ambientCoef, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera)
+vec3 ApplyLight(vec4 lightPos, vec3 lightColor, float lightPower, float attenuationCoef, vec3 coneDir, float coneAngle, float ambientCoef,
+				vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
+				vec4 shadowPos, sampler2DShadow shadowMap, int castsShadow)
 {
     vec3 surfaceToLight;
     float attenuation = 1.0;
@@ -63,8 +67,16 @@ vec3 ApplyLight(vec4 lightPos, vec3 lightColor, float lightPower, float attenuat
         specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
     vec3 specular = specularCoefficient * materialSpecularColor * lightColor;
 
+	// shadow checks	
+	float visibility = 1.0;
+	if (castsShadow == 1)
+	{	
+		float bias = 0.005;
+		visibility = texture(shadowMap, vec3(shadowPos.xy/shadowPos.w, (shadowPos.z-bias)/shadowPos.w));
+	}
+
     //linear color (color before gamma correction)
-    return ambient + attenuation*(diffuse + specular);
+    return ambient + visibility*attenuation*(diffuse + specular);
 }
 
 void main() {
@@ -75,12 +87,14 @@ void main() {
 	vec3 linearColor = vec3(0);
 	for(int i = 0; i < numLights; ++i)
 	{
-		linearColor += ApplyLight(lightPositions[i], lightColors[i], lightPowers[i], lightAttenuations[i], coneDirections[i], coneAngles[i],
-								  ambientIntensities[i], fragColor.rgb, normal, surfacePos, surfaceToCamera);
+		linearColor += ApplyLight(lightPositions[i], lightColors[i], lightPowers[i], lightAttenuations[i], coneDirections[i], coneAngles[i], ambientIntensities[i],
+								  fragColor.rgb, normal, surfacePos, surfaceToCamera,
+								  shadowPositions[i], shadowMaps[i], castsShadows[i]);
 	}
 
 	//final color (after gamma correction)
     vec3 gamma = vec3(1.0/2.2);
     finalColor = vec4(pow(linearColor, gamma), fragColor.a);
+
 }
 
