@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Util;
@@ -41,19 +42,34 @@ namespace LabBox.OpenGLVisualization
             light2.CastsDynamicShadows = true;
             var light3 = LightSource.PointLight(new Vector3(20, 20, -2), 100.0f);
        
-            var uni = SampleUniverses.SunEarth(10, 100.0);
+            var uni = SampleUniverses.SunEarth(10, 1000.0);
             IEnumerable<IGraphicalBody> bodies = BasicGraphicalBody.FromPhysicsBodies(uni.Bodies);
             MoveableBody floor = new MoveableBody(FlatFactory.NewCuboid(25, 25, 1, Color.DodgerBlue)) { Translation = new Vector3(0, 0, -5) };
 
+            
             var physicsRunner = new PausablePhysicsRunner(uni);
-            using (OpenGLVisualization vis = new OpenGLVisualization(bodies.Union(floor).ToArray()))
+            using (ILabBoxVis vis = new OpenGLVisualization(bodies, light, light2, light3))
             {
-                vis.LightSources.Add(light2, light3, light);
                 vis.InputHandler.Pause.Start += (sender, e) => physicsRunner.TogglePause();
                 vis.InputHandler.Exit.Start += (sender, e) => vis.EndVis();
                 physicsRunner.StartPhysics();
+                Task.Run(() => WaitAndAddBody(vis, floor, 5000));
+                Task.Run(() => WaitAndRemoveBody(vis, vis.Bodies.Skip(1).First(), 5000));
                 vis.RunVis();
             }
+        }
+
+        private static void WaitAndAddBody(ILabBoxVis vis, IGraphicalBody body, int ms)
+        {
+            Thread.Sleep(ms);
+            vis.AddBody(body);
+        }
+
+        private static void WaitAndRemoveBody(ILabBoxVis vis, IGraphicalBody body, int ms)
+        {
+            Thread.Sleep(ms);
+            vis.RemoveBody(body);
+            Task.Run(() => WaitAndAddBody(vis, body, 2000));
         }
     }
 }

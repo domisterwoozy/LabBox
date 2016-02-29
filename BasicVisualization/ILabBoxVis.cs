@@ -11,10 +11,15 @@ namespace BasicVisualization
 {
     public interface ILabBoxVis : IDisposable
     {
-        ICollection<IGraphicalBody> Bodies { get; }
+        IEnumerable<IGraphicalBody> Bodies { get; }
+        IEnumerable<ILightSource> LightSources { get; }
+        IEnumerable<IHUDView> HUDs { get; }
+
         IInputHandler InputHandler { get; }
         ICamera Camera { get; }
-        ICollection<IHUDView> HUDs { get; }
+
+        void AddBody(IGraphicalBody b);
+        bool RemoveBody(IGraphicalBody b);
 
         /// <summary>
         /// Should block the main thread and run the graphical simulation

@@ -23,7 +23,8 @@ namespace LabBox.OpenGLVisualization
         private int vertexBufferID;
         private int totalNumVerts;        
 
-        private LitMaterialProgram myProgram;
+        // programs
+        private LitMaterialProgram mainProgram;
         private DepthMapProgram depthProgram;
         private SimpleTextureProgram textureProgram;
         
@@ -32,27 +33,36 @@ namespace LabBox.OpenGLVisualization
         private List<Matrix4> depthProjs = new List<Matrix4>();
         private List<Matrix4> depthViews = new List<Matrix4>();
 
-        public ICollection<LightSource> LightSources { get; } = new List<LightSource>();
-        public ICollection<IGraphicalBody> Bodies { get; }
-        public ICamera Camera { get;}
-        public IInputHandler InputHandler { get; }
-        public ICollection<IHUDView> HUDs => null;        
+        // internal framework data
+        private readonly List<ILightSource> lightSources = new List<ILightSource>();
+        private List<IGraphicalBody> bodies;
+        private readonly List<IGraphicalBody> bodiesToAdd = new List<IGraphicalBody>();
+        private readonly List<IGraphicalBody> bodiesToRemove = new List<IGraphicalBody>();
 
-        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, params IGraphicalBody[] graphicalBodies) : base()
+        // framework interface
+        public IEnumerable<ILightSource> LightSources => lightSources;
+        public IEnumerable<IGraphicalBody> Bodies => bodies;
+        public IEnumerable<IHUDView> HUDs => Enumerable.Empty<IHUDView>(); // not yet implemented 
+        public ICamera Camera { get;}
+        public IInputHandler InputHandler { get; }             
+
+        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : base()
         {
             InputHandler = inputHandler;
             Camera = camera;
-            Bodies = graphicalBodies.ToList();
+            bodies = graphicalBodies.ToList();
+            lightSources = lights.ToList();
 
             BindEvents();
         }
 
-        public OpenGLVisualization(params IGraphicalBody[] graphicalBodies) : base()
+        public OpenGLVisualization(IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : base()
         {
             // use opengl defaults
             InputHandler = new OpenGLInputHandler(this);
             Camera = new FreeCamera(InputHandler);
-            Bodies = graphicalBodies.ToList();
+            bodies = graphicalBodies.ToList();
+            lightSources = lights.ToList();
 
             BindEvents();           
         }
@@ -75,6 +85,21 @@ namespace LabBox.OpenGLVisualization
             Exit();
         }
 
+        public void AddBody(IGraphicalBody b)
+        {
+            bodiesToAdd.Add(b);            
+        }
+
+        public bool RemoveBody(IGraphicalBody b)
+        {
+            if (bodies.Contains(b))
+            {
+                bodiesToRemove.Add(b);
+                return true;
+            }
+            return false;
+        }
+
         private void BasicVis_Load(object sender, EventArgs e)
         {
             // window setup
@@ -90,18 +115,17 @@ namespace LabBox.OpenGLVisualization
             GL.Enable(EnableCap.DepthTest); // enable depth testing
             GL.DepthFunc(DepthFunction.Less); // only accept fragment if it is closer to the camera than whats in there already
 
-
-            vertexBufferID = OpenGLUtil.CreateBufferObject();
-            var vertArr = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
-            totalNumVerts = vertArr.Length;
-            OpenGLUtil.PopulateBuffer(vertexBufferID, vertArr);
-
-            myProgram = new LitMaterialProgram();
+            mainProgram = new LitMaterialProgram();
             depthProgram = new DepthMapProgram();
             textureProgram = new SimpleTextureProgram();
-            
+            vertexBufferID = OpenGLUtil.CreateBufferObject();
+
+            UpdateBodiesCollection(); // incase any bodies were added/removed before the window loaded
+            PopulateVertexBuffer();
+
             // create and frame buffer and shadow map for each light source if they cast shadows
-            foreach(var light in LightSources)
+            // this only occurs once
+            foreach (var light in LightSources)
             {
                 OpenGLLightSource glLight = light.ToGLLight();
                 if (light.CastsDynamicShadows)
@@ -110,11 +134,30 @@ namespace LabBox.OpenGLVisualization
                     glLight.ShadowMapID = OpenGLUtil.CreateDepthTexture(glLight.FrameBufferID);
                 }                
                 openGLLights.Add(glLight); 
-            }            
+            }       
+        }
+
+        private void PopulateVertexBuffer()
+        {
+            var vertArr = Bodies.SelectMany(gb => gb.Vertices()).ToArray();
+            totalNumVerts = vertArr.Length;
+            OpenGLUtil.PopulateBuffer(vertexBufferID, vertArr);
+        }
+
+        // returns whether any bodies were added or removed
+        private bool UpdateBodiesCollection()
+        {
+            if (bodiesToAdd.Count == 0 && bodiesToRemove.Count == 0) return false;
+            bodies.AddRange(bodiesToAdd);
+            foreach (var b in bodiesToRemove) bodies.Remove(b);
+            bodiesToAdd.Clear();
+            bodiesToRemove.Clear();
+            return true;
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
         {
+            if (UpdateBodiesCollection()) PopulateVertexBuffer();
         }
 
         private void BasicVis_RenderFrame(object sender, FrameEventArgs e)
@@ -127,8 +170,7 @@ namespace LabBox.OpenGLVisualization
         }
 
         private void RenderLightMapDepths()
-        {         
-           
+        {       
             foreach (var light in openGLLights)
             {
                 Matrix4 depthProj = default(Matrix4);
@@ -214,23 +256,23 @@ namespace LabBox.OpenGLVisualization
             GL.Viewport(0, 0, Width, Height); // set view prot to cover full window
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            myProgram.UseProgram();
+            mainProgram.UseProgram();
 
             // camera properties
             Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Camera.VertFOV, Camera.AspectRatio, Camera.MinRange, Camera.MaxRange); // camera props
             Matrix4 view = Matrix4.LookAt(Camera.Pos.ToGLVector3(), Camera.LookAtPos.ToGLVector3(), Camera.UpDir.ToGLVector3()); // camera state
-            myProgram.SetCameraPosition(Camera.Pos.ToGLVector3());
+            mainProgram.SetCameraPosition(Camera.Pos.ToGLVector3());
 
             // light/shadow properties           
-            myProgram.AddLights(openGLLights.ToArray());
+            mainProgram.AddLights(openGLLights.ToArray());
 
             // material properties
             float shininess = 50.0f;
             Vector3 specularColor = (Color.White.ToGLVector3());
-            myProgram.SetMaterialProperties(specularColor, shininess);
+            mainProgram.SetMaterialProperties(specularColor, shininess);
 
-            myProgram.EnableAttributes();
-            myProgram.LoadBuffer(vertexBufferID);
+            mainProgram.EnableAttributes();
+            mainProgram.LoadBuffer(vertexBufferID);
 
             int startIndex = 0;
             foreach (IGraphicalBody body in Bodies)
@@ -240,14 +282,14 @@ namespace LabBox.OpenGLVisualization
                 Matrix4 rotation = Matrix4.CreateFromQuaternion(body.Orientation.ToGLQuaternion());
                 Matrix4 translation = Matrix4.CreateTranslation(body.Translation.ToGLVector3());
                 Matrix4 model = scale * rotation * translation;
-                myProgram.SetMVP(model, view, proj);
-                myProgram.SetShadowCasterMVPs(LightSources.Select((l,i) => model * depthViews[i] * depthProjs[i]).ToArray());
+                mainProgram.SetMVP(model, view, proj);
+                mainProgram.SetShadowCasterMVPs(LightSources.Select((l,i) => model * depthViews[i] * depthProjs[i]).ToArray());
 
                 int numVerts = body.Triangles.Length * 3;
                 GL.DrawArrays(PrimitiveType.Triangles, startIndex, numVerts);
                 startIndex += numVerts;
             }
-            myProgram.DisableAttributes();
-        }   
+            mainProgram.DisableAttributes();
+        } 
     }
 }

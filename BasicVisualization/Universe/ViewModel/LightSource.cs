@@ -10,7 +10,23 @@ namespace LabBox.Visualization.Universe.ViewModel
 {
     public enum LightType { Spotlight, Directional }
 
-    public class LightSource
+    public interface ILightSource
+    {
+        LightType LightType { get; }
+        Vector3 Pos { get; }
+        Vector3 LightDir { get; }
+        Color LightColor { get; }
+
+        float DiffusePower { get; }
+        float AttenuationCoef { get; }
+        float AmbientIntensity { get; }
+
+        float ConeAngle { get; }
+        bool CastsDynamicShadows { get; }
+
+    }
+
+    public class LightSource : ILightSource
     {
         public LightType LightType { get; set; } = LightType.Spotlight;
         public Vector3 Pos { get; set; }

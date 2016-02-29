@@ -32,24 +32,16 @@ namespace LabBox.OpenGLVisualization
         public static OpenGLVertex[] Vertices(this PrimitiveTriangle[] tris) => tris.SelectMany(t => t.Vertices()).ToArray();
         public static OpenGLVertex[] Vertices(this IGraphicalBody b) => b.Triangles.SelectMany(t => t.Vertices()).ToArray();
 
+        /// <summary>
+        /// Row major order.
+        /// </summary>
         public static float[] Flatten(this Matrix4 m) =>
             new[] { m.M11, m.M12, m.M13, m.M14,
                     m.M21, m.M22, m.M23, m.M24,
                     m.M31, m.M32, m.M33, m.M34,
                     m.M41, m.M42, m.M43, m.M44};
 
-        /// <summary>
-        /// Flattens an  into a oen dimensional array in column major order.
-        /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
-        //public static float[] Flatten(this Matrix4 m) =>
-        //    new[] { m.M11, m.M21, m.M31, m.M41,
-        //            m.M12, m.M22, m.M32, m.M42,
-        //            m.M13, m.M23, m.M33, m.M43,
-        //            m.M14, m.M24, m.M34, m.M44};
-
-        public static OpenGLLightSource ToGLLight(this LightSource light)
+        public static OpenGLLightSource ToGLLight(this ILightSource light)
         {
             return new OpenGLLightSource()
             {
