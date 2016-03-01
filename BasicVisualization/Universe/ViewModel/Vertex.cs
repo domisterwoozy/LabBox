@@ -20,7 +20,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         {
             Pos = pos;
             Color = color;
-            Normal = normal;
+            Normal = normal.UnitDirection;
         }
 
         public Vertex(double x, double y, double z)
@@ -43,5 +43,9 @@ namespace LabBox.Visualization.Universe.ViewModel
             Color = color;
             Normal = normal;
         }
+
+        public Vertex NewPos(Vector3 pos) => new Vertex(pos, Color, Normal);
+        public Vertex NewNormal(Vector3 normal) => new Vertex(Pos, Color, normal.UnitDirection);
+        public Vertex NewColor(Color c) => new Vertex(Pos, c, Normal);
     }
 }

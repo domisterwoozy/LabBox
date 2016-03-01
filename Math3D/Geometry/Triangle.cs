@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class Triangle : IPrimitive
+    public class Triangle : ICollider
     {
         public Vector3 A { get; }
         public Vector3 B { get; }

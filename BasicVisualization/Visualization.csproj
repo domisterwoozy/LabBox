@@ -37,6 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -54,18 +58,21 @@
     <Compile Include="Universe\PausablePhysicsRunner.cs" />
     <Compile Include="Universe\ViewModel\BasicGraphicalBody.cs" />
     <Compile Include="Universe\ViewModel\LightSource.cs" />
+    <Compile Include="Universe\ViewModel\MoveableBody.cs" />
     <Compile Include="Universe\ViewModel\PointLight.cs" />
     <Compile Include="Universe\ViewModel\FreeCamera.cs" />
     <Compile Include="Universe\ViewModel\ICamera.cs" />
     <Compile Include="Universe\ViewModel\GraphicsFactory.cs" />
-    <Compile Include="Universe\ViewModel\GraphicalBody.cs" />
+    <Compile Include="Universe\ViewModel\IGraphicalBody.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VisUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="Universe\ViewModel\Material.cs" />
     <Compile Include="Universe\ViewModel\PrimitiveTriangle.cs" />
     <Compile Include="Universe\ViewModel\Vertex.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Math3D\Math3D.csproj">

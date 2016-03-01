@@ -29,7 +29,7 @@ namespace LabBox.OpenGLVisualization
 
         public static OpenGLVertex Vertex(this Vertex v) => new OpenGLVertex() { Position = v.Pos.ToGLVector3(), Color = v.Color.ToGLVector4(), Normal = v.Normal.ToGLVector3() };
         public static OpenGLVertex[] Vertices(this PrimitiveTriangle t) => new[] { t.A.Vertex(), t.B.Vertex(), t.C.Vertex() };
-        public static OpenGLVertex[] Vertices(this PrimitiveTriangle[] tris) => tris.SelectMany(t => t.Vertices()).ToArray();
+        public static OpenGLVertex[] Vertices(this IEnumerable<PrimitiveTriangle> tris) => tris.SelectMany(t => t.Vertices()).ToArray();
         public static OpenGLVertex[] Vertices(this IGraphicalBody b) => b.Triangles.SelectMany(t => t.Vertices()).ToArray();
 
         /// <summary>

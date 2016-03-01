@@ -14,8 +14,12 @@ namespace Physics3D.Bodies
     public interface IBody
     {
         event EventHandler<FrameLengthArgs> FrameFinished;
+
         IDynamicBody Dynamics { get; }
-        IPrimitiveVolume CollisionShape { get; }
+
+        IColliderVolume CollisionShape { get; }
+        IOverlapable BoundVolume { get; }
+
         IMaterial Material { get; }
         IElectroMag EMProps { get; }
     }

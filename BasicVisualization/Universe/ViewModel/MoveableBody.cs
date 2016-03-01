@@ -1,6 +1,7 @@
 ﻿using Math3D;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -8,24 +9,20 @@ using System.Threading.Tasks;
 
 namespace LabBox.Visualization.Universe.ViewModel
 {
-    public interface IGraphicalBody
-    {
-        Quaternion Orientation { get; }
-        Vector3 Translation { get; }
-        PrimitiveTriangle[] Triangles { get; }
-    }
-
     public class MoveableBody : IGraphicalBody
     {
         public Quaternion Orientation { get; set; } = Quaternion.FromRotMatrix(Matrix3.Identity);
 
         public Vector3 Translation { get; set; } = Vector3.Zero;
 
-        public PrimitiveTriangle[] Triangles { get; }
+        public ImmutableArray<PrimitiveTriangle> Triangles { get; }
 
         public MoveableBody(IEnumerable<PrimitiveTriangle> tris)
         {
-            Triangles = tris.ToArray();
+            Triangles = tris.ToImmutableArray();
         }
+
+        public IGraphicalBody NewColor(Color c) => new MoveableBody(Triangles.NewColor(c).ToImmutableArray()) { Translation = Translation, Orientation = Orientation };
+        public IGraphicalBody NewShape(ImmutableArray<PrimitiveTriangle> tris) => new MoveableBody(tris) { Translation = Translation, Orientation = Orientation };
     }
 }

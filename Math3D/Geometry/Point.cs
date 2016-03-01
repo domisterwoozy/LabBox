@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class Point : IPrimitiveVolume
+    public class Point : IColliderVolume
     {
         public static readonly Point Instance = new Point();
 
         public IEnumerable<Edge> OuterEdges => Enumerable.Empty<Edge>();
 
-        public IEnumerable<IPrimitive> Primitives => Enumerable.Empty<IPrimitive>();
+        public IEnumerable<ICollider> Primitives => Enumerable.Empty<ICollider>();
 
         public double SurfaceArea => 0;
 
@@ -22,7 +22,7 @@ namespace Math3D.Geometry
 
         public double CrossSectionalArea(Vector3 cutPos, Vector3 cutNormal) => 0;
 
-        public IEnumerable<Intersection> IntersectEdge(IPrimitiveVolume other) => Enumerable.Empty<Intersection>();
+        public IEnumerable<Intersection> IntersectEdge(IColliderVolume other) => Enumerable.Empty<Intersection>();
 
         private Point() { }
     }

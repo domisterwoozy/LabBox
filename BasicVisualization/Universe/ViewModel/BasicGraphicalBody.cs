@@ -2,6 +2,7 @@
 using Physics3D.Bodies;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,18 +20,22 @@ namespace LabBox.Visualization.Universe.ViewModel
         public Quaternion Orientation => Body.Dynamics.Transform.Q;
         public Vector3 Translation => Body.Dynamics.Transform.Pos;
 
-        public PrimitiveTriangle[] Triangles { get; }
+        public ImmutableArray<PrimitiveTriangle> Triangles { get; }
 
-        public BasicGraphicalBody(IBody body)
+        public BasicGraphicalBody(IBody body) : this(body, SphereFactory.NewSphere(2, 4)) { }
+
+        public BasicGraphicalBody(IBody body, ImmutableArray<PrimitiveTriangle> tris)
         {
             Body = body;
-            Triangles = SphereFactory.NewSphere(2, 3);
-            //Triangles = FlatFactory.NewCuboid(1, 1, 1);
+            Triangles = tris;
         }
 
         public static IEnumerable<BasicGraphicalBody> FromPhysicsBodies(IEnumerable<IBody> bodies)
         {
             foreach (var b in bodies) yield return new BasicGraphicalBody(b);
         }
+
+        public IGraphicalBody NewColor(Color c) => new BasicGraphicalBody(Body, Triangles.NewColor(c).ToImmutableArray());
+        public IGraphicalBody NewShape(ImmutableArray<PrimitiveTriangle> tris) => new BasicGraphicalBody(Body, tris);    
     }
 }

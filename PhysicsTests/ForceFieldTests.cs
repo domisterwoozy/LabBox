@@ -25,7 +25,7 @@ namespace PhysicsTests
             var body = A.Fake<IBody>();
             var dyn = A.Fake<IDynamicBody>();
             var kin = A.Fake<IKinematics>();
-            var shape = A.Fake<IPrimitiveVolume>();
+            var shape = A.Fake<IColliderVolume>();
             var mat = A.Fake<IMaterial>();
 
             A.CallTo(() => body.Dynamics).Returns(dyn);

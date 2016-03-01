@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LabBox.OpenGLVisualization.ViewModel
 {
+    /// <summary>
+    /// This is gross and mutable but it is required for compatibility with OpenGL buffer objects.
+    /// </summary>
     public struct OpenGLVertex
     {
         public Vector3 Position;

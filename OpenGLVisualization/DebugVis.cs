@@ -19,7 +19,7 @@ namespace LabBox.OpenGLVisualization
         private int frameBufferID;
         private int textureID;
 
-        private static OpenGLVertex[] vertexBufferData = FlatFactory.NewCuboid(1, 1, 1, Color.Red).Vertices();
+        private static OpenGLVertex[] vertexBufferData = FlatFactory.NewCuboid(1, 1, 1).Vertices();
         //private static OpenGLVertex[] vertexBufferData = FlatFactory.NewCuboid(2, 2, 2, Color.Blue).Vertices();
 
         private DepthMapProgram depthProgram;

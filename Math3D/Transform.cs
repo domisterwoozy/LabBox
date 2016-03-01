@@ -43,6 +43,7 @@ namespace Math3D
 
         public Transform(Vector3 pos, Quaternion q)
         {
+            if (!q.IsUnit) throw new ArgumentException(nameof(q) + "must be a unit quaternion");
             Pos = pos;
             Q = q;
         }

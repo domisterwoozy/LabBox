@@ -15,7 +15,7 @@ namespace LabBox.Visualization.Universe.ViewModel
     /// </summary>
     public class FreeCamera : ICamera
     {
-        private const int PollsPerSecond = 60;
+        private const int PollsPerSecond = 144;
         private static readonly TimeSpan interval = TimeSpan.FromSeconds(1.0 / PollsPerSecond);
 
         private Timer inputPollTimer = null;

@@ -2,10 +2,10 @@
 
 namespace Math3D.Geometry
 {
-    public interface IPrimitiveVolume : IIntersectable<IPrimitiveVolume>, IVolume
+    public interface IColliderVolume : IIntersectable<IColliderVolume>, IVolume
     {
         IEnumerable<Edge> OuterEdges { get; }
-        IEnumerable<IPrimitive> Primitives { get; }
+        IEnumerable<ICollider> Primitives { get; }
         double CrossSectionalArea(Vector3 cutPos, Vector3 cutNormal);
     }
 

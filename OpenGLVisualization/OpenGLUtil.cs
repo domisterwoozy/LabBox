@@ -59,9 +59,9 @@ namespace LabBox.OpenGLVisualization
         {
             UseFrameBuffer(frameBufferID);
             int textureID = CreateTexture();
-            UseTexture(textureID);
+            UseTexture2D(textureID);
             // specify the texture format and parameters
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent16, 4096, 4096, 0, PixelFormat.DepthComponent, PixelType.Float, (IntPtr)0);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent16, 8192, 8192, 0, PixelFormat.DepthComponent, PixelType.Float, (IntPtr)0);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
@@ -76,13 +76,13 @@ namespace LabBox.OpenGLVisualization
 
         public static void DisableTextureCompare(int textureID)
         {
-            UseTexture(textureID);
+            UseTexture2D(textureID);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureCompareMode, (int)TextureCompareMode.None);
         }
 
         public static void EnableTextureCompare(int textureID)
         {
-            UseTexture(textureID);
+            UseTexture2D(textureID);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureCompareMode, (int)TextureCompareMode.CompareRToTexture);
         }
 
@@ -108,7 +108,7 @@ namespace LabBox.OpenGLVisualization
             return renderBufferID;
         }
 
-        public static void UseTexture(int textureID)
+        public static void UseTexture2D(int textureID)
         {
             GL.BindTexture(TextureTarget.Texture2D, textureID);
         }

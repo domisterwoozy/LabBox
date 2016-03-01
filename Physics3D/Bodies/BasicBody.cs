@@ -19,14 +19,16 @@ namespace Physics3D.Bodies
         public IDynamicBody Dynamics { get; }
         public IElectroMag EMProps { get; }
         public IMaterial Material { get; }
-        public IPrimitiveVolume CollisionShape { get; }
+        public IColliderVolume CollisionShape { get; }
+        public IOverlapable BoundVolume { get; }
 
-        public BasicBody(IDynamicBody dynamics, IElectroMag em, IMaterial mat, IPrimitiveVolume shape)
+        public BasicBody(IDynamicBody dynamics, IElectroMag em, IMaterial mat, IColliderVolume shape, IOverlapable boundVolume)
         {
             Dynamics = dynamics;
             EMProps = em;
             Material = mat;
             CollisionShape = shape;
+            BoundVolume = boundVolume;
 
             Dynamics.FrameFinished += (sender, e) => FrameFinished?.Invoke(sender, e);
         }        

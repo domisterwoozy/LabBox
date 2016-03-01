@@ -11,5 +11,6 @@ namespace Physics3D.Materials
         double DynamicFrictionCoef { get; }
         double StaticFrictionCoef { get; }
         double DragCoef { get; }
+        double Epsilon { get; }
     }
 }

@@ -40,10 +40,10 @@ namespace Math3D
             return new Quaternion(s, new Vector3((rot.ZY - rot.YZ) / denom, (rot.XZ - rot.ZX) / denom, (rot.YX - rot.XY) / denom));
         }
 
-        ///// <summary>
-        ///// A (non-unit) quaternion that represents a virtual vector. The S component of this quaternion is zero and the V component
-        ///// is the vector. Useful for certain calculations.
-        ///// </summary>
+        /// <summary>
+        /// A (non-unit) quaternion that represents a virtual vector. The S component of this quaternion is zero and the V component
+        /// is the vector. Useful for certain calculations.
+        /// </summary>
         public static Quaternion VectorQ(Vector3 v) => new Quaternion(0, v);                  
 
         public double Magnitude => Math.Sqrt(MagSquared);

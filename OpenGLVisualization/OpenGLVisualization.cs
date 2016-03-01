@@ -15,13 +15,16 @@ using System.Runtime.InteropServices;
 using BasicVisualization;
 using LabBox.OpenGLVisualization.Shaders;
 using LabBox.OpenGLVisualization.ViewModel;
+using OpenTK.Graphics;
 
 namespace LabBox.OpenGLVisualization
 {
     public class OpenGLVisualization : GameWindow, ILabBoxVis
     {
+        private const int NumFSAASamples = 16;
+
         private int vertexBufferID;
-        private int totalNumVerts;        
+        private int totalNumVerts;
 
         // programs
         private LitMaterialProgram mainProgram;
@@ -46,7 +49,8 @@ namespace LabBox.OpenGLVisualization
         public ICamera Camera { get;}
         public IInputHandler InputHandler { get; }             
 
-        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : base()
+        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) :
+            base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat))
         {
             InputHandler = inputHandler;
             Camera = camera;
@@ -56,7 +60,8 @@ namespace LabBox.OpenGLVisualization
             BindEvents();
         }
 
-        public OpenGLVisualization(IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : base()
+        public OpenGLVisualization(IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : 
+            base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat))
         {
             // use opengl defaults
             InputHandler = new OpenGLInputHandler(this);
@@ -114,6 +119,7 @@ namespace LabBox.OpenGLVisualization
             GL.ClearColor(Color.Black);
             GL.Enable(EnableCap.DepthTest); // enable depth testing
             GL.DepthFunc(DepthFunction.Less); // only accept fragment if it is closer to the camera than whats in there already
+            GL.Enable(EnableCap.Multisample); 
 
             mainProgram = new LitMaterialProgram();
             depthProgram = new DepthMapProgram();
@@ -204,7 +210,7 @@ namespace LabBox.OpenGLVisualization
 
 
                 OpenGLUtil.UseFrameBuffer(light.FrameBufferID); // use our custom framebuffer instead of the screen
-                GL.Viewport(0, 0, 4096, 4096); // render on teh entire framebuffer
+                GL.Viewport(0, 0, 8192, 8192); // render on teh entire framebuffer
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // clear the screen
 
                 depthProgram.UseProgram();

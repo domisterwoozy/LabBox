@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Drawing;
 
 namespace LabBox.Visualization.Universe.ViewModel
 {
@@ -30,5 +32,21 @@ namespace LabBox.Visualization.Universe.ViewModel
                 C = c;
             }
         }
+
+        public PrimitiveTriangle NewColor(Color c) => new PrimitiveTriangle(A.NewColor(c), B.NewColor(c), C.NewColor(c), false);
+    }
+
+    public static class TriangleExtensions
+    {
+        public static IEnumerable<Vertex> Vertices(this PrimitiveTriangle tri)
+        {
+            yield return tri.A;
+            yield return tri.B;
+            yield return tri.C;
+        }
+
+        public static IEnumerable<Vertex> Flatten(this IEnumerable<PrimitiveTriangle> tris) => tris.SelectMany(t => t.Vertices());
+
+        public static IEnumerable<PrimitiveTriangle> NewColor(this IEnumerable<PrimitiveTriangle> tris, Color c) => tris.Select(t => t.NewColor(c));
     }
 }

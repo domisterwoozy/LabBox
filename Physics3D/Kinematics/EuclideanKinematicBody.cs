@@ -26,7 +26,10 @@ namespace Physics3D.Kinematics
             // dq/dt = qdot = 0.5 * w(t) * q(t) *** Appendix B of David Barraff Physically Based Modeling - Rigid Body Simulation
             // dq = deltaTime * dq/dt;
             Quaternion dq = deltaTime * 0.5 * Quaternion.VectorQ(Omega) * Transform.Q;
-            Transform = new Transform(Transform.Pos, Transform.Q + dq);
+            // i am not sure of the physical reason behind this normalization but it is mathematically required to prevent drift away from a unit quaternion
+            // and only unit quaternions represent true rotations
+            Quaternion newQ = (Transform.Q + dq).Normalized(); 
+            Transform = new Transform(Transform.Pos, newQ);
         }
 
     }

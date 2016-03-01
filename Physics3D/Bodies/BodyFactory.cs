@@ -23,7 +23,8 @@ namespace Physics3D.Bodies
                     Matrix3.Identity),
                 None.Instance,
                 new BasicMaterial(),
-                Point.Instance);
+                Point.Instance,
+                NeverOverlap.Instance);
         }
     }
 }

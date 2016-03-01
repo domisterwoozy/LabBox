@@ -51,10 +51,11 @@
     <Compile Include="Geometry\Everything.cs" />
     <Compile Include="Geometry\Intersection.cs" />
     <Compile Include="Geometry\IIntersectable.cs" />
-    <Compile Include="Geometry\IPrimitive.cs" />
+    <Compile Include="Geometry\ICollider.cs" />
     <Compile Include="Geometry\Edge.cs" />
-    <Compile Include="Geometry\IPrimitiveVolume.cs" />
+    <Compile Include="Geometry\IColliderVolume.cs" />
     <Compile Include="CoordinateSystems\ICoordinateSystem.cs" />
+    <Compile Include="Geometry\IOverlapable.cs" />
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Point.cs" />
     <Compile Include="Geometry\Triangle.cs" />
