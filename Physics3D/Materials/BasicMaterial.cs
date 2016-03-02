@@ -12,6 +12,8 @@ namespace Physics3D.Materials
 
         public double DynamicFrictionCoef { get; set; }
 
+        public double Epsilon { get; set; }
+
         public double StaticFrictionCoef { get; set; }
     }
 }

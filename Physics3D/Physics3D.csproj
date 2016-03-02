@@ -49,6 +49,12 @@
     <Compile Include="Bodies\BodyFactory.cs" />
     <Compile Include="Collisions\Contact.cs" />
     <Compile Include="Collisions\ICollisionEngine.cs" />
+    <Compile Include="Collisions\IImpulseEngine.cs" />
+    <Compile Include="Collisions\IContactFinder.cs" />
+    <Compile Include="Collisions\IContactResolver.cs" />
+    <Compile Include="Collisions\ImpulseCollisionEngine.cs" />
+    <Compile Include="Collisions\LoopingContactResolver.cs" />
+    <Compile Include="Collisions\NoCollisions.cs" />
     <Compile Include="ElectroMagnetism\ChargeGroup.cs" />
     <Compile Include="ElectroMagnetism\ChargeLoop.cs" />
     <Compile Include="ElectroMagnetism\IElectroMag.cs" />

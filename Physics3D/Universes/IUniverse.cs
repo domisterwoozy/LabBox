@@ -27,7 +27,7 @@ namespace Physics3D.Universes
         double UniversalTime { get; }
         ICollection<IBody> Bodies { get; }
         ICollection<ForceField> ForceFields { get; }
-        ICollisionEngine CollisionEngine { get; }
+        IContactResolver ContactResolver { get; }
         void Update(double deltaTime);
     }
 

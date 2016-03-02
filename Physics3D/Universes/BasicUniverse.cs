@@ -20,26 +20,26 @@ namespace Physics3D.Universes
 
         public ICollection<IBody> Bodies { get; } = new List<IBody>();
 
-        public ICollisionEngine CollisionEngine { get; }
+        public IContactResolver ContactResolver { get; set; } = NoCollisions.Instance;
+        public IContactFinder ContactFinder { get; set; } = NoContacts.Instance;
 
-        public ICollection<ForceField> ForceFields { get; } = new List<ForceField>();        
+        public ICollection<ForceField> ForceFields { get; } = new List<ForceField>();              
 
         public void Update(double deltaTime)
         {
             if (deltaTime == 0) return;
-            // enact all the single frame forces on the bodies
             foreach (IBody body in Bodies)
             {
+                // enact forces on the body
                 foreach (ForceField field in ForceFields)
                 {
                     body.Dynamics.ThrustSingleFrame(field.GetForceOnBody(body), field.GetTorqueOnBody(body));
-                }            
-            }
-
-            // update all the bodies
-            foreach (IBody body in Bodies)
-            {
+                }
+                // update body state
                 body.Dynamics.Update(deltaTime);
+
+                // find and resolve contacts
+                ContactResolver.ResolveContacts(ContactFinder.FindContacts(body, Bodies));
             }
 
             UniversalTime += deltaTime;

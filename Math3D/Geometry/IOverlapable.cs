@@ -8,7 +8,7 @@ namespace Math3D.Geometry
 {
     public interface IOverlapable
     {
-        bool OverlapTest(IOverlapable other);
+        bool AreOverlapping(IOverlapable other);
     }
 
     public sealed class NeverOverlap : IOverlapable
@@ -16,6 +16,6 @@ namespace Math3D.Geometry
         public static readonly NeverOverlap Instance = new NeverOverlap();
         private NeverOverlap() { }
 
-        public bool OverlapTest(IOverlapable other) => false;
+        public bool AreOverlapping(IOverlapable other) => false;
     }
 }
