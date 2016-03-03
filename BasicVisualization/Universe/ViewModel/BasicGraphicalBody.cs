@@ -22,7 +22,7 @@ namespace LabBox.Visualization.Universe.ViewModel
 
         public ImmutableArray<PrimitiveTriangle> Triangles { get; }
 
-        public BasicGraphicalBody(IBody body) : this(body, SphereFactory.NewSphere(2, 4)) { }
+        public BasicGraphicalBody(IBody body) : this(body, SphereFactory.NewSphere(1, 4)) { }
 
         public BasicGraphicalBody(IBody body, ImmutableArray<PrimitiveTriangle> tris)
         {

@@ -37,7 +37,7 @@ namespace MathTests.cs
         [TestCaseSource(typeof(EdgeIntersectCases))]
         public void EdgeIntersectTest(Triangle t, Edge e, IEnumerable<Intersection> intersects)
         {
-            Assert.That(t.IntersectEdge(e), Is.EquivalentTo(intersects));
+            Assert.That(t.FindIntersections(e), Is.EquivalentTo(intersects));
         }
 
 
@@ -47,7 +47,7 @@ namespace MathTests.cs
             var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(Vector3.K, -Vector3.K);
 
-            Assert.That(tri.IntersectEdge(edge), Is.EquivalentTo(new[] { new Intersection(Vector3.Zero, Vector3.K) }));
+            Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(new[] { new Intersection(Vector3.Zero, Vector3.K) }));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace MathTests.cs
             var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(new Vector3(10, 10, 1), new Vector3(10, 10, -1));
 
-            Assert.That(tri.IntersectEdge(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));
+            Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace MathTests.cs
             var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(Vector3.I, -Vector3.I);
 
-            Assert.That(tri.IntersectEdge(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));
+            Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));
         }
     }
 }

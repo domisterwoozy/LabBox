@@ -49,7 +49,7 @@ namespace Math3D.Geometry
             C = c;
         }        
 
-        public IEnumerable<Intersection> IntersectEdge(Edge e)
+        public IEnumerable<Intersection> FindIntersections(Edge e)
         {
             // points of edge reffered to as p and q
             Vector3 p = e.A;

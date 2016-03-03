@@ -23,5 +23,10 @@ namespace Util
         public static IEnumerable<T> Union<T>(this IEnumerable<T> enumerable, params T[] items) => Enumerable.Union(enumerable, items);
 
         public static IEnumerable<T> Union<T>(this T item, IEnumerable<T> enumerable) => enumerable.Union(item);
+
+        /// <summary>
+        /// This may seem silly but it protects underlying data structures when exposed as enumerables.
+        /// </summary>
+        public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> enumerable) => enumerable.Select(item => item);
     }
 }

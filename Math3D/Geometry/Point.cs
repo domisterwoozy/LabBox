@@ -20,9 +20,9 @@ namespace Math3D.Geometry
 
         public Func<Vector3, bool> VolumeFunc => v => false;
 
-        public double CrossSectionalArea(Vector3 cutPos, Vector3 cutNormal) => 0;
+        public double CrossSectionalArea(Vector3 cutNormal) => 0;
 
-        public IEnumerable<Intersection> IntersectEdge(IColliderVolume other) => Enumerable.Empty<Intersection>();
+        public IEnumerable<Intersection> FindIntersections(Edge edge) => Enumerable.Empty<Intersection>();
 
         private Point() { }
     }

@@ -33,7 +33,7 @@ namespace PhysicsTests
             A.CallTo(() => body.Material).Returns(mat);
             A.CallTo(() => dyn.Kinematics).Returns(kin);
             A.CallTo(() => kin.V).Returns(vel);
-            A.CallTo(() => shape.CrossSectionalArea(Vector3.Zero, vel)).Returns(area);
+            A.CallTo(() => shape.CrossSectionalArea(vel)).Returns(area);
             A.CallTo(() => mat.DragCoef).Returns(cd);
 
             var coeff = vel.MagSquared * cd * area;

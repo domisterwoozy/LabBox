@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Math3D.Geometry;
+using System;
 using System.Diagnostics;
 
 namespace Math3D
@@ -77,10 +78,14 @@ namespace Math3D
         /// </summary>
         public Vector3 ToWorldSpace(Vector3 localPoint) => R * localPoint + Pos;
 
+        public Edge ToWorldSpace(Edge localEdge) => new Edge(ToWorldSpace(localEdge.A), ToWorldSpace(localEdge.B));
+
         /// <summary>
         /// Converts a point in world space to this local transform's coordinate space.
         /// </summary>
         public Vector3 ToTransformSpace(Vector3 worldPoint) => R.TransposeMatrix() * (worldPoint - Pos);
+
+        public Edge ToTransformSpace(Edge worldEdge) => new Edge(ToTransformSpace(worldEdge.A), ToTransformSpace(worldEdge.B));
 
         public Transform Translate(Vector3 v) => new Transform(Pos + v, Q);
 

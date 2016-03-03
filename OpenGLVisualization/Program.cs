@@ -3,6 +3,7 @@ using LabBox.Visualization.Universe;
 using LabBox.Visualization.Universe.ViewModel;
 using Math3D;
 using OpenTK.Graphics;
+using Physics3D.Collisions;
 using Physics3D.Universes;
 using System;
 using System.Collections.Generic;
@@ -43,9 +44,13 @@ namespace LabBox.OpenGLVisualization
             var light2 = LightSource.SpotLight(new Vector3(10, 0, 5), new Vector3(0, 0, -1), Math.PI / 4);
             light2.CastsDynamicShadows = true;
             var light3 = LightSource.PointLight(new Vector3(20, 20, -2), 100);
-       
+
             // bodies
-            var uni = SampleUniverses.SunEarth(10, 100);
+            //var uni = SampleUniverses.SunEarth(10, 100);
+            var uni = SampleUniverses.BouncyGravity(10, 100);
+            uni.ContactResolver = new LoopingContactResolver(new ImpulseCollisionEngine());
+            uni.ContactFinder = new BasicContactFinder();
+
             IEnumerable<IGraphicalBody> bodies = BasicGraphicalBody.FromPhysicsBodies(uni.Bodies);//.Select(b => b.NewShape(FlatFactory.NewCuboid(1, 1, 1))).Select(b => b.NewColor(Color.Lavender));
             MoveableBody floor = new MoveableBody(FlatFactory.NewWall(50, 50).NewColor(Color.DodgerBlue)) { Translation = new Vector3(0, 0, -5) };            
             
@@ -54,7 +59,7 @@ namespace LabBox.OpenGLVisualization
                 var physicsRunner = new PausablePhysicsRunner(uni);
                 vis.InputHandler.Pause.Start += (sender, e) => physicsRunner.TogglePause();
                 vis.InputHandler.Exit.Start += (sender, e) => vis.EndVis();
-                physicsRunner.StartPhysics();
+                vis.VisStarted += (sender, e) => physicsRunner.StartPhysics();
                 vis.RunVis();
             }
         }

@@ -18,4 +18,12 @@ namespace Math3D.Geometry
 
         public bool AreOverlapping(IOverlapable other) => false;
     }
+
+    public sealed class AlwaysOverlap : IOverlapable
+    {
+        public static readonly AlwaysOverlap Instance = new AlwaysOverlap();
+        private AlwaysOverlap() { }
+
+        public bool AreOverlapping(IOverlapable other) => true;
+    }
 }

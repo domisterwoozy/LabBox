@@ -167,6 +167,8 @@ namespace Math3D
             return Math.Acos(x);
         }
 
+        public Vector3 TransformCoords(Transform localTransform, Transform targetTransform) => targetTransform.ToTransformSpace(localTransform.ToWorldSpace(this));
+
         public override string ToString() => "X: " + X + " Y: " + Y + " Z: " + Z;
 
         #region Operators
@@ -199,6 +201,11 @@ namespace Math3D
         /// Scalar * Vector multiplciation.
         /// </summary>
         public static Vector3 operator *(double a, Vector3 b) => b.MultScalar(a);
+
+        /// <summary>
+        /// Vector * Scalar multiplciation.
+        /// </summary>
+        public static Vector3 operator *(Vector3 a, double b) => a.MultScalar(b);
 
         /// <summary>
         /// Matrix * Vector multiplication

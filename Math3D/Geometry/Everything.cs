@@ -13,7 +13,8 @@ namespace Math3D.Geometry
         public double TotalVolume => double.PositiveInfinity;
         public Func<Vector3, bool> VolumeFunc => r => true;
         public double SurfaceArea => double.PositiveInfinity;
+        public double CrossSectionalArea(Vector3 cutNormal) => double.PositiveInfinity;
 
-        private Everything() { }
+        private Everything() { }  
     }
 }

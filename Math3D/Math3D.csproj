@@ -58,6 +58,9 @@
     <Compile Include="Geometry\IOverlapable.cs" />
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Point.cs" />
+    <Compile Include="Geometry\Sphere.cs" />
+    <Compile Include="Geometry\SphereCollider.cs" />
+    <Compile Include="Geometry\SphereColliderVolume.cs" />
     <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Probability\ContinuousDistribution.cs" />

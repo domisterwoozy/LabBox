@@ -26,5 +26,18 @@ namespace Physics3D.Bodies
                 Point.Instance,
                 NeverOverlap.Instance);
         }
+
+        public static BasicBody SphereMass(double radius, double mass, Vector3 pos, Vector3 vel)
+        {
+            return new BasicBody(
+                new RigidBody6DOF(
+                    new EuclideanKinematics(new Transform(pos, Matrix3.Identity), vel, Vector3.Zero),
+                    mass,
+                    Matrix3.Identity),
+                None.Instance,
+                new BasicMaterial(),
+                new SphereColliderVolume(Vector3.Zero, radius, 10),
+                AlwaysOverlap.Instance);
+        }
     }
 }

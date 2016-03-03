@@ -11,6 +11,8 @@ namespace BasicVisualization
 {
     public interface ILabBoxVis : IDisposable
     {
+        event EventHandler VisStarted;
+        
         IEnumerable<IGraphicalBody> Bodies { get; }
         IEnumerable<ILightSource> LightSources { get; }
         IEnumerable<IHUDView> HUDs { get; }

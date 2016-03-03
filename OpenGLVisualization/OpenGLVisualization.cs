@@ -37,12 +37,15 @@ namespace LabBox.OpenGLVisualization
         private List<Matrix4> depthViews = new List<Matrix4>();
 
         // internal framework data
+        private bool hasStarted = false;
         private readonly List<ILightSource> lightSources = new List<ILightSource>();
         private List<IGraphicalBody> bodies;
         private readonly List<IGraphicalBody> bodiesToAdd = new List<IGraphicalBody>();
         private readonly List<IGraphicalBody> bodiesToRemove = new List<IGraphicalBody>();
 
+
         // framework interface
+        public event EventHandler VisStarted;
         public IEnumerable<ILightSource> LightSources => lightSources;
         public IEnumerable<IGraphicalBody> Bodies => bodies;
         public IEnumerable<IHUDView> HUDs => Enumerable.Empty<IHUDView>(); // not yet implemented 
@@ -77,7 +80,7 @@ namespace LabBox.OpenGLVisualization
         {
             Load += BasicVis_Load;
             UpdateFrame += BasicVis_UpdateFrame;
-            RenderFrame += BasicVis_RenderFrame;            
+            RenderFrame += BasicVis_RenderFrame;      
         }
 
         public void RunVis()
@@ -163,6 +166,11 @@ namespace LabBox.OpenGLVisualization
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
         {
+            if (!hasStarted)
+            {
+                hasStarted = true;
+                VisStarted?.Invoke(this, e);
+            }
             if (UpdateBodiesCollection()) PopulateVertexBuffer();
         }
 

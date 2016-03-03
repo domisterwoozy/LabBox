@@ -7,6 +7,6 @@ namespace Math3D.Geometry
         /// <summary>
         /// Determines if and where a specified object intersects this object.
         /// </summary>
-        IEnumerable<Intersection> IntersectEdge(T other);
+        IEnumerable<Intersection> FindIntersections(T other);
     }
 }
