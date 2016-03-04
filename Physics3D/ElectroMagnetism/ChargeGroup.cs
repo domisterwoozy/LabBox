@@ -36,7 +36,7 @@ namespace Physics3D.ElectroMagnetism
         /// Summation of 0.5 * q * r X V
         /// See: https://en.wikipedia.org/wiki/Magnetic_moment#Integral_representation
         /// </summary>
-        public Vector3 MagneticDipoleMoment => 0.5 * this.Sum(c => c.Charge * (c.Pos ^ c.Vel));
+        public Vector3 MagneticDipoleMoment => 0.5 * this.Sum(c => c.Charge * (c.Pos % c.Vel));
 
         public ChargeGroup(params ChargeGroupMember[] charges)
         {

@@ -10,7 +10,5 @@
             A = a;
             B = b;
         }
-
-        public Edge TransformCoords(Transform localTransform, Transform targetTransform) => targetTransform.ToTransformSpace(localTransform.ToWorldSpace(this));
     }
 }

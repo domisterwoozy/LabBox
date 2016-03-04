@@ -20,19 +20,19 @@ namespace Math3D.Geometry
         /// The direction normal to the plane the triangle is in.
         /// The direction points upward from this plane in accordance with the right hand rule of the 3 triangle points (A, B, C) in that order.
         /// </summary>
-        public Vector3 N => (AB ^ AC).UnitDirection;
+        public Vector3 N => (AB % AC).UnitDirection;
         /// <summary>
         /// Points outward from the triangle, perpindicular to edge AB but inside the triangle plane.
         /// </summary>
-        public Vector3 ABN => (AB ^ N).UnitDirection;
+        public Vector3 ABN => (AB % N).UnitDirection;
         /// <summary>
         /// Points outward from the triangle, perpindicular to edge AC but inside the triangle plane.
         /// </summary>
-        public Vector3 ACN => (N ^ AC).UnitDirection;
+        public Vector3 ACN => (N % AC).UnitDirection;
         /// <summary>
         /// Points outward from the triangle, perpindicular to edge BC but inside the triangle plane.
         /// </summary>
-        public Vector3 BCN => (BC ^ N).UnitDirection;
+        public Vector3 BCN => (BC % N).UnitDirection;
 
         public Vector3? Normal => N;
         public IEnumerable<Edge> Edges => new[] { new Edge(A, B), new Edge(A, C), new Edge(B, C) };

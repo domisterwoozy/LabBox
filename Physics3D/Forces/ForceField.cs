@@ -56,7 +56,7 @@ namespace Physics3D.Forces
         /// </summary>
         public static Vector3 NullApplier(IBody body, Vector3 rawField) => Vector3.Zero;
         /// <summary>
-        /// F = |V|^2 * cd * area * W
+        /// F = |V|%2 * cd * area * W
         /// </summary>
         public static Vector3 DragForceApplier(IBody body, Vector3 windField)
         {
@@ -74,15 +74,15 @@ namespace Physics3D.Forces
         /// <summary>
         /// T = p X E
         /// </summary>
-        public static Vector3 ElectricTorqueApplier(IBody body, Vector3 electricField) => body.EMProps.ElectricDipoleMoment ^ electricField;
+        public static Vector3 ElectricTorqueApplier(IBody body, Vector3 electricField) => body.EMProps.ElectricDipoleMoment % electricField;
         /// <summary>
         /// F = q * (V X B)
         /// </summary>
-        public static Vector3 MagnetismForceApplier(IBody body, Vector3 magneticField) => body.EMProps.Charge * (body.Dynamics.Kinematics.V ^ magneticField);
+        public static Vector3 MagnetismForceApplier(IBody body, Vector3 magneticField) => body.EMProps.Charge * (body.Dynamics.Kinematics.V % magneticField);
         /// <summary>
         /// T = m X B
         /// </summary>
-        public static Vector3 MagnetismTorqueApplier(IBody body, Vector3 magneticField) => body.EMProps.MagneticDipoleMoment ^ magneticField;
+        public static Vector3 MagnetismTorqueApplier(IBody body, Vector3 magneticField) => body.EMProps.MagneticDipoleMoment % magneticField;
         /// <summary>
         /// Returns a new force application function that ignores a specified body called source.
         /// </summary>
@@ -95,10 +95,10 @@ namespace Physics3D.Forces
         /// </summary>
         public static ForceField BasicForce(IVectorField forceField) => new ForceField(forceField);
         public static ForceField Drag(IVectorField windField) => new ForceField(windField, DragForceApplier);
-        public static ForceField Gravity(IBody sourceBody, double gravConstant)
+        public static ForceField Gravity(IBody sourceBody, double strength)
         {
             return new ForceField(
-                PhysicsFields.PointMassGravity(sourceBody.Dynamics.Mass * gravConstant).Translate(() => sourceBody.Dynamics.Transform.Pos),
+                PhysicsFields.PointMassGravity(strength).Translate(() => sourceBody.Dynamics.Transform.Pos),
                 IgnoreSource(sourceBody, GravityForceApplier));
         }
         public static ForceField Gravity(Generator<Vector3> posGen, double strength)

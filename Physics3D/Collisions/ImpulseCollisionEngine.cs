@@ -21,12 +21,12 @@ namespace Physics3D.Collisions
         /// <summary>
         /// Global coefficient of dynamic friction.
         /// </summary>
-        public double DynamicFrictionFactor { get; set; } = 0.5f;
+        public double DynamicFrictionFactor { get; set; } = 0.05f;
 
         /// <summary>
         /// A factor of global 'bounciness'
         /// </summary>
-        public double Epsilon { get; set; } = 0.05f;
+        public double Epsilon { get; set; } = 1.4f;
 
         /// <summary>
         /// Objects colliding with a relative velocity below this number are not considered colliding.
@@ -43,7 +43,7 @@ namespace Physics3D.Collisions
             /// IMPLEMENTATION EXPLANATION           
             /// point p is the collision point
             /// vector n is the collision normal and it defines the 'collision plane'
-            /// the relative velocity vector and n are in another plane called the 'parallel plane" and it is defined by a vector called nPerp (vRel ^ n = nPerp)
+            /// the relative velocity vector and n are in another plane called the 'parallel plane" and it is defined by a vector called nPerp (vRel % n = nPerp)
             /// point a is the cm of body a
             /// point b is the cm of body b
             /// imagine the collision occuring in the frame where body b is fixed
@@ -69,17 +69,17 @@ namespace Physics3D.Collisions
             Vector3 normalImpulse = scalarNormalImpulse * intersection.Normal.Inverse;
             Vector3 frictionImpulse = Vector3.Zero;
 
-            Vector3 nPerp = (vRel ^ intersection.Normal).UnitDirection; // will be zero if vRel is completely normal to collision plane and therefore no friction component
+            Vector3 nPerp = (vRel % intersection.Normal).UnitDirection; // will be zero if vRel is completely normal to collision plane and therefore no friction component
             if (nPerp.MagSquared != 0) // there is motion in collision plane -> friction exists
             {
                 // the normalized projectio0n of vRel onto the collision plane
                 // it lies in the collision plane and defines the paralell plane
-                Vector3 nPar = (intersection.Normal ^ nPerp).UnitDirection;
-                double vRelPar = vRel * nPar;
-                double fric = FrictionImpulse(scalarNormalImpulse, vRelPar, a.Material, b.Material);
-                double maxFric = MaxFrictionImpulse(a, b, vRelPar, nPar, nPerp, scalarNormalImpulse, aToP, bToP);
-                if (Math.Abs(fric) > Math.Abs(maxFric)) fric = maxFric;
-                frictionImpulse = fric * nPar.Inverse;
+                //Vector3 nPar = (intersection.Normal % nPerp).UnitDirection;
+                //double vRelPar = vRel * nPar;
+                //double fric = FrictionImpulse(scalarNormalImpulse, vRelPar, a.Material, b.Material);
+                //double maxFric = MaxFrictionImpulse(a, b, vRelPar, nPar, nPerp, scalarNormalImpulse, aToP, bToP);
+                //if (Math.Abs(fric) > Math.Abs(maxFric)) fric = maxFric;
+                //frictionImpulse = fric * nPar.Inverse;
             }
             return frictionImpulse + normalImpulse;
         }
@@ -102,7 +102,7 @@ namespace Physics3D.Collisions
             {
                 apPar = aToP.ProjectToPlane(nPerp);
                 thetaA = nPar.AngleBetween(apPar.Inverse);
-                Vector3 axisOfRotA = (nPar ^ apPar).UnitDirection;
+                Vector3 axisOfRotA = (nPar % apPar).UnitDirection;
                 double invScalarRotInertiaA = a.Dynamics.InvI.Magnitude(axisOfRotA);
                 c2a = Math.Pow(apPar.Magnitude, 2) * Math.Sign(thetaA) * Math.Cos(thetaA + Math.PI / 2) * invScalarRotInertiaA - a.Dynamics.InvMass;
             }
@@ -110,7 +110,7 @@ namespace Physics3D.Collisions
             {
                 bpPar = bToP.ProjectToPlane(nPerp);
                 thetaB = nPar.AngleBetween(bpPar.Inverse);
-                Vector3 axisOfRotB = (nPar ^ bpPar).UnitDirection;
+                Vector3 axisOfRotB = (nPar % bpPar).UnitDirection;
                 double invScalarRotInertiaB = b.Dynamics.InvI.Magnitude(axisOfRotB);
                 c2b = Math.Pow(bpPar.Magnitude, 2) * Math.Sign(thetaB) * Math.Cos(thetaB + Math.PI / 2) * invScalarRotInertiaB - b.Dynamics.InvMass;
             }
@@ -134,14 +134,14 @@ namespace Physics3D.Collisions
             double num = 1 + DerivedEpsilon(a.Material, b.Material) * Math.Abs(vRelPerp);
             double term1 = a.Dynamics.InvMass;
             double term2 = b.Dynamics.InvMass;
-            double term3 = n * (a.Dynamics.InvI * (aToP ^ n) ^ aToP);
-            double term4 = n * (b.Dynamics.InvI * (bToP ^ n) ^ bToP);
+            double term3 = n * (a.Dynamics.InvI * (aToP % n) % aToP);
+            double term4 = n * (b.Dynamics.InvI * (bToP % n) % bToP);
             return num / (term1 + term2 + term3 + term4);
         }
 
-        private double DerivedDynamicCoef(IMaterial a, IMaterial b) => DynamicFrictionFactor * (a.DynamicFrictionCoef + b.DynamicFrictionCoef) / 2;
-        private double DerivedStaticCoef(IMaterial a, IMaterial b) => StaticFrictionFactor * (a.StaticFrictionCoef + b.StaticFrictionCoef) / 2;
-        private double DerivedEpsilon(IMaterial a, IMaterial b) => Epsilon * (a.Epsilon + b.Epsilon) / 2;
+        private double DerivedDynamicCoef(IMaterial a, IMaterial b) => DynamicFrictionFactor * ((a.DynamicFrictionCoef + b.DynamicFrictionCoef) / 2);
+        private double DerivedStaticCoef(IMaterial a, IMaterial b) => StaticFrictionFactor * ((a.StaticFrictionCoef + b.StaticFrictionCoef) / 2);
+        private double DerivedEpsilon(IMaterial a, IMaterial b) => Epsilon * ((a.Epsilon + b.Epsilon) / 2);
 
     }
 }

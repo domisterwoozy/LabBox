@@ -36,8 +36,23 @@ namespace Physics3D.Bodies
                     Matrix3.Identity),
                 None.Instance,
                 new BasicMaterial(),
-                new SphereColliderVolume(Vector3.Zero, radius, 10),
+                new SphereColliderVolume(Vector3.Zero, radius, 30),
+                new SphereBound(radius));
+        }
+
+        public static BasicBody Wall(double x, double y, double z, Vector3 pos)
+        {
+            return new BasicBody(
+                new RigidBody6DOF(
+                    new EuclideanKinematics(new Transform(pos, Matrix3.Identity), Vector3.Zero, Vector3.Zero),
+                    double.PositiveInfinity,
+                    Matrix3.Identity),
+                None.Instance,
+                new BasicMaterial(),
+                new CuboidColliderVolume(x, y, z, pos),
                 AlwaysOverlap.Instance);
         }
+
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Math3D.Geometry;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Math3D
 {
@@ -11,6 +13,7 @@ namespace Math3D
     public struct Transform
     {
         public static readonly Transform Zero = new Transform(Vector3.Zero, Matrix3.Identity);
+        public static readonly Transform World = Zero;
 
         /// <summary>
         /// The world position of the center of mass of this body.
@@ -71,21 +74,7 @@ namespace Math3D
                 default:
                     throw new ArgumentOutOfRangeException(nameof(axes));
             }
-        }     
-
-        /// <summary>
-        /// Converts a point in this local transforms coordinates to world coordinates.
-        /// </summary>
-        public Vector3 ToWorldSpace(Vector3 localPoint) => R * localPoint + Pos;
-
-        public Edge ToWorldSpace(Edge localEdge) => new Edge(ToWorldSpace(localEdge.A), ToWorldSpace(localEdge.B));
-
-        /// <summary>
-        /// Converts a point in world space to this local transform's coordinate space.
-        /// </summary>
-        public Vector3 ToTransformSpace(Vector3 worldPoint) => R.TransposeMatrix() * (worldPoint - Pos);
-
-        public Edge ToTransformSpace(Edge worldEdge) => new Edge(ToTransformSpace(worldEdge.A), ToTransformSpace(worldEdge.B));
+        }
 
         public Transform Translate(Vector3 v) => new Transform(Pos + v, Q);
 
@@ -96,6 +85,28 @@ namespace Math3D
             Debug.Assert(q.IsUnit);
             return new Transform(Pos, q * Q);
         }
+
+        #region Transformations
+        /// <summary>
+        /// Converts a point in this local transforms coordinates to world coordinates.
+        /// </summary>
+        public Vector3 ToWorldSpace(Vector3 localPoint) => R * localPoint + Pos;
+
+        public Edge ToWorldSpace(Edge localEdge) => new Edge(ToWorldSpace(localEdge.A), ToWorldSpace(localEdge.B));
+
+        public Intersection ToWorldSpace(Intersection localInter) => new Intersection(ToWorldSpace(localInter.Point), ToWorldSpace(localInter.Normal));
+
+        /// <summary>
+        /// Converts a point in world space to this local transform's coordinate space.
+        /// </summary>
+        public Vector3 ToLocalSpace(Vector3 worldPoint) => R.TransposeMatrix() * (worldPoint - Pos);
+
+        public Edge ToLocalSpace(Edge worldEdge) => new Edge(ToLocalSpace(worldEdge.A), ToLocalSpace(worldEdge.B));
+
+        public Intersection ToLocalSpace(Intersection worldInter) => new Intersection(ToLocalSpace(worldInter.Point), ToLocalSpace(worldInter.Normal));
+        #endregion
+
+
 
         #region Equality
         /// <summary>
@@ -139,5 +150,24 @@ namespace Math3D
             return Q == other.Q;
         }
         #endregion
+    }
+
+    public struct Transformation
+    {
+        public Transform TransformA { get; }
+        public Transform TransformB { get; }
+
+        public Transformation(Transform a, Transform b)
+        {
+            TransformA = a;
+            TransformB = b;
+        }
+
+        public Transformation Reverse() => new Transformation(TransformB, TransformA);
+
+        public Vector3 TransformVector(Vector3 v) => TransformB.ToLocalSpace(TransformA.ToWorldSpace(v));
+        public IEnumerable<Vector3> TransformVectors(params Vector3[] vectors) => vectors.Select(TransformVector);
+        public Edge TransformEdge(Edge e) => new Edge(TransformVector(e.A), TransformVector(e.B));
+        public Intersection TransformIntersection(Intersection i) => new Intersection(TransformVector(i.Point), TransformVector(i.Normal));
     }
 }

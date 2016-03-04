@@ -27,15 +27,27 @@ namespace Math3D.Geometry
             Radius = radius;
             Rank = rank;
 
-            edges =
-                (from i in Enumerable.Range(0, rank)
-                 from j in Enumerable.Range(0, rank)
-                 let theta = ((double)i / rank) * 2 * Math.PI
-                 let phi = ((double)j / rank) * 2 * Math.PI
-                 let x = Radius * Math.Cos(theta) * Math.Sin(phi)
-                 let y = Radius * Math.Sin(theta) * Math.Sin(phi)
-                 let z = Radius * Math.Cos(phi)
-                 select new Edge(CenterPos, CenterPos + new Vector3(x, y, z))).ToImmutableArray();
+            edges = CreateEdges(rank).ToImmutableArray();
+        }
+
+        private IEnumerable<Edge> CreateEdges(int rank)
+        {
+            foreach (int i in Enumerable.Range(0, rank))
+            {
+                foreach (int j in Enumerable.Range(0, rank / 2))
+                {
+                    double theta = ((double)i / rank) * 2 * Math.PI;
+                    double phi = ((double)j / ((float)rank / 2)) * 2 * Math.PI;
+                    double x = Radius * Math.Cos(theta) * Math.Sin(phi);
+                    double y = Radius * Math.Sin(theta) * Math.Sin(phi);
+                    double z = Radius * Math.Cos(phi);
+                    yield return new Edge(CenterPos, CenterPos + new Vector3(x, y, z));
+                }
+            }
+            yield return new Edge(CenterPos, CenterPos + Radius * Vector3.I);
+            yield return new Edge(CenterPos, CenterPos + Radius * Vector3.J);
+            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.I);
+            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.J);
         }
 
         public IEnumerable<Intersection> FindIntersections(Edge edge)

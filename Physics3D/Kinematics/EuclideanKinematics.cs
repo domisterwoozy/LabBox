@@ -23,6 +23,6 @@ namespace Physics3D.Kinematics
             Omega = omega;
         }
 
-        public Vector3 SurfaceVelocity(Vector3 p) => V + Omega ^ p;
+        public Vector3 SurfaceVelocity(Vector3 p) => V + Omega % p;
     }
 }

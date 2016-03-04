@@ -42,7 +42,7 @@ namespace Physics3D.Dynamics
         public IKinematics Kinematics => kinematicBody.GetCurrentState();
         public Transform Transform => kinematicBody.Transform;
         public Matrix3 I => InvI.InverseMatrix();
-        public Matrix3 InvI => InvIBody.Rotate(kinematicBody.Transform.R);
+        public Matrix3 InvI => InvIBody.Rotate(kinematicBody.Transform.Q);
         public double Mass => 1 / InvMass;
         public double KineticEnergy
         {
@@ -108,7 +108,8 @@ namespace Physics3D.Dynamics
         public void EnactImpulse(Vector3 impulse, Vector3 relPos)
         {
             P += impulse;
-            L += relPos ^ impulse;
+            L += relPos % impulse;
+            UpdateKinematics();
         }
 
         public void Fix()
@@ -172,17 +173,22 @@ namespace Physics3D.Dynamics
 
         public void Update(double deltaTime)
         { 
-            // update forces           
+            // update dynamics           
             P += deltaTime * NetCurrentForce;
             L += deltaTime * NetCurrentTorque;
-            // update velocities
-            kinematicBody.V = InvMass * P;
-            kinematicBody.Omega = InvI * L;
+            // update kinematics
+            UpdateKinematics();
             // update positions
             kinematicBody.UpdateTransform(deltaTime);
 
             UpdateTempForces(deltaTime);
             FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));
+        }
+
+        private void UpdateKinematics()
+        {
+            kinematicBody.V = InvMass * P;
+            kinematicBody.Omega = InvI * L;
         }
 
         private void UpdateTempForces(double deltaTime)

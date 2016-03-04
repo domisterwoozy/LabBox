@@ -65,9 +65,9 @@ namespace Physics3D.Forces
             Func<Vector3, Vector3> customFunc =
             r =>
             {
-                double s = ((r - pointOnWire) ^ currentVector.UnitDirection).Magnitude; // perp dist b/w wire and r
+                double s = ((r - pointOnWire) % currentVector.UnitDirection).Magnitude; // perp dist b/w wire and r
                 double magnitude = (magConstant * currentVector.Magnitude) / (2 * Math.PI * s); // mu * I / 2 * PI * s
-                return magnitude * (currentVector ^ r).UnitDirection;
+                return magnitude * (currentVector % r).UnitDirection;
             };
             return new CustomVectorField(customFunc);
         }
@@ -84,7 +84,7 @@ namespace Physics3D.Forces
         public static IVectorField PointChargeMagnetic(double charge, double magConstant, Vector3 vel)
         {
             double factor = magConstant * charge / (4 * Math.PI);
-            Func<Vector3, Vector3> customFunc = r => (factor / r.MagSquared) * (vel ^ r.UnitDirection);
+            Func<Vector3, Vector3> customFunc = r => (factor / r.MagSquared) * (vel % r.UnitDirection);
             return new CustomVectorField(customFunc);
         }
 

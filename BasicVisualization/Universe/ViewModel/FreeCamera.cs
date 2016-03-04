@@ -71,7 +71,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         }
 
         private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.K).UnitDirection;
-        private Vector3 HorizontalRight() => HorizontalForward() ^ Vector3.K;
+        private Vector3 HorizontalRight() => HorizontalForward() % Vector3.K;
 
         private void PollInput(object timerState)
         {

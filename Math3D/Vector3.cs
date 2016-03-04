@@ -120,7 +120,7 @@ namespace Math3D
         public Quaternion RotationRequired(Vector3 dir)
         {
             double angleDiff = AngleBetween(dir);
-            Vector3 rotAxis = this ^ dir; // axis to rotate around to get there
+            Vector3 rotAxis = this % dir; // axis to rotate around to get there
             return Quaternion.UnitQuaternion(angleDiff, rotAxis);
         }
 
@@ -167,7 +167,7 @@ namespace Math3D
             return Math.Acos(x);
         }
 
-        public Vector3 TransformCoords(Transform localTransform, Transform targetTransform) => targetTransform.ToTransformSpace(localTransform.ToWorldSpace(this));
+        public Vector3 TransformCoords(Transform localTransform, Transform targetTransform) => targetTransform.ToLocalSpace(localTransform.ToWorldSpace(this));
 
         public override string ToString() => "X: " + X + " Y: " + Y + " Z: " + Z;
 
@@ -189,8 +189,12 @@ namespace Math3D
 
         /// <summary>
         /// Vector cross product.
+        /// The '%' sign is picked because it takes equal precedence to other multiplicative operators.
+        /// If we used the more customary '%' then addition/subtraction would take precedence over the cross product.
+        /// For example A + B % C would be equal to (A + B) % C and NOT equal to A + (B % C) like in normal vector math.
+        /// See: https://msdn.microsoft.com/en-us/library/aa691323(v=vs.71).aspx
         /// </summary>
-        public static Vector3 operator ^(Vector3 a, Vector3 b) => a.CrossProduct(b);
+        public static Vector3 operator %(Vector3 a, Vector3 b) => a.CrossProduct(b);
 
         /// <summary>
         /// Vector dot product.

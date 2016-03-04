@@ -27,7 +27,10 @@ namespace Physics3D.Collisions
             while (stillResolving)
             {
                 loopCount++;
-                if (loopCount > MaxLoops) return false;
+                if (loopCount > MaxLoops)
+                {
+                    return false;
+                }
                 stillResolving = false;
                 foreach (Contact c in contactArr)
                 {

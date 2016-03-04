@@ -18,7 +18,7 @@ namespace LabBox.Visualization.Universe.ViewModel
 
         public PrimitiveTriangle(Vertex a, Vertex b, Vertex c, bool setVertexNormals = true)
         {
-            Normal = (b.Pos - a.Pos) ^ (c.Pos - a.Pos);
+            Normal = (b.Pos - a.Pos) % (c.Pos - a.Pos);
             if (setVertexNormals)
             {
                 A = new Vertex(a.Pos, a.Color, Normal);

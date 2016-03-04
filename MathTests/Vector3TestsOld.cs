@@ -63,7 +63,7 @@ namespace MathTests
             double randA = rand.NextDouble();
             double randB = rand.NextDouble();
 
-            Assert.AreEqual((randA * Vector3.I) ^ (randB * Vector3.J), (randA * randB) * Vector3.K);
+            Assert.AreEqual((randA * Vector3.I) % (randB * Vector3.J), (randA * randB) * Vector3.K);
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace MathTests
             double randA = rand.NextDouble();
             double randB = rand.NextDouble();
 
-            Assert.AreEqual((randA * Vector3.I) ^ (randB * Vector3.J), (randA * randB) * Vector3.K);
+            Assert.AreEqual((randA * Vector3.I) % (randB * Vector3.J), (randA * randB) * Vector3.K);
         }
 
         [TestMethod]

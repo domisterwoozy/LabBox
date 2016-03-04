@@ -61,7 +61,7 @@ namespace MathTests
         [TestCaseSource(typeof(CrossProductCases))]
         public void CrossProductTest(Vector3 a, Vector3 b, Vector3 crossProduct)
         {
-            Assert.That(a ^ b, Is.EqualTo(crossProduct));
+            Assert.That(a % b, Izz.EqualTo(crossProduct).Within(Math.Pow(10, -10)));
         }
 
         private class CrossProductCases : IEnumerable
@@ -72,13 +72,16 @@ namespace MathTests
                 yield return new[] { Vector3.I, Vector3.Zero, Vector3.Zero };
                 yield return new[] { Vector3.I, Vector3.J, Vector3.K };
                 yield return new[] { -Vector3.I, Vector3.J, -Vector3.K };
+                yield return new[] { new Vector3(2.2, 99.0, -4), Vector3.Zero, Vector3.Zero };
+                yield return new[] { Vector3.Zero, new Vector3(2.2, 99.0, -4), Vector3.Zero };
+                yield return new[] { new Vector3(-4, 19, 4), new Vector3(2.2, 2, 2), new Vector3(30, 16.8, -49.8) };
             }
         }
 
         [Theory]
         public void CrossProductPerpindicularTest(Vector3 a, Vector3 b)
         {
-            Vector3 res = a ^ b;
+            Vector3 res = a % b;
             Assert.That(res * a, Is.EqualTo(0).Within(Math.Pow(10, -10)));
             Assert.That(res * b, Is.EqualTo(0).Within(Math.Pow(10, -10)));
         }

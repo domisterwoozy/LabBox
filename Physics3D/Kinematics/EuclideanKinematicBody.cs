@@ -18,7 +18,7 @@ namespace Physics3D.Kinematics
 
         public IKinematics GetCurrentState() => new EuclideanKinematics(Transform, V, Omega);
 
-        public Vector3 SurfaceVelocity(Vector3 p) => V + Omega ^ p;
+        public Vector3 SurfaceVelocity(Vector3 p) => V + Omega % p;
 
         public void UpdateTransform(double deltaTime)
         {

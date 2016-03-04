@@ -36,16 +36,15 @@ namespace Physics3D.Universes
             double gravConstant = 1.0;
             double earthMass = Math.Pow(10, -5);
 
-            //double earthSpeed = Math.Sqrt(gravConstant * sunMass / distance); // for circular orbit
             double earthSpeed = 1.0; // constant speed
 
             var sun = BodyFactory.SphereMass(1.0, sunMass, Vector3.Zero, Vector3.Zero);
-            var earth = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.I, earthSpeed * Vector3.J);
-            earth.Dynamics.ThrustInputs(Vector3.Zero, new Vector3(1, 1, 1), 1); // add a slight rotation to earth
+            sun.Dynamics.Fix();
+            var earth = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.I, -Vector3.I + Vector3.J);
 
             var uni = new BasicUniverse();
             uni.Bodies.Add(sun, earth);
-            uni.ForceFields.Add(ForceFieldFactory.Gravity(sun, gravConstant));
+            uni.ForceFields.Add(ForceFieldFactory.Gravity(sun, gravConstant * sunMass));
 
             return uni;
         }
