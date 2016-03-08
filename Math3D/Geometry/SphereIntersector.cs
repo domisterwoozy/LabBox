@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class SphereCollider : ICollider
+    public class SphereIntersector : IIntersectable<Edge>
     {
         private readonly ImmutableArray<Edge> edges;
 
@@ -19,7 +19,7 @@ namespace Math3D.Geometry
 
         public Vector3? Normal => null;
 
-        public SphereCollider(Vector3 pos, double radius, int rank)
+        public SphereIntersector(Vector3 pos, double radius, int rank)
         {
             if (radius <= 0.0) throw new ArgumentException(nameof(radius) + " must be positive");
             if (rank <= 0) throw new ArgumentException(nameof(rank) + " must be positive");
@@ -37,7 +37,7 @@ namespace Math3D.Geometry
                 foreach (int j in Enumerable.Range(0, rank / 2))
                 {
                     double theta = ((double)i / rank) * 2 * Math.PI;
-                    double phi = ((double)j / ((float)rank / 2)) * 2 * Math.PI;
+                    double phi = ((double)j / ((float)rank / 2)) * Math.PI;
                     double x = Radius * Math.Cos(theta) * Math.Sin(phi);
                     double y = Radius * Math.Sin(theta) * Math.Sin(phi);
                     double z = Radius * Math.Cos(phi);
@@ -48,6 +48,7 @@ namespace Math3D.Geometry
             yield return new Edge(CenterPos, CenterPos + Radius * Vector3.J);
             yield return new Edge(CenterPos, CenterPos - Radius * Vector3.I);
             yield return new Edge(CenterPos, CenterPos - Radius * Vector3.J);
+            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.K);
         }
 
         public IEnumerable<Intersection> FindIntersections(Edge edge)

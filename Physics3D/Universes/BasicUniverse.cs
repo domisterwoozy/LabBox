@@ -28,8 +28,11 @@ namespace Physics3D.Universes
         public void Update(double deltaTime)
         {
             if (deltaTime == 0) return;
+            //deltaTime = Math.Pow(10, -5); // constant for testing
             foreach (IBody body in Bodies)
             {
+                if (body.Dynamics.IsFixed) continue;
+
                 // enact forces on the body
                 foreach (ForceField field in ForceFields)
                 {

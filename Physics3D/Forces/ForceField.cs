@@ -60,7 +60,7 @@ namespace Physics3D.Forces
         /// </summary>
         public static Vector3 DragForceApplier(IBody body, Vector3 windField)
         {
-            double area = body.CollisionShape.CrossSectionalArea(body.Dynamics.Kinematics.V.UnitDirection);
+            double area = body.Shape.CrossSectionalArea(body.Dynamics.Kinematics.V.UnitDirection);
             return body.Dynamics.Kinematics.V.MagSquared  * area * body.Material.DragCoef * windField;
         }
         /// <summary>

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class Point : IColliderVolume
+    public class Point : IEdgeIntersector, IVolume
     {
         public static readonly Point Instance = new Point();
 
-        public IEnumerable<Edge> OuterEdges => Enumerable.Empty<Edge>();
+        public IEnumerable<Edge> Edges => Enumerable.Empty<Edge>();
 
-        public IEnumerable<ICollider> Primitives => Enumerable.Empty<ICollider>();
+        public IEnumerable<IIntersectable<Edge>> Primitives => Enumerable.Empty<IIntersectable<Edge>>();
 
         public double SurfaceArea => 0;
 

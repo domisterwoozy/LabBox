@@ -17,8 +17,9 @@ namespace Physics3D.Bodies
 
         IDynamicBody Dynamics { get; }
 
-        IColliderVolume CollisionShape { get; }
+        IEdgeIntersector CollisionShape { get; }
         IOverlapable BoundVolume { get; }
+        IVolume Shape { get; }
 
         IMaterial Material { get; }
         IElectroMag EMProps { get; }

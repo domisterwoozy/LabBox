@@ -122,7 +122,9 @@ namespace LabBox.OpenGLVisualization
             GL.ClearColor(Color.Black);
             GL.Enable(EnableCap.DepthTest); // enable depth testing
             GL.DepthFunc(DepthFunction.Less); // only accept fragment if it is closer to the camera than whats in there already
-            GL.Enable(EnableCap.Multisample); 
+            GL.Enable(EnableCap.Multisample); // standard AA
+            GL.Enable(EnableCap.Blend); // transparency
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha); // transparency func
 
             mainProgram = new LitMaterialProgram();
             depthProgram = new DepthMapProgram();

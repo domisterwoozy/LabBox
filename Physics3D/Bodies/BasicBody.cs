@@ -18,17 +18,21 @@ namespace Physics3D.Bodies
         public event EventHandler<FrameLengthArgs> FrameFinished;
         public IDynamicBody Dynamics { get; }
         public IElectroMag EMProps { get; }
-        public IMaterial Material { get; }
-        public IColliderVolume CollisionShape { get; }
+        public BasicMaterial Material { get; }
+        public IEdgeIntersector CollisionShape { get; }
+        public IVolume Shape { get; }
         public IOverlapable BoundVolume { get; }
 
-        public BasicBody(IDynamicBody dynamics, IElectroMag em, IMaterial mat, IColliderVolume shape, IOverlapable boundVolume)
+        IMaterial IBody.Material => Material;
+        
+        public BasicBody(IDynamicBody dynamics, IElectroMag em, BasicMaterial mat, IEdgeIntersector intersectionShape, IOverlapable boundVolume, IVolume shape)
         {
             Dynamics = dynamics;
             EMProps = em;
             Material = mat;
-            CollisionShape = shape;
+            CollisionShape = intersectionShape;
             BoundVolume = boundVolume;
+            Shape = shape;
 
             Dynamics.FrameFinished += (sender, e) => FrameFinished?.Invoke(sender, e);
         }        

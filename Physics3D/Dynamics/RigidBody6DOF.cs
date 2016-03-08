@@ -107,6 +107,7 @@ namespace Physics3D.Dynamics
 
         public void EnactImpulse(Vector3 impulse, Vector3 relPos)
         {
+            Validate(impulse);
             P += impulse;
             L += relPos % impulse;
             UpdateKinematics();
@@ -155,27 +156,35 @@ namespace Physics3D.Dynamics
 
         public void AddInputs(Vector3 force, Vector3 torque)
         {
+            Validate(force);
+            Validate(torque);
             netForce += force;
             netTorque += torque;
         }
 
         public void ThrustInputs(Vector3 force, Vector3 torque, float duration)
         {
+            Validate(force);
+            Validate(torque);
             tempForces.Add(new TempForce(force, duration));
             tempTorques.Add(new TempForce(torque, duration));
         }
 
         public void ThrustSingleFrame(Vector3 force, Vector3 torque)
         {
+            if (IsFixed) return; // we are guaranteed to be fixed for atleast this frame so ignore the input
+            Validate(force);
+            Validate(torque);
             singleFrameForces.Add(force);
             singleFrameTorques.Add(torque);
         }
 
         public void Update(double deltaTime)
-        { 
+        {
             // update dynamics           
             P += deltaTime * NetCurrentForce;
             L += deltaTime * NetCurrentTorque;
+
             // update kinematics
             UpdateKinematics();
             // update positions
@@ -188,7 +197,7 @@ namespace Physics3D.Dynamics
         private void UpdateKinematics()
         {
             kinematicBody.V = InvMass * P;
-            kinematicBody.Omega = InvI * L;
+            kinematicBody.Omega = InvI * L;         
         }
 
         private void UpdateTempForces(double deltaTime)
@@ -201,6 +210,19 @@ namespace Physics3D.Dynamics
 
             singleFrameForces.Clear();
             singleFrameTorques.Clear();
-        }        
+        }          
+
+        private static void Validate(Vector3 v)
+        {
+            Validate(v.X);
+            Validate(v.Y);
+            Validate(v.Z);
+        }
+        
+        private static void Validate(double d)
+        {
+            if (double.IsNaN(d)) throw new ArgumentException("Input must not be NaN or Infinity");
+            if (double.IsInfinity(d)) throw new ArgumentException("Input must not be NaN or Infinity");
+        }    
     }
 }

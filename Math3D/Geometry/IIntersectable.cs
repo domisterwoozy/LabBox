@@ -2,7 +2,7 @@
 
 namespace Math3D.Geometry
 {
-    public interface IIntersectable<T> 
+    public interface IIntersectable<in T> 
     {
         /// <summary>
         /// Determines if and where a specified object intersects this object.

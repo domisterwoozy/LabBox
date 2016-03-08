@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class SphereColliderVolume : IColliderVolume
+    public class SphereIntersectorVolume : IEdgeIntersector, IVolume
     {
-        private readonly SphereCollider sphereCollider;
+        private readonly SphereIntersector sphereCollider;
         private readonly Sphere sphere;
 
-        public IEnumerable<Edge> OuterEdges => sphereCollider.Edges;
-
-        public IEnumerable<ICollider> Primitives { get { yield return sphereCollider; } }
+        public IEnumerable<Edge> Edges => sphereCollider.Edges;
 
         public double SurfaceArea => sphere.SurfaceArea;
 
@@ -21,9 +19,11 @@ namespace Math3D.Geometry
 
         public Func<Vector3, bool> VolumeFunc => sphere.VolumeFunc;
 
-        public SphereColliderVolume(Vector3 pos, double radius, int rank)
+        public double Radius => sphere.Radius;
+
+        public SphereIntersectorVolume(Vector3 pos, double radius, int rank)
         {
-            sphereCollider = new SphereCollider(pos, radius, rank);
+            sphereCollider = new SphereIntersector(pos, radius, rank);
             sphere = new Sphere(radius);
         }
 

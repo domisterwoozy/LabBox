@@ -13,8 +13,12 @@ namespace LabBox.Visualization.Universe.ViewModel
 {
     public static class FlatFactory
     {
-        public static ImmutableArray<PrimitiveTriangle> NewCuboid(double x, double y, double z)
+        public static ImmutableArray<PrimitiveTriangle> NewCuboid(double width, double length, double height)
         {
+            double x = width / 2;
+            double y = length / 2;
+            double z = height / 2;
+
             var verts = ImmutableArray.CreateBuilder<Vertex>();
             // tops four points in ccw order
             verts.Add(new Vertex(x, y, z)); // 0
@@ -71,6 +75,7 @@ namespace LabBox.Visualization.Universe.ViewModel
     {
         public static ImmutableArray<PrimitiveTriangle> NewSphere(double radius, int level)
         {
+            if (level > 5) throw new ArgumentException(nameof(level) + " is to damn high");
             double t = (1.0 + Math.Sqrt(5.0)) / 2.0;
             var verts = ImmutableArray.CreateBuilder<Vertex>();
             verts.Add(SetVectorLength(new Vertex(-1, t, 0), radius));

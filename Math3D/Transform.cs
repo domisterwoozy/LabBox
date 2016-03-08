@@ -92,18 +92,22 @@ namespace Math3D
         /// </summary>
         public Vector3 ToWorldSpace(Vector3 localPoint) => R * localPoint + Pos;
 
+        public Vector3 RotateToWorld(Vector3 localDir) => R * localDir;
+
         public Edge ToWorldSpace(Edge localEdge) => new Edge(ToWorldSpace(localEdge.A), ToWorldSpace(localEdge.B));
 
-        public Intersection ToWorldSpace(Intersection localInter) => new Intersection(ToWorldSpace(localInter.Point), ToWorldSpace(localInter.Normal));
+        public Intersection ToWorldSpace(Intersection localInter) => new Intersection(ToWorldSpace(localInter.Point), RotateToWorld(localInter.Normal));
 
         /// <summary>
         /// Converts a point in world space to this local transform's coordinate space.
         /// </summary>
         public Vector3 ToLocalSpace(Vector3 worldPoint) => R.TransposeMatrix() * (worldPoint - Pos);
 
+        public Vector3 RotateToLocal(Vector3 worldDir) => R.TransposeMatrix() * worldDir;
+
         public Edge ToLocalSpace(Edge worldEdge) => new Edge(ToLocalSpace(worldEdge.A), ToLocalSpace(worldEdge.B));
 
-        public Intersection ToLocalSpace(Intersection worldInter) => new Intersection(ToLocalSpace(worldInter.Point), ToLocalSpace(worldInter.Normal));
+        public Intersection ToLocalSpace(Intersection worldInter) => new Intersection(ToLocalSpace(worldInter.Point), RotateToLocal(worldInter.Normal));
         #endregion
 
 
@@ -165,9 +169,13 @@ namespace Math3D
 
         public Transformation Reverse() => new Transformation(TransformB, TransformA);
 
-        public Vector3 TransformVector(Vector3 v) => TransformB.ToLocalSpace(TransformA.ToWorldSpace(v));
-        public IEnumerable<Vector3> TransformVectors(params Vector3[] vectors) => vectors.Select(TransformVector);
-        public Edge TransformEdge(Edge e) => new Edge(TransformVector(e.A), TransformVector(e.B));
-        public Intersection TransformIntersection(Intersection i) => new Intersection(TransformVector(i.Point), TransformVector(i.Normal));
+        public Vector3 TransformPos(Vector3 v) => TransformB.ToLocalSpace(TransformA.ToWorldSpace(v));
+        public Vector3 TransformDirection(Vector3 v) => TransformB.RotateToLocal(TransformA.RotateToWorld(v));
+        public IEnumerable<Vector3> TransformDirections(params Vector3[] vectors) => vectors.Select(TransformDirection);
+        public IEnumerable<Vector3> TransformPositions(params Vector3[] vectors) => vectors.Select(TransformPos);
+
+
+        public Edge TransformEdge(Edge e) => new Edge(TransformPos(e.A), TransformPos(e.B));
+        public Intersection TransformIntersection(Intersection i) => new Intersection(TransformPos(i.Point), TransformDirection(i.Normal));
     }
 }

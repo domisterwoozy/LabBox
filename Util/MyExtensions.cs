@@ -28,5 +28,10 @@ namespace Util
         /// This may seem silly but it protects underlying data structures when exposed as enumerables.
         /// </summary>
         public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> enumerable) => enumerable.Select(item => item);
+
+        public static IEnumerable<T> EnumerableOf<T>(params T[] items)
+        {
+            foreach (var item in items) yield return item;
+        }
     }
 }

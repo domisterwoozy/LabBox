@@ -21,12 +21,12 @@ namespace Physics3D.Collisions
         /// <summary>
         /// Global coefficient of dynamic friction.
         /// </summary>
-        public double DynamicFrictionFactor { get; set; } = 0.05f;
+        public double DynamicFrictionFactor { get; set; } = 0.5f;
 
         /// <summary>
         /// A factor of global 'bounciness'
         /// </summary>
-        public double Epsilon { get; set; } = 1.4f;
+        public double Epsilon { get; set; } = 1.0f;
 
         /// <summary>
         /// Objects colliding with a relative velocity below this number are not considered colliding.
@@ -68,18 +68,18 @@ namespace Physics3D.Collisions
             double scalarNormalImpulse = NormalImpulse(vRelPerp, a, b, aToP, bToP, intersection.Normal);
             Vector3 normalImpulse = scalarNormalImpulse * intersection.Normal.Inverse;
             Vector3 frictionImpulse = Vector3.Zero;
-
+            
             Vector3 nPerp = (vRel % intersection.Normal).UnitDirection; // will be zero if vRel is completely normal to collision plane and therefore no friction component
             if (nPerp.MagSquared != 0) // there is motion in collision plane -> friction exists
             {
                 // the normalized projectio0n of vRel onto the collision plane
                 // it lies in the collision plane and defines the paralell plane
-                //Vector3 nPar = (intersection.Normal % nPerp).UnitDirection;
-                //double vRelPar = vRel * nPar;
-                //double fric = FrictionImpulse(scalarNormalImpulse, vRelPar, a.Material, b.Material);
-                //double maxFric = MaxFrictionImpulse(a, b, vRelPar, nPar, nPerp, scalarNormalImpulse, aToP, bToP);
-                //if (Math.Abs(fric) > Math.Abs(maxFric)) fric = maxFric;
-                //frictionImpulse = fric * nPar.Inverse;
+                Vector3 nPar = (intersection.Normal % nPerp).UnitDirection;
+                double vRelPar = vRel * nPar;
+                double fric = FrictionImpulse(scalarNormalImpulse, vRelPar, a.Material, b.Material);
+                double maxFric = MaxFrictionImpulse(a, b, vRelPar, nPar, nPerp, scalarNormalImpulse, aToP, bToP);
+                if (Math.Abs(fric) > Math.Abs(maxFric)) fric = maxFric;
+                frictionImpulse = fric * nPar.Inverse;
             }
             return frictionImpulse + normalImpulse;
         }
@@ -131,7 +131,7 @@ namespace Physics3D.Collisions
 
         private double NormalImpulse(double vRelPerp, IBody a, IBody b, Vector3 aToP, Vector3 bToP, Vector3 n)
         {
-            double num = 1 + DerivedEpsilon(a.Material, b.Material) * Math.Abs(vRelPerp);
+            double num = (1 + DerivedEpsilon(a.Material, b.Material)) * Math.Pow(Math.Abs(vRelPerp), 1.0);
             double term1 = a.Dynamics.InvMass;
             double term2 = b.Dynamics.InvMass;
             double term3 = n * (a.Dynamics.InvI * (aToP % n) % aToP);
@@ -142,6 +142,19 @@ namespace Physics3D.Collisions
         private double DerivedDynamicCoef(IMaterial a, IMaterial b) => DynamicFrictionFactor * ((a.DynamicFrictionCoef + b.DynamicFrictionCoef) / 2);
         private double DerivedStaticCoef(IMaterial a, IMaterial b) => StaticFrictionFactor * ((a.StaticFrictionCoef + b.StaticFrictionCoef) / 2);
         private double DerivedEpsilon(IMaterial a, IMaterial b) => Epsilon * ((a.Epsilon + b.Epsilon) / 2);
+
+        private static void Validate(Vector3 v)
+        {
+            Validate(v.X);
+            Validate(v.Y);
+            Validate(v.Z);
+        }
+
+        private static void Validate(double d)
+        {
+            if (double.IsNaN(d)) throw new ArgumentException("Input must not be NaN or Infinity");
+            if (double.IsInfinity(d)) throw new ArgumentException("Input must not be NaN or Infinity");
+        }
 
     }
 }

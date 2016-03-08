@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Math3D.Geometry
 {
-    public class Triangle : ICollider
+    public class TriangleIntersector : IEdgeIntersector
     {
         public Vector3 A { get; }
         public Vector3 B { get; }
@@ -41,7 +41,7 @@ namespace Math3D.Geometry
         /// The points of the triangle are assigned counter clockwise
         /// and the normal points upward.
         /// </summary>
-        public Triangle(Vector3 a, Vector3 b, Vector3 c)
+        public TriangleIntersector(Vector3 a, Vector3 b, Vector3 c)
         {
             // todo: verify the 3 points are not colinear
             A = a;

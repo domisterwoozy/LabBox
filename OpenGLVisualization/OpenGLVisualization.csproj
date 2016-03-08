@@ -60,6 +60,7 @@
     <Compile Include="DebugVis.cs" />
     <Compile Include="OpenGLExtensions.cs" />
     <Compile Include="OpenGLInputHandler.cs" />
+    <Compile Include="SampleVisualizations.cs" />
     <Compile Include="Shaders\OpenGLProgram.cs" />
     <Compile Include="OpenGLUtil.cs" />
     <Compile Include="OpenGLVisualization.cs" />

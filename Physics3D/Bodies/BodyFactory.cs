@@ -24,7 +24,8 @@ namespace Physics3D.Bodies
                 None.Instance,
                 new BasicMaterial(),
                 Point.Instance,
-                NeverOverlap.Instance);
+                NeverOverlap.Instance,
+                Point.Instance);
         }
 
         public static BasicBody SphereMass(double radius, double mass, Vector3 pos, Vector3 vel)
@@ -36,21 +37,39 @@ namespace Physics3D.Bodies
                     Matrix3.Identity),
                 None.Instance,
                 new BasicMaterial(),
-                new SphereColliderVolume(Vector3.Zero, radius, 30),
-                new SphereBound(radius));
+                new SphereIntersectorVolume(Vector3.Zero, radius, 10),
+                new SphereBound(radius),
+                new SphereIntersectorVolume(Vector3.Zero, radius, 10));
         }
 
-        public static BasicBody Wall(double x, double y, double z, Vector3 pos)
+        public static BasicBody Cuboid(double x, double y, double z, Vector3 pos)
         {
-            return new BasicBody(
+            var wall = new BasicBody(
                 new RigidBody6DOF(
                     new EuclideanKinematics(new Transform(pos, Matrix3.Identity), Vector3.Zero, Vector3.Zero),
-                    double.PositiveInfinity,
+                    1.0,
                     Matrix3.Identity),
                 None.Instance,
                 new BasicMaterial(),
-                new CuboidColliderVolume(x, y, z, pos),
-                AlwaysOverlap.Instance);
+                Intersectors.CuboidIntersector(x, y, z),
+                AlwaysOverlap.Instance,
+                new Cuboid(x, y, z));
+
+            wall.Dynamics.Fix();
+            return wall;
+        }
+
+        public static IEnumerable<BasicBody> Box(double x, double y, double z, Vector3 center)
+        {
+            yield return Cuboid(x, y, 1.0, new Vector3(0, 0, -z / 2)); // bottom
+            yield return Cuboid(x, y, 1.0, new Vector3(0, 0, z / 2)); // top
+
+            yield return Cuboid(x, 1.0, z, new Vector3(0, -y / 2, 0)); // front
+            yield return Cuboid(x, 1.0, z, new Vector3(0, y / 2, 0)); // back
+
+            yield return Cuboid(1.0, y, z, new Vector3(-x / 2, 0, 0)); // left
+            yield return Cuboid(1.0, y, z, new Vector3(x / 2, 0, 0)); // right
+
         }
 
 

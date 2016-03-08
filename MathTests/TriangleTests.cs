@@ -17,7 +17,7 @@ namespace MathTests.cs
         {
             public IEnumerator GetEnumerator()
             {
-                var t1 = new Triangle(Vector3.I, Vector3.J, Vector3.K);
+                var t1 = new TriangleIntersector(Vector3.I, Vector3.J, Vector3.K);
                 var t1n = new Vector3(1, 1, 1).UnitDirection;
                 var e1 = new Edge(Vector3.Zero, new Vector3(1, 1, 1));
                 var e2 = new Edge(Vector3.Zero, 2 * Vector3.I);
@@ -35,7 +35,7 @@ namespace MathTests.cs
         }
 
         [TestCaseSource(typeof(EdgeIntersectCases))]
-        public void EdgeIntersectTest(Triangle t, Edge e, IEnumerable<Intersection> intersects)
+        public void EdgeIntersectTest(TriangleIntersector t, Edge e, IEnumerable<Intersection> intersects)
         {
             Assert.That(t.FindIntersections(e), Is.EquivalentTo(intersects));
         }
@@ -44,7 +44,7 @@ namespace MathTests.cs
         [Test]
         public void IntersectMiddleTest()
         {
-            var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
+            var tri = new TriangleIntersector(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(Vector3.K, -Vector3.K);
 
             Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(new[] { new Intersection(Vector3.Zero, Vector3.K) }));
@@ -53,7 +53,7 @@ namespace MathTests.cs
         [Test]
         public void MissTest()
         {
-            var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
+            var tri = new TriangleIntersector(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(new Vector3(10, 10, 1), new Vector3(10, 10, -1));
 
             Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));
@@ -62,7 +62,7 @@ namespace MathTests.cs
         [Test]
         public void IntersectParalellTest()
         {
-            var tri = new Triangle(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
+            var tri = new TriangleIntersector(Vector3.J, -Vector3.I, new Vector3(1, -1, 0));
             var edge = new Edge(Vector3.I, -Vector3.I);
 
             Assert.That(tri.FindIntersections(edge), Is.EquivalentTo(Enumerable.Empty<Intersection>()));

@@ -190,8 +190,8 @@ namespace Math3D
         /// <summary>
         /// Vector cross product.
         /// The '%' sign is picked because it takes equal precedence to other multiplicative operators.
-        /// If we used the more customary '%' then addition/subtraction would take precedence over the cross product.
-        /// For example A + B % C would be equal to (A + B) % C and NOT equal to A + (B % C) like in normal vector math.
+        /// If we used the more customary '^' then addition/subtraction would take precedence over the cross product.
+        /// For example A + B ^ C would be equal to (A + B) ^ C and NOT equal to A + (B ^ C) like in normal vector math.
         /// See: https://msdn.microsoft.com/en-us/library/aa691323(v=vs.71).aspx
         /// </summary>
         public static Vector3 operator %(Vector3 a, Vector3 b) => a.CrossProduct(b);
