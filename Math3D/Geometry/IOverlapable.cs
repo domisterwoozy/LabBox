@@ -8,23 +8,18 @@ namespace Math3D.Geometry
 {
     public interface IOverlapable
     {
-        bool AreOverlapping(IOverlapable other, Vector3 thisPos, Vector3 otherPos);
     }
 
-    public sealed class NeverOverlap : IOverlapable
+    public sealed class PointBound : IOverlapable
     {
-        public static readonly NeverOverlap Instance = new NeverOverlap();
-        private NeverOverlap() { }
-
-        public bool AreOverlapping(IOverlapable other, Vector3 thisPos, Vector3 otherPos) => false;
+        public static readonly PointBound Instance = new PointBound();
+        private PointBound() { }
     }
 
-    public sealed class AlwaysOverlap : IOverlapable
+    public sealed class InifiniteBound : IOverlapable
     {
-        public static readonly AlwaysOverlap Instance = new AlwaysOverlap();
-        private AlwaysOverlap() { }
-
-        public bool AreOverlapping(IOverlapable other, Vector3 thisPos, Vector3 otherPos) => true;
+        public static readonly InifiniteBound Instance = new InifiniteBound();
+        private InifiniteBound() { }
     }
 
     public sealed class SphereBound : IOverlapable
@@ -35,14 +30,19 @@ namespace Math3D.Geometry
         {
             Radius = radius;
         }
+    }
 
-        public bool AreOverlapping(IOverlapable other, Vector3 thisPos, Vector3 otherPos)
+    public sealed class BoxBound : IOverlapable
+    {
+        public double Length { get; }
+        public double Width { get; }
+        public double Height { get; }
+
+        public BoxBound(double length, double width, double height)
         {
-            // naive implementation currently, going to implement some sort of dynamic dispatch later
-            var otherSphere = other as SphereBound;
-            if (otherSphere == null) return true;
-            return (otherPos - thisPos).Magnitude < (Radius + otherSphere.Radius);
-
+            Length = length;
+            Width = width;
+            Height = height;
         }
     }
 }

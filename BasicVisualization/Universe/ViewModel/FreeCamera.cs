@@ -27,8 +27,8 @@ namespace LabBox.Visualization.Universe.ViewModel
 
         public Vector3 Pos { get; private set; } = new Vector3(10, 10, 10);
         public Vector3 UpDir { get; private set; } = Vector3.K;
-        public Vector3 LookAtPos { get; private set; } = Vector3.Zero;        
-        
+        public Vector3 LookAtPos { get; private set; } = Vector3.Zero;
+
         /// <summary>
         /// The input handler used to control this camera.
         /// </summary>
@@ -40,13 +40,13 @@ namespace LabBox.Visualization.Universe.ViewModel
         /// <summary>
         /// Use to tune the rotation speed of the camera.
         /// </summary>
-        public float TurnSpeed { get; set; } = 35.0f;
+        public float TurnSpeed { get; set; } = 0.25f;
         /// <summary>
         /// Whether the input controlled camera is currently accepting input.
         /// </summary>
         public bool IsLocked
         {
-            get { return inputPollTimer != null; }
+            get { return inputPollTimer == null; }
             set
             {
                 if (value) StopPollHeartBeat();
@@ -57,7 +57,11 @@ namespace LabBox.Visualization.Universe.ViewModel
         public FreeCamera(IInputHandler camInput)
         {
             CameraInput = camInput;
-        }
+            camInput.TurnLeft.Start += TurnLeft_Start;
+            camInput.TurnRight.Start += TurnRight_Start;
+            camInput.TurnUp.Start += TurnUp_Start;
+            camInput.TurnDown.Start += TurnDown_Start;
+        }       
 
         private void StartPollHeartBeat()
         {
@@ -114,20 +118,45 @@ namespace LabBox.Visualization.Universe.ViewModel
             // turning
             if (CameraInput.TurnUp.IsActive)
             {
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
+                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnUp.Weight * TurnSpeed * Vector3.K;
             }
             if (CameraInput.TurnDown.IsActive)
             {
-                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
+                LookAtPos -= (1.0 / PollsPerSecond) * CameraInput.TurnDown.Weight * TurnSpeed * Vector3.K;
             }
             if (CameraInput.TurnLeft.IsActive)
             {
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * -HorizontalRight();
+                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnLeft.Weight * TurnSpeed * -HorizontalRight();
             }
             if (CameraInput.TurnRight.IsActive)
             {
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight();
+                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnRight.Weight * TurnSpeed * HorizontalRight();
             }
+        }
+
+
+        private void TurnLeft_Start(object sender, EventArgs e)
+        {
+            if (IsLocked) return;
+            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnLeft.Weight * TurnSpeed * -HorizontalRight();
+        }
+
+        private void TurnRight_Start(object sender, EventArgs e)
+        {
+            if (IsLocked) return;
+            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnRight.Weight * TurnSpeed * HorizontalRight();
+        }        
+
+        private void TurnUp_Start(object sender, EventArgs e)
+        {
+            if (IsLocked) return;
+            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnUp.Weight * TurnSpeed * Vector3.K;
+        }
+
+        private void TurnDown_Start(object sender, EventArgs e)
+        {
+            if (IsLocked) return;
+            LookAtPos -= (1.0 / PollsPerSecond) * CameraInput.TurnDown.Weight * TurnSpeed * Vector3.K;
         }
     }
 }

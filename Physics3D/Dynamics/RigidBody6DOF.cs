@@ -107,6 +107,7 @@ namespace Physics3D.Dynamics
 
         public void EnactImpulse(Vector3 impulse, Vector3 relPos)
         {
+            if (IsFixed) return;
             Validate(impulse);
             P += impulse;
             L += relPos % impulse;

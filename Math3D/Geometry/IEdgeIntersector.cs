@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Math3D.Geometry
 {
@@ -19,5 +20,5 @@ namespace Math3D.Geometry
         /// If it is not well defined it should return null.
         /// </summary>
         //Vector3? Normal { get; }        
-    }
+    }    
 }

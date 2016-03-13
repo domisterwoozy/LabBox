@@ -36,14 +36,25 @@ namespace Physics3D.Universes
                 // enact forces on the body
                 foreach (ForceField field in ForceFields)
                 {
+                    // maybe dont apply forces if we are currently inside another object?
                     body.Dynamics.ThrustSingleFrame(field.GetForceOnBody(body), field.GetTorqueOnBody(body));
                 }
-                // update body state
-                body.Dynamics.Update(deltaTime);
-
+                
                 // find and resolve contacts
                 ContactResolver.ResolveContacts(ContactFinder.FindContacts(body, Bodies));
+
+                // update body state
+                body.Dynamics.Update(deltaTime);
+                
             }
+
+            //foreach (IBody body in Bodies)
+            //{
+            //    //if (body.Dynamics.IsFixed) continue;
+
+            //    // find and resolve contacts
+            //    ContactResolver.ResolveContacts(ContactFinder.FindContacts(body, Bodies));
+            //}
 
             UniversalTime += deltaTime;
             FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));

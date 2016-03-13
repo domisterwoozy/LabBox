@@ -29,9 +29,11 @@ namespace Physics3D.Collisions
         public double Epsilon { get; set; } = 1.0f;
 
         /// <summary>
-        /// Objects colliding with a relative velocity below this number are not considered colliding.
+        /// Objects receding with a relative velocity lower than this are still considered colliding.
+        /// Raise this if you have strong forces that are causing objects to interpenetrate while 'resting'
         /// </summary>
-        public double RestingThresholdSpeed { get; set; } = 0.01f;
+        public double CollidingThresholdSpeed { get; set; } = 0.1f;
+
         /// <summary>
         /// Objects colliding with a relative paralell velocity below this threshold experience static friction.
         /// </summary>
@@ -63,7 +65,7 @@ namespace Physics3D.Collisions
 
             Vector3 vRel = aVelP - bVelP; // the relative velocity of the colliding points
             double vRelPerp = vRel * intersection.Normal.Inverse; // negative means A is moving towards the plane (colliding)
-            if (vRelPerp > -RestingThresholdSpeed) return Vector3.Zero; // either receding or resting on eachother -> no impulse generated
+            if (vRelPerp > CollidingThresholdSpeed) return Vector3.Zero; // objects are receding
 
             double scalarNormalImpulse = NormalImpulse(vRelPerp, a, b, aToP, bToP, intersection.Normal);
             Vector3 normalImpulse = scalarNormalImpulse * intersection.Normal.Inverse;
@@ -117,7 +119,7 @@ namespace Physics3D.Collisions
             double result = vRelPar / (-c2b - c2a);
             // debugging
             if (double.IsNaN(result) || double.IsInfinity(result)) throw new InvalidOperationException("Friction cannot be NaN");
-            if (result < 0) throw new InvalidOperationException("Friction cannot be negative");
+            if (result < 0) return 0;//  throw new InvalidOperationException("Friction cannot be negative");
 
             return result;
         }

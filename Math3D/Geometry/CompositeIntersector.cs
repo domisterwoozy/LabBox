@@ -9,11 +9,11 @@ namespace Math3D.Geometry
 {
     public class CompositeIntersector : IEdgeIntersector
     {
-        public ImmutableArray<IEdgeIntersector> Primitives { get; }
+        public ImmutableArray<TriangleIntersector> Primitives { get; }
 
         public IEnumerable<Edge> Edges { get; }
 
-        public CompositeIntersector(IEnumerable<IEdgeIntersector> primitives)
+        public CompositeIntersector(IEnumerable<TriangleIntersector> primitives)
         {
             Primitives = primitives.ToImmutableArray();
             Edges = Primitives.SelectMany(p => p.Edges);

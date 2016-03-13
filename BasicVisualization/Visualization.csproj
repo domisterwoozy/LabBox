@@ -55,7 +55,13 @@
     <Compile Include="ILabBoxVis.cs" />
     <Compile Include="Input\IInputHandler.cs" />
     <Compile Include="Input\IInput.cs" />
-    <Compile Include="Universe\PausablePhysicsRunner.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Universe\FixedTimePhysicsRunner.cs" />
+    <Compile Include="Universe\RealTimePhysicsRunner.cs" />
     <Compile Include="Universe\ViewModel\BasicGraphicalBody.cs" />
     <Compile Include="Universe\ViewModel\LightSource.cs" />
     <Compile Include="Universe\ViewModel\MoveableBody.cs" />
@@ -88,7 +94,30 @@
       <Name>Util</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_back6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_bottom4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_front5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_left2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_right1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\first-skybox_top3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

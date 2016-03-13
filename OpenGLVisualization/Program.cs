@@ -38,7 +38,7 @@ namespace LabBox.OpenGLVisualization
 
         private static void RunSim()
         {                       
-            using (ILabBoxVis vis = SampleVisualizations.Vis())
+            using (ILabBoxVis vis = SampleVisualizations.BouncyBalls())
             {
                 vis.RunVis();
             }

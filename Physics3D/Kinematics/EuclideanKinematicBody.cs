@@ -1,5 +1,9 @@
-﻿using Math3D;
+﻿using System;
+using Math3D;
 using Physics3D.Kinematics;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Physics3D.Kinematics
 {
@@ -31,6 +35,6 @@ namespace Physics3D.Kinematics
             Quaternion newQ = (Transform.Q + dq).Normalized(); 
             Transform = new Transform(Transform.Pos, newQ);
         }
+    }   
 
-    }
 }

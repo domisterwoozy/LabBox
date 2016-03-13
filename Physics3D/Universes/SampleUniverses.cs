@@ -45,19 +45,63 @@ namespace Physics3D.Universes
             sun.Material.DynamicFrictionCoef = 0.0f;
             sun.Material.StaticFrictionCoef = 0.0f;
 
-            var satOne = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.I, -Vector3.I + Vector3.J + Vector3.K);
+            var satOne = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.I, Vector3.Zero);
             satOne.Material.Epsilon = 0.75f;
-            satOne.Material.DynamicFrictionCoef = 0.0f;
-            satOne.Material.StaticFrictionCoef = 0.0f;
+            satOne.Material.DynamicFrictionCoef = 0.05f;
+            satOne.Material.StaticFrictionCoef = 0.1f;
 
             var satTwo = BodyFactory.SphereMass(1.0, earthMass, -distance * Vector3.I, Vector3.I - Vector3.J - Vector3.K);
             satTwo.Material.Epsilon = 0.75f;
-            satTwo.Material.DynamicFrictionCoef = 0.0f;
-            satTwo.Material.StaticFrictionCoef = 0.0f;
+            satTwo.Material.DynamicFrictionCoef = 0.05f;
+            satTwo.Material.StaticFrictionCoef = 0.1f;
+
+            var satThree = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
+            satThree.Material.Epsilon = 0.75f;
+            satThree.Material.DynamicFrictionCoef = 0.05f;
+            satThree.Material.StaticFrictionCoef = 0.1f;
+
+            var satFour = BodyFactory.SphereMass(1.0, earthMass, -distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
+            satFour.Material.Epsilon = 0.75f;
+            satFour.Material.DynamicFrictionCoef = 0.05f;
+            satFour.Material.StaticFrictionCoef = 0.1f;
+
+            var satFive = BodyFactory.SphereMass(3.0, 10 * earthMass, -10 *distance * Vector3.J, Vector3.J);
+            satFive.Material.Epsilon = 0.75f;
+            satFive.Material.DynamicFrictionCoef = 0.05f;
+            satFive.Material.StaticFrictionCoef = 0.1f;
 
             var uni = new BasicUniverse();
-            uni.Bodies.Add(sun, satOne, satTwo);
+            uni.Bodies.Add(sun, satOne, satTwo, satThree, satFour, satFive);
             uni.ForceFields.Add(ForceFieldFactory.Gravity(sun, gravConstant * sunMass));
+
+            return uni;
+        }
+
+        public static BasicUniverse BouncyBalls(double distance, double speed)
+        {
+            var satOne = BodyFactory.SphereMass(1.0, 1.0, distance * Vector3.I, speed * (-Vector3.I + Vector3.J + Vector3.K));
+            satOne.Material.Epsilon = 0.75;
+            satOne.Material.DynamicFrictionCoef = 0.5f;
+            satOne.Material.StaticFrictionCoef = 1.0f;
+
+            var satTwo = BodyFactory.SphereMass(1.0, 1.0, -distance * Vector3.I, speed * (Vector3.I - Vector3.J - Vector3.K));
+            satTwo.Material.Epsilon = 1.0f;
+            satTwo.Material.DynamicFrictionCoef = 0.05f;
+            satTwo.Material.StaticFrictionCoef = 0.1f;
+
+            var satThree = BodyFactory.SphereMass(1.0, 1.0, distance * Vector3.J, speed * (Vector3.I - Vector3.J - Vector3.K));
+            satThree.Material.Epsilon = 1.0f;
+            satThree.Material.DynamicFrictionCoef = 0.05f;
+            satThree.Material.StaticFrictionCoef = 0.1f;
+
+            var satFour = BodyFactory.SphereMass(1.0, 1.0, -distance * Vector3.J, speed * (Vector3.I - Vector3.J - Vector3.K));
+            satFour.Material.Epsilon = 1.0f;
+            satFour.Material.DynamicFrictionCoef = 0.05f;
+            satFour.Material.StaticFrictionCoef = 0.1f;
+
+            var uni = new BasicUniverse();
+            uni.Bodies.Add( satOne, satTwo, satThree, satFour);
+            uni.ForceFields.Add(new ForceField(new ConstantVectorField(-9.8 * Vector3.K), ForceFieldFactory.GravityForceApplier));
 
             return uni;
         }

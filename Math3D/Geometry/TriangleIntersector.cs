@@ -34,7 +34,6 @@ namespace Math3D.Geometry
         /// </summary>
         public Vector3 BCN => (BC % N).UnitDirection;
 
-        public Vector3? Normal => N;
         public IEnumerable<Edge> Edges => new[] { new Edge(A, B), new Edge(A, C), new Edge(B, C) };
 
         /// <summary>

@@ -58,7 +58,7 @@
     <Compile Include="ElectroMagnetism\ChargeGroup.cs" />
     <Compile Include="ElectroMagnetism\ChargeLoop.cs" />
     <Compile Include="ElectroMagnetism\IElectroMag.cs" />
-    <Compile Include="ElectroMagnetism\None.cs" />
+    <Compile Include="ElectroMagnetism\EMNone.cs" />
     <Compile Include="ElectroMagnetism\PointCharge.cs" />
     <Compile Include="ElectroMagnetism\Solenoid.cs" />
     <Compile Include="Experiments\IExperiment.cs" />

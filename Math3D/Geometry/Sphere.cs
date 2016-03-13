@@ -24,9 +24,7 @@ namespace Math3D.Geometry
         {
             if (radius <= 0.0) throw new ArgumentException(nameof(radius) + " must be positive");
             Radius = radius;
-        }
-
-        
+        }        
     }    
     
 }

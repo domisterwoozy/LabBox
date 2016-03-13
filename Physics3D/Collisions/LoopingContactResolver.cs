@@ -34,6 +34,7 @@ namespace Physics3D.Collisions
                 stillResolving = false;
                 foreach (Contact c in contactArr)
                 {
+                    if (c.BodyA.Dynamics.IsFixed && c.BodyB.Dynamics.IsFixed) continue; // cant do anything if both bodies are fixed and intersecting
                     Vector3 impulse = Engine.Collide(c);
                     if (impulse != Vector3.Zero)
                     {

@@ -32,23 +32,24 @@ namespace Math3D.Geometry
 
         private IEnumerable<Edge> CreateEdges(int rank)
         {
-            foreach (int i in Enumerable.Range(0, rank))
-            {
-                foreach (int j in Enumerable.Range(0, rank / 2))
-                {
-                    double theta = ((double)i / rank) * 2 * Math.PI;
-                    double phi = ((double)j / ((float)rank / 2)) * Math.PI;
-                    double x = Radius * Math.Cos(theta) * Math.Sin(phi);
-                    double y = Radius * Math.Sin(theta) * Math.Sin(phi);
-                    double z = Radius * Math.Cos(phi);
-                    yield return new Edge(CenterPos, CenterPos + new Vector3(x, y, z));
-                }
-            }
-            yield return new Edge(CenterPos, CenterPos + Radius * Vector3.I);
-            yield return new Edge(CenterPos, CenterPos + Radius * Vector3.J);
-            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.I);
-            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.J);
-            yield return new Edge(CenterPos, CenterPos - Radius * Vector3.K);
+            yield break;
+            //foreach (int i in Enumerable.Range(0, rank))
+            //{
+            //    foreach (int j in Enumerable.Range(0, rank / 2))
+            //    {
+            //        double theta = ((double)i / rank) * 2 * Math.PI;
+            //        double phi = ((double)j / ((float)rank / 2)) * Math.PI;
+            //        double x = Radius * Math.Cos(theta) * Math.Sin(phi);
+            //        double y = Radius * Math.Sin(theta) * Math.Sin(phi);
+            //        double z = Radius * Math.Cos(phi);
+            //        yield return new Edge(CenterPos, CenterPos + new Vector3(x, y, z));
+            //    }
+            //}
+            //yield return new Edge(CenterPos, CenterPos + Radius * Vector3.I);
+            //yield return new Edge(CenterPos, CenterPos + Radius * Vector3.J);
+            //yield return new Edge(CenterPos, CenterPos - Radius * Vector3.I);
+            //yield return new Edge(CenterPos, CenterPos - Radius * Vector3.J);
+            //yield return new Edge(CenterPos, CenterPos - Radius * Vector3.K);
         }
 
         public IEnumerable<Intersection> FindIntersections(Edge edge)

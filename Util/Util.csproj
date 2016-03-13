@@ -47,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generator.cs" />
+    <Compile Include="IStrategy.cs" />
     <Compile Include="MyExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnorderedPair.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

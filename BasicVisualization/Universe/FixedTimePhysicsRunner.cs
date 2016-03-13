@@ -1,24 +1,25 @@
 ﻿using Physics3D.Universes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LabBox.Visualization.Universe
 {
-    // Todo: use a ManualResetEvent to actually pause the thread instead of just passing 0
-    public class PausablePhysicsRunner
-    {        
-        public IUniverse Universe { get; }
-        
-        public bool IsPaused => TimeMultiplier == 0.0f;
-        public float TimeMultiplier { get; set; } = 1.0f;
+    public class FixedTimePhysicsRunner
+    {
+        private double lastFrameLength = 1.0;
 
-        public PausablePhysicsRunner(IUniverse uni)
+        public IUniverse Universe { get; }
+
+        public bool IsPaused => FrameLength == 0.0f;
+        public double FrameLength { get; set; } = Math.Pow(5, -3);
+
+        public FixedTimePhysicsRunner(IUniverse uni, double timeStep = 0)
         {
             Universe = uni;
+            if (timeStep != 0) FrameLength = timeStep;
         }
 
         public void StartPhysics()
@@ -34,24 +35,20 @@ namespace LabBox.Visualization.Universe
 
         public void ResumePhysics()
         {
-            TimeMultiplier = 1.0f;
+            FrameLength = lastFrameLength;
         }
 
         public void PausePhysics()
         {
-            TimeMultiplier = 0.0f;
+            lastFrameLength = FrameLength;
+            FrameLength = 0.0;
         }
 
         private void PhysicsLoop()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-            TimeSpan lastTime = sw.Elapsed;
             while (true)
             {
-                TimeSpan delta = sw.Elapsed - lastTime;
-                lastTime = sw.Elapsed;
-                Universe.Update(delta.TotalSeconds * TimeMultiplier);
+                Universe.Update(FrameLength);
             }
         }
     }

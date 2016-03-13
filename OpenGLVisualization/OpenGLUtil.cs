@@ -1,7 +1,9 @@
 ﻿using LabBox.OpenGLVisualization.ViewModel;
+using LabBox.Visualization;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +29,7 @@ namespace LabBox.OpenGLVisualization
             Console.WriteLine(GL.GetShaderInfoLog(shaderAddr));
             return shaderAddr;
         }
+        
 
         /// <summary>
         /// Generates a single Vertex Array Object and returns the OpenGL address.
@@ -54,6 +57,20 @@ namespace LabBox.OpenGLVisualization
             GL.GenTextures(1, out textureID);
             return textureID;
         }
+
+        public static int CreateImageTexture(Bitmap image)
+        {
+            int textureID = CreateTexture();
+            UseTexture2D(textureID);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, image.GetBits());
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0); // unbind texture
+            return textureID;
+        }        
 
         public static int CreateDepthTexture(int frameBufferID)
         {
@@ -111,6 +128,11 @@ namespace LabBox.OpenGLVisualization
         public static void UseTexture2D(int textureID)
         {
             GL.BindTexture(TextureTarget.Texture2D, textureID);
+        }
+
+        public static void UseCubemap(int textureID)
+        {
+            GL.BindTexture(TextureTarget.TextureCubeMap, textureID);
         }
 
         /// <summary>
