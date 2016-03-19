@@ -11,6 +11,7 @@ namespace Physics3D.Collisions
     {
         public IImpulseEngine Engine { get; }
         public int MaxLoops { get; set; } = 100;
+        public double EpsilonGrowFactor { get; set; } = 1.0;
 
         public LoopingContactResolver(IImpulseEngine engine)
         {
@@ -21,6 +22,8 @@ namespace Physics3D.Collisions
         {
             Contact[] contactArr = contacts.ToArray();
             if (contactArr.Length == 0) return true;
+
+            double initialEpsilon = Engine.Epsilon;
 
             int loopCount = 0;
             bool stillResolving = true;
@@ -43,7 +46,9 @@ namespace Physics3D.Collisions
                         stillResolving = true;
                     }
                 }
+                Engine.Epsilon *= EpsilonGrowFactor;
             }
+            Engine.Epsilon = initialEpsilon;
             return true;
         }
     }

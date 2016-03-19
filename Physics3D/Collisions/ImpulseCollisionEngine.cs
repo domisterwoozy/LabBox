@@ -83,6 +83,8 @@ namespace Physics3D.Collisions
                 if (Math.Abs(fric) > Math.Abs(maxFric)) fric = maxFric;
                 frictionImpulse = fric * nPar.Inverse;
             }
+            Validate(frictionImpulse);
+            Validate(normalImpulse);
             return frictionImpulse + normalImpulse;
         }
 

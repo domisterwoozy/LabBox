@@ -21,6 +21,7 @@ namespace Physics3D.Collisions
     {
         public static readonly NoCollisions Instance = new NoCollisions();
 
+
         public IImpulseEngine Engine => NoImpulse.Instance;
 
         private NoCollisions() { }
@@ -33,6 +34,8 @@ namespace Physics3D.Collisions
         public static readonly NoImpulse Instance = new NoImpulse();
 
         private NoImpulse() { }
+
+        public double Epsilon { get; set; } = 0.0;
 
         public Vector3 Collide(Contact c) => Vector3.Zero;
     }

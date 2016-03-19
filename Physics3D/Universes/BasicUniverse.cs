@@ -45,17 +45,18 @@ namespace Physics3D.Universes
 
                 // update body state
                 body.Dynamics.Update(deltaTime);
-                
+
+                //var contacts = ContactFinder.FindContacts(body, Bodies);
+                //var debugEngine = ContactResolver.Engine;
+                //foreach(var c in contacts)
+                //{
+                //    var i = debugEngine.Collide(c);
+                //    if (i != Vector3.Zero)
+                //    {
+                //        ; // time to debug
+                //    }
+                //}               
             }
-
-            //foreach (IBody body in Bodies)
-            //{
-            //    //if (body.Dynamics.IsFixed) continue;
-
-            //    // find and resolve contacts
-            //    ContactResolver.ResolveContacts(ContactFinder.FindContacts(body, Bodies));
-            //}
-
             UniversalTime += deltaTime;
             FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));
         }

@@ -75,7 +75,7 @@ namespace LabBox.OpenGLVisualization
             boxOne.Material.Epsilon = 0.25f;
             boxOne.Material.DynamicFrictionCoef = 0.05f;
             boxOne.Material.StaticFrictionCoef = 0.1f;
-            //var boxOneGraphic = new SmoothedGraphicalBody(boxOne, FlatFactory.NewCuboid(3, 1, 0.5), 40);
+            //var boxOneGraphic = new SmoothedGraphicalBody(boxOne, FlatFactory.NewCuboid(3, 3, 0.5), 40);
             var boxOneGraphic = new BasicGraphicalBody(boxOne, FlatFactory.NewCuboid(3, 3, 0.5));
 
             var boxTwo = BodyFactory.Cuboid(3, 1, 0.5, new Vector3(3, 3, 5), Vector3.Zero, new Vector3(0.1, 0.1, 0.1));
@@ -85,21 +85,21 @@ namespace LabBox.OpenGLVisualization
             //var boxTwoGraphic = new SmoothedGraphicalBody(boxTwo, FlatFactory.NewCuboid(3, 3, 0.5), 40);
             var boxTwoGraphic = new BasicGraphicalBody(boxTwo, FlatFactory.NewCuboid(3, 1, 0.5));
 
-            var boxThree = BodyFactory.Cuboid(1, 4, 0.5, new Vector3(-3, -3, 2), new Vector3(2, 2, 0), new Vector3(3.1, 0.1, 9.1));
-            boxThree.Material.Epsilon = 0.25f;
-            boxThree.Material.DynamicFrictionCoef = 0.05f;
-            boxThree.Material.StaticFrictionCoef = 0.1f;
-            //var boxThreeGraphic = new SmoothedGraphicalBody(boxThree, FlatFactory.NewCuboid(1, 4, 0.5), 40);
-            var boxThreeGraphic = new BasicGraphicalBody(boxThree, FlatFactory.NewCuboid(1, 4, 0.5));
+            //var boxThree = BodyFactory.Cuboid(1, 4, 0.5, new Vector3(-3, -3, 2), new Vector3(2, 2, 0), new Vector3(3.1, 0.1, 9.1));
+            //boxThree.Material.Epsilon = 0.25f;
+            //boxThree.Material.DynamicFrictionCoef = 0.05f;
+            //boxThree.Material.StaticFrictionCoef = 0.1f;
+            ////var boxThreeGraphic = new SmoothedGraphicalBody(boxThree, FlatFactory.NewCuboid(1, 4, 0.5), 40);
+            //var boxThreeGraphic = new BasicGraphicalBody(boxThree, FlatFactory.NewCuboid(1, 4, 0.5));
 
             var uni = new BasicUniverse();
-            uni.ForceFields.Add(new ForceField(new ConstantVectorField(-5.0 * Vector3.K), ForceFieldFactory.GravityForceApplier));
+            uni.ForceFields.Add(new ForceField(new ConstantVectorField(-1.0 * Vector3.K), ForceFieldFactory.GravityForceApplier));
             uni.Bodies.Add(floor);
-            uni.Bodies.Add(boxOne, boxTwo, boxThree);
+            uni.Bodies.Add(boxOne, boxTwo);
 
-            var vis = new OpenGLVisualization(new IGraphicalBody[] { floorGraphic, boxOneGraphic, boxTwoGraphic, boxThreeGraphic }, sun, light2);
+            var vis = new OpenGLVisualization(new IGraphicalBody[] { floorGraphic, boxOneGraphic, boxTwoGraphic }, sun, light2);
 
-            uni.ContactResolver = new LoopingContactResolver(new ImpulseCollisionEngine() { CollidingThresholdSpeed = 0.05f });
+            uni.ContactResolver = new LoopingContactResolver(new ImpulseCollisionEngine() { CollidingThresholdSpeed = 0.01f });
             uni.ContactFinder = new BasicContactFinder();
 
             var physicsRunner = new RealTimePhysicsRunner(uni);

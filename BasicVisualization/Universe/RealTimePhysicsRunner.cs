@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace LabBox.Visualization.Universe
 {
-    // Todo: use a ManualResetEvent to actually pause the thread instead of just passing 0
-    public class RealTimePhysicsRunner
+    public class RealTimePhysicsRunner : IPhysicsRunner
     {        
         public IUniverse Universe { get; }
         
         public bool IsPaused => TimeMultiplier == 0.0f;
-        public float TimeMultiplier { get; set; } = 1.0f;
+        public double TimeMultiplier { get; set; } = 1.0;
+        public double MaxFrameLength { get; set; } = 3 * Math.Pow(10, -3);
 
         public RealTimePhysicsRunner(IUniverse uni)
         {
@@ -51,7 +51,7 @@ namespace LabBox.Visualization.Universe
             {
                 TimeSpan delta = sw.Elapsed - lastTime;
                 lastTime = sw.Elapsed;
-                Universe.Update(delta.TotalSeconds * TimeMultiplier);
+                Universe.Update(Math.Min(delta.TotalSeconds * TimeMultiplier, MaxFrameLength));
             }
         }
     }

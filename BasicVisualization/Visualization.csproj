@@ -61,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Universe\FixedTimePhysicsRunner.cs" />
+    <Compile Include="Universe\IPhysicsRunner.cs" />
     <Compile Include="Universe\RealTimePhysicsRunner.cs" />
     <Compile Include="Universe\ViewModel\BasicGraphicalBody.cs" />
     <Compile Include="Universe\ViewModel\LightSource.cs" />
