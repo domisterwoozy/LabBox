@@ -1,17 +1,12 @@
-﻿using LabBox.Visualization.Universe;
-using LabBox.Visualization.Universe.ViewModel;
+﻿using LabBox.Visualization.Universe.ViewModel;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LabBox.Visualization.HUD;
 using LabBox.Visualization.Input;
-using System.Runtime.InteropServices;
 using BasicVisualization;
 using LabBox.OpenGLVisualization.Shaders;
 using LabBox.OpenGLVisualization.ViewModel;
@@ -42,6 +37,7 @@ namespace LabBox.OpenGLVisualization
         private List<IGraphicalBody> bodies;
         private readonly List<IGraphicalBody> bodiesToAdd = new List<IGraphicalBody>();
         private readonly List<IGraphicalBody> bodiesToRemove = new List<IGraphicalBody>();
+        private readonly List<IDisposable> toDispose = new List<IDisposable>();
 
 
         // framework interface
@@ -50,13 +46,15 @@ namespace LabBox.OpenGLVisualization
         public IEnumerable<IGraphicalBody> Bodies => bodies;
         public IEnumerable<IHUDView> HUDs => Enumerable.Empty<IHUDView>(); // not yet implemented 
         public ICamera Camera { get;}
-        public IInputHandler InputHandler { get; }             
+        public IInputObservable Input { get; }             
 
-        public OpenGLVisualization(IInputHandler inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) :
+        public OpenGLVisualization(IInputObservable inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) :
             base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat))
         {
-            InputHandler = inputHandler;
-            Camera = camera;
+            Input = inputHandler;
+            var cam = new FreeCamera(Input);
+            toDispose.Add(cam);
+            Camera = cam;
             bodies = graphicalBodies.ToList();
             lightSources = lights.ToList();
 
@@ -67,8 +65,10 @@ namespace LabBox.OpenGLVisualization
             base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat))
         {
             // use opengl defaults
-            InputHandler = new OpenGLInputHandler(this);
-            Camera = new FreeCamera(InputHandler);
+            Input = new OpenGLInputObservable(this);
+            var cam = new FreeCamera(Input);
+            toDispose.Add(cam);
+            Camera = cam;
             bodies = graphicalBodies.ToList();
             lightSources = lights.ToList();
 
@@ -80,7 +80,13 @@ namespace LabBox.OpenGLVisualization
         {
             Load += BasicVis_Load;
             UpdateFrame += BasicVis_UpdateFrame;
-            RenderFrame += BasicVis_RenderFrame;      
+            RenderFrame += BasicVis_RenderFrame;
+            Disposed += OpenGLVisualization_Disposed;   
+        }
+
+        private void OpenGLVisualization_Disposed(object sender, EventArgs e)
+        {
+            foreach (var dis in toDispose) dis.Dispose();
         }
 
         public void RunVis()

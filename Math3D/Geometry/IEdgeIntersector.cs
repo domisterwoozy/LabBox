@@ -12,13 +12,6 @@ namespace Math3D.Geometry
         /// <summary>
         /// The collection of edges that make up this primitive. These should only be 'external' edges that can intersect other objects.
         /// </summary>
-        IEnumerable<Edge> Edges { get; }
-
-        /// <summary>
-        /// If this primitive is a simple subset of a plane a normal direction can be useful when calculating intersections.
-        /// This property is optional and not well defined for some types of primitives (ex: sphere).
-        /// If it is not well defined it should return null.
-        /// </summary>
-        //Vector3? Normal { get; }        
-    }    
+        IEnumerable<Edge> Edges { get; }      
+    }  
 }

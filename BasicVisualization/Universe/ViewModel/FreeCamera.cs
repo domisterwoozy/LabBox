@@ -2,8 +2,10 @@
 using Math3D;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +15,13 @@ namespace LabBox.Visualization.Universe.ViewModel
     /// <summary>
     /// A camera controlled by user input.
     /// </summary>
-    public class FreeCamera : ICamera
+    public class FreeCamera : ICamera, IDisposable
     {
         private const int PollsPerSecond = 144;
         private static readonly TimeSpan interval = TimeSpan.FromSeconds(1.0 / PollsPerSecond);
-
         private Timer inputPollTimer = null;
+
+        private readonly List<IDisposable> subs = new List<IDisposable>();
 
         public float VertFOV { get; set; } = (float)Math.PI / 3;
         public float MaxRange { get; set; } = 70.0f;
@@ -32,7 +35,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         /// <summary>
         /// The input handler used to control this camera.
         /// </summary>
-        public IInputHandler CameraInput { get; }
+        public IInputObservable CameraInput { get; }
         /// <summary>
         /// Use to tune the lateral movement speed of the camera.
         /// </summary>
@@ -40,7 +43,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         /// <summary>
         /// Use to tune the rotation speed of the camera.
         /// </summary>
-        public float TurnSpeed { get; set; } = 0.25f;
+        public float TurnSpeed { get; set; } = 0.0025f;
         /// <summary>
         /// Whether the input controlled camera is currently accepting input.
         /// </summary>
@@ -54,15 +57,66 @@ namespace LabBox.Visualization.Universe.ViewModel
             }
         }
 
-        public FreeCamera(IInputHandler camInput)
+        public FreeCamera(IInputObservable camInput)
         {
             CameraInput = camInput;
-            camInput.TurnLeft.Start += TurnLeft_Start;
-            camInput.TurnRight.Start += TurnRight_Start;
-            camInput.TurnUp.Start += TurnUp_Start;
-            camInput.TurnDown.Start += TurnDown_Start;
-        }       
 
+            // all inputs when were not locked
+            var inputs = from evt in camInput.InputEvents where !IsLocked select evt;
+
+            // handle look inputs
+            var turnLeftInputs = from inpt in inputs where inpt.Input == InputType.TurnLeft select inpt;
+            var turnRightInputs = from inpt in inputs where inpt.Input == InputType.TurnRight select inpt;
+            var turnUpInputs = from inpt in inputs where inpt.Input == InputType.TurnUp select inpt;
+            var turnDownInputs = from inpt in inputs where inpt.Input == InputType.TurnDown select inpt;
+            subs.Add(turnLeftInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * -HorizontalRight())));
+            subs.Add(turnRightInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * HorizontalRight())));
+            subs.Add(turnUpInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * Vector3.K)));
+            subs.Add(turnDownInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * -Vector3.K)));
+
+            // handle movement inputs
+            var fwdInputs = from inpt in inputs where inpt.Input == InputType.Forward select inpt;
+            subs.Add(fwdInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Forward)));
+            subs.Add(fwdInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Forward)));
+            var bwdInputs = from inpt in inputs where inpt.Input == InputType.Backward select inpt;
+            subs.Add(bwdInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Backward)));
+            subs.Add(bwdInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Backward)));
+            var leftInputs = from inpt in inputs where inpt.Input == InputType.Left select inpt;
+            subs.Add(leftInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Left)));
+            subs.Add(leftInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Left)));
+            var rightInputs = from inpt in inputs where inpt.Input == InputType.Right select inpt;
+            subs.Add(rightInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Right)));
+            subs.Add(rightInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Right)));
+            var upInputs = from inpt in inputs where inpt.Input == InputType.Up select inpt;
+            subs.Add(upInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Up)));
+            subs.Add(upInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Up)));
+            var downInputs = from inpt in inputs where inpt.Input == InputType.Down select inpt;
+            subs.Add(downInputs.Where(inpt => inpt.State == InputState.Start).Subscribe(inpt => StartMovement(MovementDir.Down)));
+            subs.Add(downInputs.Where(inpt => inpt.State == InputState.Finish).Subscribe(inpt => EndMovement(MovementDir.Down)));
+        }
+
+        public void Dispose()
+        {
+            foreach (var sub in subs) sub.Dispose();
+        }
+
+        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.K).UnitDirection;
+        private Vector3 HorizontalRight() => HorizontalForward() % Vector3.K;
+        private void MoveLookAtPos(Vector3 amtToMove)
+        {
+            LookAtPos += amtToMove;
+        }
+        private void MovePos(Vector3 amtToMove)
+        {
+            Pos += amtToMove;
+        }
+        private void Move(Vector3 amtToMove)
+        {
+            MoveLookAtPos(amtToMove);
+            MovePos(amtToMove);
+        }
+
+        #region Polling to smooth out movement
         private void StartPollHeartBeat()
         {
             inputPollTimer = new Timer(PollInput, null, interval, interval);
@@ -73,90 +127,26 @@ namespace LabBox.Visualization.Universe.ViewModel
             inputPollTimer.Change(Timeout.Infinite, Timeout.Infinite);
             inputPollTimer = null;
         }
-
-        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.K).UnitDirection;
-        private Vector3 HorizontalRight() => HorizontalForward() % Vector3.K;
-
         private void PollInput(object timerState)
         {
-            // move forward and back
-            if (CameraInput.Forward.IsActive)
-            {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalForward();
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalForward();
-            }
-            if (CameraInput.Backward.IsActive)
-            {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * -HorizontalForward();
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * -HorizontalForward();
-            }
-
-            // move left and right
-            if (CameraInput.Left.IsActive)
-            {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * -HorizontalRight();
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * -HorizontalRight();
-            }
-            if (CameraInput.Right.IsActive)
-            {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight();
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight();
-            }
-
-            // float up and down
-            if (CameraInput.Up.IsActive)
-            {
-                Pos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
-                LookAtPos += (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
-            }
-            if (CameraInput.Down.IsActive)
-            {
-                Pos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
-                LookAtPos -= (1.0 / PollsPerSecond) * MoveSpeed * Vector3.K;
-            }
-
-            // turning
-            if (CameraInput.TurnUp.IsActive)
-            {
-                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnUp.Weight * TurnSpeed * Vector3.K;
-            }
-            if (CameraInput.TurnDown.IsActive)
-            {
-                LookAtPos -= (1.0 / PollsPerSecond) * CameraInput.TurnDown.Weight * TurnSpeed * Vector3.K;
-            }
-            if (CameraInput.TurnLeft.IsActive)
-            {
-                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnLeft.Weight * TurnSpeed * -HorizontalRight();
-            }
-            if (CameraInput.TurnRight.IsActive)
-            {
-                LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnRight.Weight * TurnSpeed * HorizontalRight();
-            }
+            if (currentMovement.Contains(MovementDir.Forward)) Move((1.0 / PollsPerSecond) * MoveSpeed * HorizontalForward());
+            if (currentMovement.Contains(MovementDir.Backward)) Move((1.0 / PollsPerSecond) * MoveSpeed * -HorizontalForward());
+            if (currentMovement.Contains(MovementDir.Left)) Move((1.0 / PollsPerSecond) * MoveSpeed * -HorizontalRight());
+            if (currentMovement.Contains(MovementDir.Right)) Move((1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight());
+            if (currentMovement.Contains(MovementDir.Up)) Move((1.0 / PollsPerSecond) * MoveSpeed * Vector3.K);
+            if (currentMovement.Contains(MovementDir.Down)) Move((1.0 / PollsPerSecond) * MoveSpeed * -Vector3.K);
         }
 
-
-        private void TurnLeft_Start(object sender, EventArgs e)
+        private enum MovementDir { Forward, Backward, Left, Right, Up, Down }
+        private HashSet<MovementDir> currentMovement = new HashSet<MovementDir>();
+        private void StartMovement(MovementDir dir)
         {
-            if (IsLocked) return;
-            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnLeft.Weight * TurnSpeed * -HorizontalRight();
+            currentMovement.Add(dir);
         }
-
-        private void TurnRight_Start(object sender, EventArgs e)
+        private void EndMovement(MovementDir dir)
         {
-            if (IsLocked) return;
-            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnRight.Weight * TurnSpeed * HorizontalRight();
-        }        
-
-        private void TurnUp_Start(object sender, EventArgs e)
-        {
-            if (IsLocked) return;
-            LookAtPos += (1.0 / PollsPerSecond) * CameraInput.TurnUp.Weight * TurnSpeed * Vector3.K;
+            currentMovement.Remove(dir);
         }
-
-        private void TurnDown_Start(object sender, EventArgs e)
-        {
-            if (IsLocked) return;
-            LookAtPos -= (1.0 / PollsPerSecond) * CameraInput.TurnDown.Weight * TurnSpeed * Vector3.K;
-        }
+        #endregion
     }
 }

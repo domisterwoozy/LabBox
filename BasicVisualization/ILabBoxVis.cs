@@ -17,7 +17,7 @@ namespace BasicVisualization
         IEnumerable<ILightSource> LightSources { get; }
         IEnumerable<IHUDView> HUDs { get; }
 
-        IInputHandler InputHandler { get; }
+        IInputObservable Input { get; }
         ICamera Camera { get; }
 
         void AddBody(IGraphicalBody b);

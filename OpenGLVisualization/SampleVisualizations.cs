@@ -1,4 +1,5 @@
-﻿using LabBox.Visualization.Universe;
+﻿using LabBox.Visualization.Input;
+using LabBox.Visualization.Universe;
 using LabBox.Visualization.Universe.ViewModel;
 using Math3D;
 using Math3D.Geometry;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Util;
@@ -45,8 +47,8 @@ namespace LabBox.OpenGLVisualization
             uni.ContactFinder = new BasicContactFinder();
 
             var physicsRunner = new RealTimePhysicsRunner(uni);
-            vis.InputHandler.Pause.Start += (sender, e) => physicsRunner.TogglePause();
-            vis.InputHandler.Exit.Start += (sender, e) => vis.EndVis();
+            vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Pause && inpt.State == InputState.Start).Subscribe(inpt => physicsRunner.TogglePause());
+            vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Exit).Subscribe(inpt => vis.EndVis());
             vis.VisStarted += (sender, e) => physicsRunner.StartPhysics();
 
             return vis;
@@ -104,8 +106,8 @@ namespace LabBox.OpenGLVisualization
 
             var physicsRunner = new RealTimePhysicsRunner(uni);
             //var physicsRunner = new FixedTimePhysicsRunner(uni);
-            vis.InputHandler.Pause.Start += (sender, e) => physicsRunner.TogglePause();
-            vis.InputHandler.Exit.Start += (sender, e) => vis.EndVis();
+            vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Pause && inpt.State == InputState.Start).Subscribe(inpt => physicsRunner.TogglePause());
+            vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Exit).Subscribe(inpt => vis.EndVis());
             vis.VisStarted += (sender, e) => physicsRunner.StartPhysics();
 
             return vis;
