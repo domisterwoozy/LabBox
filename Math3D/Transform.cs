@@ -18,7 +18,7 @@ namespace Math3D
         /// <summary>
         /// The world position of the center of mass of this body.
         /// </summary>
-        public Vector3 Pos { get;  }        
+        public Vector3 Pos { get; }
 
         /// <summary>
         /// The orientation of this body in world coordinates.
@@ -56,8 +56,8 @@ namespace Math3D
         {
             Pos = pos;
             Q = Quaternion.FromRotMatrix(r);
-        }   
-        
+        }
+
         /// <summary>
         /// Gets the unit vector directions in world space of this local coordinate spaces basis vectors.
         /// </summary>
@@ -177,5 +177,17 @@ namespace Math3D
 
         public Edge TransformEdge(Edge e) => new Edge(TransformPos(e.A), TransformPos(e.B));
         public Intersection TransformIntersection(Intersection i) => new Intersection(TransformPos(i.Point), TransformDirection(i.Normal));
+    }
+
+    public struct TransformedObj<T>
+    {
+        public Transform ObjTransform { get; }
+        public T Obj { get; }
+
+        public TransformedObj(Transform objTransform, T obj)
+        {
+            ObjTransform = objTransform;
+            Obj = obj;
+        }
     }
 }

@@ -24,8 +24,8 @@ namespace Physics3D.Bodies
                 EMNone.Instance,
                 new BasicMaterial(),
                 Point.Instance,
-                PointBound.Instance,
-                Point.Instance);
+                Point.Instance,
+                PointBound.Instance);
         }
 
         public static BasicBody SphereMass(double radius, double mass, Vector3 pos, Vector3 vel)
@@ -38,8 +38,8 @@ namespace Physics3D.Bodies
                 EMNone.Instance,
                 new BasicMaterial(),
                 new SphereIntersectorVolume(Vector3.Zero, radius, 5),
-                new SphereBound(radius),
-                new SphereIntersectorVolume(Vector3.Zero, radius, 5));
+                new SphereIntersectorVolume(Vector3.Zero, radius, 5),
+                new SphereBound(radius));
         }
 
         public static BasicBody Cuboid(double length, double width, double height, Vector3 pos, Vector3 vel = default(Vector3), Vector3 omega = default(Vector3))
@@ -52,8 +52,8 @@ namespace Physics3D.Bodies
                 EMNone.Instance,
                 new BasicMaterial(),
                 Intersectors.CuboidIntersector(length, width, height),
-                new SphereBound(new Vector3(length / 2, width / 2, height / 2).Magnitude),
-                new Cuboid(length, width, height));
+                new Cuboid(length, width, height),
+                new SphereBound(new Vector3(length / 2, width / 2, height / 2).Magnitude));               
         }
 
         public static IEnumerable<BasicBody> Box(double length, double width, double height, Vector3 center)

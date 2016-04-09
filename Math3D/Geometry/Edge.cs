@@ -30,6 +30,6 @@ namespace Math3D.Geometry
             return result;
         }
 
-        public override string ToString() => $"Edge From {A} to {B}";        
+        public override string ToString() => $"Edge From {A} to {B}";
     }
 }

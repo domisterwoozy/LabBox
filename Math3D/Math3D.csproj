@@ -61,6 +61,7 @@
     <Compile Include="Geometry\OverlapStrategies.cs" />
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Point.cs" />
+    <Compile Include="Geometry\Raycast.cs" />
     <Compile Include="Geometry\RayTest.cs" />
     <Compile Include="Geometry\Sphere.cs" />
     <Compile Include="Geometry\SphereIntersector.cs" />
@@ -110,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\TypeBuilder.1.0.5933.23347\analyzers\dotnet\cs\TypeBuilder.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
