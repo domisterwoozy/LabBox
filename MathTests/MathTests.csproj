@@ -86,6 +86,10 @@
       <Project>{f0ff2bbc-425a-4deb-ab0d-590b54e02ef3}</Project>
       <Name>Math3D</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{AF19557C-9EA0-415E-831A-0F14C243FF8B}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\TypeBuilder.1.0.5933.23347\analyzers\dotnet\cs\TypeBuilder.dll" />

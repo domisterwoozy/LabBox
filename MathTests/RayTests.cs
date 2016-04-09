@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FakeItEasy;
+using Util;
 
 namespace MathTests.cs
 {
@@ -16,7 +17,7 @@ namespace MathTests.cs
         [Test]
         public void EmptyTest()
         {
-            Assert.IsNull(Ray.Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.I, 100));
+            Assert.That(Ray.Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Ray.Hit>.Nothing));
         }
 
         [Test]
@@ -44,7 +45,9 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new[] { new Intersection() });
 
-            Assert.That(Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Value.HitObject, Is.EqualTo(closeObj));
+            Ray.Hit? hit = Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Ray.Hit?>(h => h, none => null);
+            Assert.NotNull(hit);
+            Assert.That(hit.Value.HitObject, Is.EqualTo(closeObj));
         }
 
         [Test]
@@ -66,7 +69,9 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new[] { new Intersection() });
 
-            Assert.That(Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Value.HitObject, Is.EqualTo(farObj));
+            Ray.Hit? hit = Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Ray.Hit?>(h => h, none => null);
+            Assert.NotNull(hit);
+            Assert.That(hit.Value.HitObject, Is.EqualTo(farObj));
         }
 
         [Test]
@@ -88,7 +93,7 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new Intersection[] { });
 
-            Assert.IsNull(Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100));
+            Assert.That(Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Ray.Hit>.Nothing));
         }
 
 

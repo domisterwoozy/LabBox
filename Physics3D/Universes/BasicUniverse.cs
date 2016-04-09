@@ -28,7 +28,6 @@ namespace Physics3D.Universes
         public void Update(double deltaTime)
         {
             if (deltaTime == 0) return;
-            //deltaTime = Math.Pow(10, -5); // constant for testing
             foreach (IBody body in Bodies)
             {
                 if (body.Dynamics.IsFixed) continue;
@@ -44,18 +43,7 @@ namespace Physics3D.Universes
                 ContactResolver.ResolveContacts(ContactFinder.FindContacts(body, Bodies));
 
                 // update body state
-                body.Dynamics.Update(deltaTime);
-
-                //var contacts = ContactFinder.FindContacts(body, Bodies);
-                //var debugEngine = ContactResolver.Engine;
-                //foreach(var c in contacts)
-                //{
-                //    var i = debugEngine.Collide(c);
-                //    if (i != Vector3.Zero)
-                //    {
-                //        ; // time to debug
-                //    }
-                //}               
+                body.Dynamics.Update(deltaTime);          
             }
             UniversalTime += deltaTime;
             FrameFinished?.Invoke(this, new FrameLengthArgs(deltaTime));

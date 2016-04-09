@@ -1,4 +1,5 @@
-﻿using Math3D.Geometry;
+﻿using Math3D;
+using Math3D.Geometry;
 using Math3D.VectorCalc;
 using Physics3D.Bodies;
 using Physics3D.Collisions;
@@ -24,15 +25,29 @@ namespace Physics3D.Universes
     public interface IUniverse
     {
         event EventHandler<FrameLengthArgs> FrameFinished;
+
         double UniversalTime { get; }
+
         ICollection<IBody> Bodies { get; }
         ICollection<ForceField> ForceFields { get; }
-        IContactResolver ContactResolver { get; }
+        IContactResolver ContactResolver { get; }        
+
         void Update(double deltaTime);
     }
 
     public static class UniverseExtensions
     {
         public static IEnumerable<IBody> BodiesWithin(this IUniverse uni, IVolume vol) => uni.Bodies.Where(b => vol.VolumeFunc(b.Dynamics.Transform.Pos));
+
+        public static Optional<IBody> SelectBody(this IUniverse uni, Vector3 origin, Vector3 dir)
+        {
+            double furthestBodyPos = uni.Bodies.Max(b => (b.Position() - origin).Magnitude);
+            var res = Ray.Cast(uni.Bodies.Select(b => new TransformedObj<IEdgeIntersector>(b.Dynamics.Transform, b.CollisionShape)), origin, dir, furthestBodyPos);
+            return
+                res.Match(
+                    hit => uni.Bodies.Single(b => b.CollisionShape == hit.HitObject.Obj).ToOptional(),
+                    none => Optional<IBody>.Nothing
+                );
+        }
     }
 }

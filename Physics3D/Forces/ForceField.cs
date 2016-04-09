@@ -2,6 +2,7 @@
 using Math3D.VectorCalc;
 using Physics3D.Bodies;
 using Physics3D.Dynamics;
+using Physics3D.Measurement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,8 +41,8 @@ namespace Physics3D.Forces
             TorqueApplicationFunc = torqueApplFunc;
         }
 
-        public Vector3 GetForceOnBody(IBody body) => ForceApplicationFunc(body, RawField.Value(body.Dynamics.Transform.Pos));
-        public Vector3 GetTorqueOnBody(IBody body) => TorqueApplicationFunc(body, RawField.Value(body.Dynamics.Transform.Pos));
+        public Vector3 GetForceOnBody(IBody body) => ForceApplicationFunc(body, RawField.Value(body.Position()));
+        public Vector3 GetTorqueOnBody(IBody body) => TorqueApplicationFunc(body, RawField.Value(body.Position()));
     }
 
     public static class ForceFieldFactory
@@ -98,7 +99,7 @@ namespace Physics3D.Forces
         public static ForceField Gravity(IBody sourceBody, double strength)
         {
             return new ForceField(
-                PhysicsFields.PointMassGravity(strength).Translate(() => sourceBody.Dynamics.Transform.Pos),
+                PhysicsFields.PointMassGravity(strength).Translate(() => sourceBody.Position()),
                 IgnoreSource(sourceBody, GravityForceApplier));
         }
         public static ForceField Gravity(Generator<Vector3> posGen, double strength)
@@ -106,21 +107,20 @@ namespace Physics3D.Forces
             return new ForceField(PhysicsFields.PointMassGravity(strength).Translate(posGen), GravityForceApplier);
         }
 
-        public static ForceField ElectricCharge(IBody sourceBody, double electricConstant) => ElectricCharge(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.Charge, electricConstant);
+        public static ForceField ElectricCharge(IBody sourceBody, double electricConstant) => ElectricCharge(() => sourceBody.Position(), sourceBody.EMProps.Charge, electricConstant);
         public static ForceField ElectricCharge(Generator<Vector3> posGen, double charge, double electricConstant)
         {            
             return new ForceField(PhysicsFields.PointChargeElectric(charge,  electricConstant).Translate(posGen), ElectricForceApplier, ElectricTorqueApplier);
         }
 
         public static ForceField ElectricDipole(IBody sourceBody, double electricConstant) =>
-            ElectricDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.ElectricDipoleMoment, electricConstant);
+            ElectricDipole(() => sourceBody.Position(), sourceBody.EMProps.ElectricDipoleMoment, electricConstant);
         public static ForceField ElectricDipole(Generator<Vector3> posGen, Vector3 elecMoment, double electricConstant)
         {
             return new ForceField(PhysicsFields.ElectricDipole(elecMoment, electricConstant).Translate(posGen), ElectricForceApplier, ElectricTorqueApplier);
         }
 
-        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant)
-            => MagneticDipole(() => sourceBody.Dynamics.Transform.Pos, sourceBody.EMProps.MagneticDipoleMoment, magneticConstant);        
+        public static ForceField MagneticDipole(IBody sourceBody, double magneticConstant) => MagneticDipole(() => sourceBody.Position(), sourceBody.EMProps.MagneticDipoleMoment, magneticConstant);        
         public static ForceField MagneticDipole(Generator<Vector3> posGen, Vector3 magMoment, double magneticConstant)
         {
             return new ForceField(PhysicsFields.MagneticDipole(magMoment, magneticConstant).Translate(posGen), MagnetismForceApplier, MagnetismTorqueApplier);

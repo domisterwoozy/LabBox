@@ -49,6 +49,7 @@
     <Compile Include="Generator.cs" />
     <Compile Include="IStrategy.cs" />
     <Compile Include="MyExtensions.cs" />
+    <Compile Include="Optional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnorderedPair.cs" />
     <Compile Include="Util.cs" />

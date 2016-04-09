@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Util;
 
 namespace Math3D.Geometry
 {
@@ -20,7 +21,7 @@ namespace Math3D.Geometry
             }
         }
 
-        public static Hit? Cast(IEnumerable<TransformedObj<IEdgeIntersector>> transformedIntersectors, Vector3 origin, Vector3 dir, double rayLength,
+        public static Optional<Hit> Cast(IEnumerable<TransformedObj<IEdgeIntersector>> transformedIntersectors, Vector3 origin, Vector3 dir, double rayLength,
             Func<TransformedObj<IEdgeIntersector>, bool> filter = null)
         {
             if (transformedIntersectors == null) throw new ArgumentNullException(nameof(transformedIntersectors));
@@ -34,9 +35,9 @@ namespace Math3D.Geometry
                 IEnumerable<Intersection> inters = transformedIntersector.Obj.FindIntersections(edge);
                 if (!inters.Any()) continue;
                 var closest = inters.OrderBy(i => (i.Point - origin).MagSquared).FirstOrDefault();
-                return new Hit(transformedIntersector, transformedIntersector.ObjTransform.ToWorldSpace(closest.Point));
+                return new Hit(transformedIntersector, transformedIntersector.ObjTransform.ToWorldSpace(closest.Point)).ToOptional();
             }
-            return null;
+            return Optional<Hit>.Nothing;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Math3D.Geometry;
+﻿using Math3D;
+using Math3D.Geometry;
 using Physics3D.Dynamics;
 using Physics3D.ElectroMagnetism;
 using Physics3D.Materials;
@@ -23,5 +24,9 @@ namespace Physics3D.Bodies
 
         IMaterial Material { get; }
         IElectroMag EMProps { get; }
+    }
+
+    public static class BodyExtensions
+    {
     }
 }

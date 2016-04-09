@@ -39,22 +39,19 @@ namespace LabBox.OpenGLVisualization
         private readonly List<IGraphicalBody> bodiesToRemove = new List<IGraphicalBody>();
         private readonly List<IDisposable> toDispose = new List<IDisposable>();
 
-
         // framework interface
         public event EventHandler VisStarted;
         public IEnumerable<ILightSource> LightSources => lightSources;
         public IEnumerable<IGraphicalBody> Bodies => bodies;
         public IEnumerable<IHUDView> HUDs => Enumerable.Empty<IHUDView>(); // not yet implemented 
-        public ICamera Camera { get;}
+        public ICamera Camera { get; }
         public IInputObservable Input { get; }             
 
         public OpenGLVisualization(IInputObservable inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) :
             base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat))
         {
             Input = inputHandler;
-            var cam = new FreeCamera(Input);
-            toDispose.Add(cam);
-            Camera = cam;
+            Camera = camera;
             bodies = graphicalBodies.ToList();
             lightSources = lights.ToList();
 
@@ -68,6 +65,7 @@ namespace LabBox.OpenGLVisualization
             Input = new OpenGLInputObservable(this);
             var cam = new FreeCamera(Input);
             toDispose.Add(cam);
+
             Camera = cam;
             bodies = graphicalBodies.ToList();
             lightSources = lights.ToList();

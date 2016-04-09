@@ -61,8 +61,7 @@
     <Compile Include="Geometry\OverlapStrategies.cs" />
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Point.cs" />
-    <Compile Include="Geometry\Raycast.cs" />
-    <Compile Include="Geometry\RayTest.cs" />
+    <Compile Include="Geometry\Ray.cs" />
     <Compile Include="Geometry\Sphere.cs" />
     <Compile Include="Geometry\SphereIntersector.cs" />
     <Compile Include="Geometry\SphereIntersectorVolume.cs" />
