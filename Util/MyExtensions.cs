@@ -24,6 +24,8 @@ namespace Util
 
         public static IEnumerable<T> Union<T>(this T item, IEnumerable<T> enumerable) => enumerable.Union(item);
 
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, params T[] items) => Enumerable.Except(enumerable, items);
+
         /// <summary>
         /// This may seem silly but it protects underlying data structures when exposed as enumerables.
         /// </summary>

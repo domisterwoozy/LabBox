@@ -58,6 +58,7 @@
     <Compile Include="CoordinateSystems\ICoordinateSystem.cs" />
     <Compile Include="Geometry\IntersectionStrategies.cs" />
     <Compile Include="Geometry\IOverlapable.cs" />
+    <Compile Include="Geometry\IRay.cs" />
     <Compile Include="Geometry\OverlapStrategies.cs" />
     <Compile Include="Geometry\IVolume.cs" />
     <Compile Include="Geometry\Point.cs" />

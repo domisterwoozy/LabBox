@@ -2,10 +2,7 @@
 using Math3D.Geometry;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FakeItEasy;
 using Util;
 
@@ -17,13 +14,13 @@ namespace MathTests.cs
         [Test]
         public void EmptyTest()
         {
-            Assert.That(Ray.Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Ray.Hit>.Nothing));
+            Assert.That(new Ray().Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Hit>.Nothing));
         }
 
         [Test]
         public void NoDirTest()
         {
-            Assert.Throws<ArgumentException>(() => Ray.Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.Zero, 100));
+            Assert.Throws<ArgumentException>(() => new Ray().Cast(Enumerable.Empty<TransformedObj<IEdgeIntersector>>(), Vector3.Zero, Vector3.Zero, 100));
         }
 
         [Test]
@@ -45,7 +42,7 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new[] { new Intersection() });
 
-            Ray.Hit? hit = Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Ray.Hit?>(h => h, none => null);
+            Hit? hit = new Ray().Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Hit?>(h => h, () => null);
             Assert.NotNull(hit);
             Assert.That(hit.Value.HitObject, Is.EqualTo(closeObj));
         }
@@ -69,7 +66,7 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new[] { new Intersection() });
 
-            Ray.Hit? hit = Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Ray.Hit?>(h => h, none => null);
+            Hit? hit = new Ray().Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100).Match<Hit?>(h => h, () => null);
             Assert.NotNull(hit);
             Assert.That(hit.Value.HitObject, Is.EqualTo(farObj));
         }
@@ -93,7 +90,7 @@ namespace MathTests.cs
                 .WithAnyArguments()
                 .Returns(new Intersection[] { });
 
-            Assert.That(Ray.Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Ray.Hit>.Nothing));
+            Assert.That(new Ray().Cast(new[] { farObj, closeObj }, Vector3.Zero, Vector3.I, 100), Is.EqualTo(Optional<Hit>.Nothing));
         }
 
 

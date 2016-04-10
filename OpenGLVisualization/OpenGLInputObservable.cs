@@ -47,7 +47,7 @@ namespace LabBox.OpenGLVisualization
                 from evt in Observable.FromEventPattern<MouseButtonEventArgs>(window, "MouseUp")
                 select GLMouseClickInput.FromArgs(evt.EventArgs, true);
 
-            InputEvents = downEvents.Merge(upEvents).Merge(mouseMoveEvents).Merge(mouseDownEvents);
+            InputEvents = downEvents.Merge(upEvents).Merge(mouseMoveEvents).Merge(mouseDownEvents).Merge(mouseUpEvents);
 
             window.MouseMove += (sender, e) => Cursor.Position = new Point(window.Width / 2, window.Height / 2); // keep mouse centered (bc fps)
         }
@@ -66,7 +66,7 @@ namespace LabBox.OpenGLVisualization
 
             public static GLMouseClickInput FromArgs(MouseButtonEventArgs args, bool up)
             {
-                return new GLMouseClickInput(args.Button == MouseButton.Button1 ? InputType.PrimarySelect : InputType.SecondarySelect, up ? InputState.Finish : InputState.Start);
+                return new GLMouseClickInput(args.Button == MouseButton.Left ? InputType.PrimarySelect : InputType.SecondarySelect, up ? InputState.Finish : InputState.Start);
             }
         }
 
@@ -136,6 +136,9 @@ namespace LabBox.OpenGLVisualization
                         return InputType.Exit;
                     case Key.P:
                         return InputType.Pause;
+                    case Key.ControlLeft:
+                    case Key.ControlRight:
+                        return InputType.MultiSelect;
                     default:
                         return null;
                 }

@@ -1,5 +1,6 @@
 ﻿using LabBox.Visualization.Input;
 using LabBox.Visualization.Universe;
+using LabBox.Visualization.Universe.Interaction;
 using LabBox.Visualization.Universe.ViewModel;
 using Math3D;
 using Math3D.Geometry;
@@ -104,11 +105,14 @@ namespace LabBox.OpenGLVisualization
             uni.ContactResolver = new LoopingContactResolver(new ImpulseCollisionEngine() { CollidingThresholdSpeed = 0.01f });
             uni.ContactFinder = new BasicContactFinder();
 
-            var physicsRunner = new RealTimePhysicsRunner(uni);
-            //var physicsRunner = new FixedTimePhysicsRunner(uni);
+            //var physicsRunner = new RealTimePhysicsRunner(uni);
+            var physicsRunner = new FixedTimePhysicsRunner(uni);
             vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Pause && inpt.State == InputState.Start).Subscribe(inpt => physicsRunner.TogglePause());
             vis.Input.InputEvents.Where(inpt => inpt.Input == InputType.Exit).Subscribe(inpt => vis.EndVis());
             vis.VisStarted += (sender, e) => physicsRunner.StartPhysics();
+
+            var selector = InputHandlers.BodySelector(vis.Input, uni, vis.Camera);
+            selector.Selection += (sender, e) => Console.WriteLine($"Selection Type: {e.SelectType}, Index: {uni.Bodies.ToList().IndexOf(e.Item)}, Total Selected: {selector.SelectedItems.Count}");
 
             return vis;
         }

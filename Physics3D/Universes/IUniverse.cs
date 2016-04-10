@@ -30,7 +30,7 @@ namespace Physics3D.Universes
 
         ICollection<IBody> Bodies { get; }
         ICollection<ForceField> ForceFields { get; }
-        IContactResolver ContactResolver { get; }        
+        IContactResolver ContactResolver { get; }
 
         void Update(double deltaTime);
     }
@@ -39,14 +39,15 @@ namespace Physics3D.Universes
     {
         public static IEnumerable<IBody> BodiesWithin(this IUniverse uni, IVolume vol) => uni.Bodies.Where(b => vol.VolumeFunc(b.Dynamics.Transform.Pos));
 
-        public static Optional<IBody> SelectBody(this IUniverse uni, Vector3 origin, Vector3 dir)
+        public static Optional<IBody> RaySelect(this IUniverse uni, Vector3 origin, Vector3 dir, IRay rayCastProvider = null)
         {
+            if (rayCastProvider == null) rayCastProvider = new Ray();
             double furthestBodyPos = uni.Bodies.Max(b => (b.Position() - origin).Magnitude);
-            var res = Ray.Cast(uni.Bodies.Select(b => new TransformedObj<IEdgeIntersector>(b.Dynamics.Transform, b.CollisionShape)), origin, dir, furthestBodyPos);
+            var res = rayCastProvider.Cast(uni.Bodies.Select(b => new TransformedObj<IEdgeIntersector>(b.Dynamics.Transform, b.CollisionShape)), origin, dir, furthestBodyPos);
             return
                 res.Match(
                     hit => uni.Bodies.Single(b => b.CollisionShape == hit.HitObject.Obj).ToOptional(),
-                    none => Optional<IBody>.Nothing
+                    () => Optional<IBody>.Nothing
                 );
         }
     }

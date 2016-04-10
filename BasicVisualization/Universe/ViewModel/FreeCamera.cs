@@ -2,13 +2,9 @@
 using Math3D;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LabBox.Visualization.Universe.ViewModel
 {
