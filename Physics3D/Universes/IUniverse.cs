@@ -42,7 +42,7 @@ namespace Physics3D.Universes
         public static Optional<IBody> RaySelect(this IUniverse uni, Vector3 origin, Vector3 dir, IRay rayCastProvider = null)
         {
             if (rayCastProvider == null) rayCastProvider = new Ray();
-            double furthestBodyPos = uni.Bodies.Max(b => (b.Position() - origin).Magnitude);
+            double furthestBodyPos = uni.Bodies.Max(b => (b.Position() - origin).Magnitude) + 100; // need to tune this. need to basically find the max dimension size of the biggest object
             var res = rayCastProvider.Cast(uni.Bodies.Select(b => new TransformedObj<IEdgeIntersector>(b.Dynamics.Transform, b.CollisionShape)), origin, dir, furthestBodyPos);
             return
                 res.Match(

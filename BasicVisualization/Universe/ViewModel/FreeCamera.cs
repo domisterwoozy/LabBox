@@ -20,12 +20,12 @@ namespace LabBox.Visualization.Universe.ViewModel
         private readonly List<IDisposable> subs = new List<IDisposable>();
 
         public float VertFOV { get; set; } = (float)Math.PI / 3;
-        public float MaxRange { get; set; } = 70.0f;
+        public float MaxRange { get; set; } = 30.0f;
         public float MinRange { get; set; } = 0.1f;
         public float AspectRatio { get; } = 16.0f / 9.0f;
 
         public Vector3 Pos { get; private set; } = new Vector3(10, 10, 10);
-        public Vector3 UpDir { get; private set; } = Vector3.K;
+        public Vector3 UpDir { get; private set; } = Vector3.J;
         public Vector3 LookAtPos { get; private set; } = Vector3.Zero;
 
         /// <summary>

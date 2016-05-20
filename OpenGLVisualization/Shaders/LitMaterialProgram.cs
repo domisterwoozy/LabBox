@@ -31,6 +31,13 @@ namespace LabBox.OpenGLVisualization.Shaders
             GL.UniformMatrix4(GetUniformID("mvp"), false, ref mvp);
         }
 
+        public void SetMVP(Matrix4 vp, Matrix4 m)
+        {
+            GL.UniformMatrix4(GetUniformID("model"), false, ref m);
+            Matrix4 mvp = m * vp;
+            GL.UniformMatrix4(GetUniformID("mvp"), false, ref mvp);
+        }
+
         public void SetMaterialProperties(Vector3 specularColor, float shininess)
         {
             GL.Uniform1(GetUniformID("materialShininess"), shininess);
@@ -70,8 +77,9 @@ namespace LabBox.OpenGLVisualization.Shaders
             // lol this codes fucking insane
             // the texture units are reffered to through the enum when activating/binding
             // then when sending to the shader you refer to the numeral value of the texture unit
+            // i believe THIS IS NOT WORKING IN VR
             int currentTextureUnit = (int)TextureUnit.Texture0;
-            for (int i = 0; i < shadowMapTextureIDs.Length; i++)
+            foreach (int i in Enumerable.Range(0, shadowMapTextureIDs.Length))
             {
                 // bind the texture to a texture unit
                 GL.ActiveTexture((TextureUnit)currentTextureUnit);

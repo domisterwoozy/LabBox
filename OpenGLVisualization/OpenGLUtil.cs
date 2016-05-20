@@ -72,13 +72,13 @@ namespace LabBox.OpenGLVisualization
             return textureID;
         }        
 
-        public static int CreateDepthTexture(int frameBufferID)
+        public static int CreateDepthTexture(int frameBufferID, int size)
         {
             UseFrameBuffer(frameBufferID);
             int textureID = CreateTexture();
             UseTexture2D(textureID);
             // specify the texture format and parameters
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent16, 8192, 8192, 0, PixelFormat.DepthComponent, PixelType.Float, (IntPtr)0);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent16, size, size, 0, PixelFormat.DepthComponent, PixelType.Float, (IntPtr)0);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);

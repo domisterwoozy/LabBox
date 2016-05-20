@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicsIntegrationTests", "PhysicsIntegrationTests\PhysicsIntegrationTests.csproj", "{6EC3CE41-FF1D-4B48-AE56-5BC91F83DA95}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGLVisualization", "OpenGLVisualization\OpenGLVisualization.csproj", "{00855522-5B2D-4868-9103-7ABAB16783F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisTests", "VisTests\VisTests.csproj", "{B0B824F4-0D7D-4CC3-B5E9-6B5E3A69BE7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloVR", "HelloVR\HelloVR.csproj", "{8E0A7915-C60D-4697-8965-C5C3599E145D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{B0B824F4-0D7D-4CC3-B5E9-6B5E3A69BE7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0B824F4-0D7D-4CC3-B5E9-6B5E3A69BE7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0B824F4-0D7D-4CC3-B5E9-6B5E3A69BE7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E0A7915-C60D-4697-8965-C5C3599E145D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E0A7915-C60D-4697-8965-C5C3599E145D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E0A7915-C60D-4697-8965-C5C3599E145D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E0A7915-C60D-4697-8965-C5C3599E145D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,7 +17,8 @@ namespace Math3D.Geometry
             if (filter != null) transformedIntersectors = transformedIntersectors.Where(filter);
 
             var edge = new Edge(origin, origin + rayLength * dir.UnitDirection);
-            foreach (var transformedIntersector in transformedIntersectors.OrderBy(o => (o.ObjTransform.Pos - origin).MagSquared))
+            // todo: this order by is not good enough. we really need to find all intersectiosn and just return the closest
+            foreach (var transformedIntersector in transformedIntersectors.OrderBy(o => (o.ObjTransform.Pos - origin).MagSquared)) 
             {
                 Edge edgeLocal = transformedIntersector.ObjTransform.ToLocalSpace(edge);
                 IEnumerable<Intersection> inters = transformedIntersector.Obj.FindIntersections(edge);

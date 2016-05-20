@@ -16,16 +16,16 @@ namespace Physics3D.Universes
 {
     public static class SampleUniverses
     {
-        public static BasicUniverse SunEarth(double distance, double sunMass)
+        public static BasicUniverse SunEarth(double distance, double sunMass, double height = 0)
         {
             double gravConstant = 1.0;
             double earthMass = Math.Pow(10, -5);
 
             double earthSpeed = Math.Sqrt(gravConstant * sunMass / distance); // for circular orbit
 
-            var sun = BodyFactory.PointMass(sunMass, Vector3.Zero, Vector3.Zero);
+            var sun = BodyFactory.PointMass(sunMass, Vector3.Zero + Vector3.J * height, Vector3.Zero);
             sun.Dynamics.Fix();
-            var earth = BodyFactory.PointMass(earthMass, distance * Vector3.I, earthSpeed * Vector3.J);
+            var earth = BodyFactory.PointMass(earthMass, distance * Vector3.I + Vector3.J * height, earthSpeed * Vector3.K);
             earth.Dynamics.ThrustInputs(Vector3.Zero, new Vector3(1,1,1), 1); // add a slight rotation to earth
 
             var uni = new BasicUniverse();
@@ -40,32 +40,32 @@ namespace Physics3D.Universes
             double gravConstant = 1.0;
             double earthMass = Math.Pow(10, -5);
            
-            var sun = BodyFactory.SphereMass(1.0, sunMass, Vector3.Zero, Vector3.Zero);
+            var sun = BodyFactory.SphereMass(0.2, sunMass, Vector3.Zero, Vector3.Zero);
             sun.Dynamics.Fix();
             sun.Material.DynamicFrictionCoef = 0.0f;
             sun.Material.StaticFrictionCoef = 0.0f;
 
-            var satOne = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.I, Vector3.Zero);
+            var satOne = BodyFactory.SphereMass(0.2, earthMass, distance * Vector3.I, Vector3.Zero);
             satOne.Material.Epsilon = 0.75f;
             satOne.Material.DynamicFrictionCoef = 0.05f;
             satOne.Material.StaticFrictionCoef = 0.1f;
 
-            var satTwo = BodyFactory.SphereMass(1.0, earthMass, -distance * Vector3.I, Vector3.I - Vector3.J - Vector3.K);
+            var satTwo = BodyFactory.SphereMass(0.2, earthMass, -distance * Vector3.I, Vector3.I - Vector3.J - Vector3.K);
             satTwo.Material.Epsilon = 0.75f;
             satTwo.Material.DynamicFrictionCoef = 0.05f;
             satTwo.Material.StaticFrictionCoef = 0.1f;
 
-            var satThree = BodyFactory.SphereMass(1.0, earthMass, distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
+            var satThree = BodyFactory.SphereMass(0.2, earthMass, distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
             satThree.Material.Epsilon = 0.75f;
             satThree.Material.DynamicFrictionCoef = 0.05f;
             satThree.Material.StaticFrictionCoef = 0.1f;
 
-            var satFour = BodyFactory.SphereMass(1.0, earthMass, -distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
+            var satFour = BodyFactory.SphereMass(0.2, earthMass, -distance * Vector3.J, Vector3.I - Vector3.J - Vector3.K);
             satFour.Material.Epsilon = 0.75f;
             satFour.Material.DynamicFrictionCoef = 0.05f;
             satFour.Material.StaticFrictionCoef = 0.1f;
 
-            var satFive = BodyFactory.SphereMass(3.0, 10 * earthMass, -10 *distance * Vector3.J, Vector3.J);
+            var satFive = BodyFactory.SphereMass(0.2, 10 * earthMass, -10 *distance * Vector3.J, Vector3.J);
             satFive.Material.Epsilon = 0.75f;
             satFive.Material.DynamicFrictionCoef = 0.05f;
             satFive.Material.StaticFrictionCoef = 0.1f;

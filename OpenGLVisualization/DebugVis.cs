@@ -48,7 +48,7 @@ namespace LabBox.OpenGLVisualization
             textureProgram = new SimpleTextureProgram();
 
             frameBufferID = OpenGLUtil.CreateFrameBuffer();            
-            textureID = OpenGLUtil.CreateDepthTexture(frameBufferID);    
+            textureID = OpenGLUtil.CreateDepthTexture(frameBufferID, 2048);    
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
@@ -75,8 +75,6 @@ namespace LabBox.OpenGLVisualization
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertexBufferData.Length); // here the fragment shader will automatically write the depth to the texture bc of location 0
             depthProgram.DisableAttributes();
-            //OpenGLUtil.CheckInvalidFrameBuffer();
-
 
             OpenGLUtil.UseFrameBuffer(0); // now render to the screen
             GL.Viewport(0, 0, Width, Height);

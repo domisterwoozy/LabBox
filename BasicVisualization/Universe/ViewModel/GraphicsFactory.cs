@@ -13,11 +13,11 @@ namespace LabBox.Visualization.Universe.ViewModel
 {
     public static class FlatFactory
     {
-        public static ImmutableArray<PrimitiveTriangle> NewCuboid(double width, double length, double height)
+        public static ImmutableArray<PrimitiveTriangle> NewCuboid(double xLength, double yLength, double zLength)
         {
-            double x = width / 2;
-            double y = length / 2;
-            double z = height / 2;
+            double x = xLength / 2;
+            double y = yLength / 2;
+            double z = zLength / 2;
 
             var verts = ImmutableArray.CreateBuilder<Vertex>();
             // tops four points in ccw order
