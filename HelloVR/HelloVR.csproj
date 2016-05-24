@@ -39,8 +39,28 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,18 +69,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EyeFrameBuffer.cs" />
-    <Compile Include="GLRenderModel.cs" />
-    <Compile Include="GLVRScene.cs" />
+    <Compile Include="IVRGraphics.cs" />
+    <Compile Include="OpenGL\EyeFrameBuffer.cs" />
+    <Compile Include="OpenGL\GLRenderModel.cs" />
     <Compile Include="Headers\openvr_api.cs" />
-    <Compile Include="HelloVRWindow.cs" />
+    <Compile Include="OpenGL\HelloVRWindow.cs" />
     <Compile Include="IGLDrawable.cs" />
-    <Compile Include="OpenGLUtil.cs" />
+    <Compile Include="OpenGL\OpenGLUtil.cs" />
+    <Compile Include="OpenGL\GLVRGraphics.cs" />
+    <Compile Include="OpenVRInputObservable.cs" />
+    <Compile Include="OpenVRScene.cs" />
     <Compile Include="OpenVRUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shaders\OpenGLProgram.cs" />
-    <Compile Include="Shaders\RenderModelProgram.cs" />
+    <Compile Include="OpenGL\Shaders\OpenGLProgram.cs" />
+    <Compile Include="OpenGL\Shaders\RenderModelProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -68,12 +91,12 @@
     <None Include="Headers\openvr_api.json" />
     <None Include="Headers\openvr_capi.h" />
     <None Include="Headers\openvr_driver.h" />
-    <None Include="OpenTK.dll.config" />
+    <None Include="OpenGL\OpenTK.dll.config" />
     <None Include="packages.config" />
-    <None Include="Shaders\rendermodelvs.glsl">
+    <None Include="OpenGL\Shaders\rendermodelvs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\rendermodelfs.glsl">
+    <None Include="OpenGL\Shaders\rendermodelfs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -84,6 +107,20 @@
     <Content Include="openvr_api.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BasicVisualization\Visualization.csproj">
+      <Project>{D43CF0D8-2CD3-41EC-A4BF-6CA881E616DB}</Project>
+      <Name>Visualization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Math3D\Math3D.csproj">
+      <Project>{F0FF2BBC-425A-4DEB-AB0D-590B54E02EF3}</Project>
+      <Name>Math3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{AF19557C-9EA0-415E-831A-0F14C243FF8B}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

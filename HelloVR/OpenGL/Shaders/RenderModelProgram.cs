@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace HelloVR.Shaders
+namespace HelloVR.OpenGL.Shaders
 {
     public sealed class RenderModelProgram : OpenGLProgram
     {

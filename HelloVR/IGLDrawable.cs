@@ -7,31 +7,23 @@ using System.Threading.Tasks;
 
 namespace HelloVR
 {
-    public interface IGLDrawable
+    public interface IVRDrawable
     {
-        void Update();
-        void Draw(Matrix4 viewProjmatrix);
+        void Draw(Matrix4 viewProjmatrix, Vector3 camPos);
     }
 
-    public sealed class BasicDrawable : IGLDrawable
+    public sealed class BasicDrawable : IVRDrawable
     {
-        public Action UpdateAction { get; }
-        public Action<Matrix4> DrawAction { get; }
+        public Action<Matrix4, Vector3> DrawAction { get; }
 
-        public BasicDrawable(Action updateAction, Action<Matrix4> drawAction)
+        public BasicDrawable(Action<Matrix4, Vector3> drawAction)
         {
-            UpdateAction = updateAction;
             DrawAction = drawAction;
         }
 
-        public void Draw(Matrix4 viewProjmatrix)
+        public void Draw(Matrix4 viewProjmatrix, Vector3 camPos)
         {
-            DrawAction(viewProjmatrix);
-        }
-
-        public void Update()
-        {
-            UpdateAction();
+            DrawAction(viewProjmatrix, camPos);
         }
     }
 }

@@ -12,15 +12,16 @@ using LabBox.OpenGLVisualization.Shaders;
 using LabBox.OpenGLVisualization.ViewModel;
 using OpenTK.Graphics;
 using HelloVR;
+using HelloVR.OpenGL;
 
 namespace LabBox.OpenGLVisualization
 {
     public class OpenGLVisualization : GameWindow, ILabBoxVis
     {
-        private const int NumFSAASamples = 8;
-        private const int ShadowMapSize = 8192;
+        private const int NumFSAASamples = 2;
+        private const int ShadowMapSize = 8196;
 
-        private const float FarClip = 5;
+        private const float FarClip = 10;
         private const float NearClip = 0.1f;
 
         private int vertexBufferID;
@@ -50,44 +51,41 @@ namespace LabBox.OpenGLVisualization
         public IEnumerable<IGraphicalBody> Bodies => bodies;
         public IEnumerable<IHUDView> HUDs => Enumerable.Empty<IHUDView>(); // not yet implemented 
         public ICamera Camera { get; }
-        public IInputObservable Input { get; }
+        public IInputObservable Input { get; private set; }
 
         // VR!
-        private const bool VRFlag = true;
-        private GLVRScene vrScene;
-        private BasicDrawable vrDrawable;
-        
+        private readonly bool VRFlag = true;
+        private readonly BasicDrawable vrDrawable;
+        private readonly OpenVRScene vrScene;        
 
-        public OpenGLVisualization(IInputObservable inputHandler, ICamera camera, IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) :
-            base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat),
+        public OpenGLVisualization(IEnumerable<IGraphicalBody> graphicalBodies, bool vr, params ILightSource[] lights) : 
+            base(1220, 720, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat),
                 "LabBox Vis")
         {
-            Input = inputHandler;
-            Camera = camera;
-            bodies = graphicalBodies.ToList();
-            lightSources = lights.ToList();
+            VRFlag = vr;
+            if (VRFlag)
+            {
+                vrScene = OpenVRScene.Create(NearClip, FarClip);
+                Input = vrScene.OpenVRInput;
+                vrDrawable = new BasicDrawable((vpMat, camPos) => RenderVR(vpMat, camPos));
+            }
+            else
+            {
+                Input = new OpenGLInputObservable(this);                
+            }
 
-            BindEvents();
-        }
-
-        public OpenGLVisualization(IEnumerable<IGraphicalBody> graphicalBodies, params ILightSource[] lights) : 
-            base(1920, 1080, new GraphicsMode(GraphicsMode.Default.ColorFormat, GraphicsMode.Default.Depth, GraphicsMode.Default.Stencil, NumFSAASamples, GraphicsMode.Default.AccumulatorFormat),
-                "LabBox Vis")
-        {
-            // use opengl defaults
-            Input = new OpenGLInputObservable(this);
+            // not sure how we should handle the ICamera interface in VR yet
             var cam = new FreeCamera(Input);
-            cam.MaxRange = FarClip * 2;
+            cam.MaxRange = FarClip;
             cam.MinRange = NearClip;
             toDispose.Add(cam);
-
             Camera = cam;
+
             bodies = graphicalBodies.ToList();
             lightSources = lights.ToList();
 
             BindEvents();           
         }
-
 
         private void BindEvents()
         {
@@ -129,27 +127,25 @@ namespace LabBox.OpenGLVisualization
 
         private void BasicVis_Load(object sender, EventArgs e)
         {
-            // window setup
-            Title = "Basic Vis";
-            WindowBorder = WindowBorder.Hidden;            
-            WindowState = WindowState.Fullscreen;            
-            CursorVisible = true;
-
-            // my model setup
-            Camera.IsLocked = false;
-
-            if (VRFlag)
-            {
-                vrScene = GLVRScene.InitScene(NearClip, FarClip);
-                vrDrawable = new BasicDrawable(() => { }, vpMat => RenderVR(vpMat));
-            }
-
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(Color.White);
             GL.Enable(EnableCap.DepthTest); // enable depth testing
             GL.DepthFunc(DepthFunction.Less); // only accept fragment if it is closer to the camera than whats in there already
             GL.Enable(EnableCap.Multisample); // standard AA
             GL.Enable(EnableCap.Blend); // transparency
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha); // transparency func
+                     
+            if (VRFlag)
+            {
+                WindowState = WindowState.Minimized;
+                vrScene.InitGraphics(new GLVRGraphics(vrScene, true)); // always use GL graphics
+            }
+            else
+            {
+                WindowBorder = WindowBorder.Hidden;
+                WindowState = WindowState.Fullscreen;
+                CursorVisible = false;
+                Camera.IsLocked = false;
+            }         
 
             mainProgram = new LitMaterialProgram();
             depthProgram = new DepthMapProgram();
@@ -192,18 +188,18 @@ namespace LabBox.OpenGLVisualization
         }
 
         private void BasicVis_UpdateFrame(object sender, FrameEventArgs e)
-        {
+        {            
             if (!hasStarted)
             {
                 hasStarted = true;
                 VisStarted?.Invoke(this, e);
             }
             if (UpdateBodiesCollection()) PopulateVertexBuffer();
-            if (VRFlag) vrScene.UpdateTracking();
+            if (VRFlag) vrScene.UpdateTracking(); // update tracking every frame
         }
 
         private void BasicVis_RenderFrame(object sender, FrameEventArgs e)
-        {
+        {            
             RenderLightMapDepths();           
 
             if (VRFlag)
@@ -251,7 +247,6 @@ namespace LabBox.OpenGLVisualization
                     depthProj = Matrix4.CreatePerspectiveFieldOfView(light.ConeAngle * 2, 1.0f, Camera.MinRange, Camera.MaxRange); // uses camera specs to guide percision
                     depthView = Matrix4.LookAt(light.Pos.Xyz, light.Pos.Xyz + light.ConeDir, upDir); 
                 }
-
 
                 OpenGLUtil.UseFrameBuffer(light.FrameBufferID); // use our custom framebuffer instead of the screen
                 GL.Viewport(0, 0, ShadowMapSize, ShadowMapSize); // render on teh entire framebuffer
@@ -342,13 +337,12 @@ namespace LabBox.OpenGLVisualization
             mainProgram.DisableAttributes();
         } 
 
-        private void RenderVR(Matrix4 viewProjMatrix)
+        private void RenderVR(Matrix4 viewProjMatrix, Vector3 camPos)
         {                 
             mainProgram.UseProgram();
 
             // camera properties
-            // todo: need an api function to get position of each individual eye
-            mainProgram.SetCameraPosition(vrScene.HMDPos);
+            mainProgram.SetCameraPosition(camPos);
 
             // light/shadow properties           
             mainProgram.AddLights(openGLLights.ToArray());

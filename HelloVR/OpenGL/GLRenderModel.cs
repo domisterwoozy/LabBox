@@ -3,30 +3,42 @@ using System.Runtime.InteropServices;
 using Valve.VR;
 using OpenTK;
 using System;
-using HelloVR.Shaders;
 using System.Threading;
 using System.Collections.Generic;
+using HelloVR.OpenGL.Shaders;
 
-namespace HelloVR
+namespace HelloVR.OpenGL
 {
-    public class GLRenderModels : IGLDrawable
+    public class GLRenderModels : IVRDrawable
     {
         private readonly RenderModelProgram program = new RenderModelProgram();        
-        private readonly Dictionary<uint, GLRenderModel> models = new Dictionary<uint, GLRenderModel>();
+        private readonly Dictionary<int, GLRenderModel> models;
+        private readonly OpenVRScene scene;
 
-        private readonly CVRSystem hmd;
-        private TrackedDevicePose_t[] devicePoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
-
-        public GLRenderModels(CVRSystem hmd)
+        private GLRenderModels(OpenVRScene scene, Dictionary<int, GLRenderModel> models)
         {
-            this.hmd = hmd;
+            this.scene = scene;
+            this.models = models;
+        }
 
-            ETrackedPropertyError err = ETrackedPropertyError.TrackedProp_Success;
-            for (uint trackedDeviceIndex = OpenVR.k_unTrackedDeviceIndex_Hmd + 1; trackedDeviceIndex < OpenVR.k_unMaxTrackedDeviceCount; trackedDeviceIndex++)
+        /// <summary>
+        /// I really, really want to make this asynchronous so that we can load render models on the fly without interupting the experience.
+        /// I need to look more into how we can accomplish this without casuing errors in OpenGL.
+        /// </summary>
+        /// <returns></returns>
+        public static GLRenderModels Create(OpenVRScene scene)
+        {
+            const int retryInterval = 10;
+
+            var models = new Dictionary<int, GLRenderModel>();
+            foreach (int trackedDeviceIndex in OpenVRUtil.DeviceIndexes)
             {
-                if (!hmd.IsTrackedDeviceConnected(trackedDeviceIndex)) continue;
-                string renderModelName = hmd.GetTrackedDeviceStr(trackedDeviceIndex, ETrackedDeviceProperty.Prop_RenderModelName_String, ref err);
-                if (err != ETrackedPropertyError.TrackedProp_Success) throw new InvalidOperationException("Failed to retrieve prop name for connected tracked device");
+                if (trackedDeviceIndex == OpenVR.k_unTrackedDeviceIndex_Hmd) continue; // dont want to render the actual HMD! it would block your face! (yep i did that)
+                if (!scene.IsConnected(trackedDeviceIndex)) continue;
+
+                string renderModelName =
+                    scene.DeviceInfo(trackedDeviceIndex, ETrackedDeviceProperty.Prop_RenderModelName_String)
+                    .Validate(propErr => new InvalidOperationException($"Failed to retrieve prop name for connected tracked device: {propErr}"));
 
                 // load render model async
                 IntPtr renderModelPtr = IntPtr.Zero;
@@ -34,8 +46,8 @@ namespace HelloVR
                 while (rmErr == EVRRenderModelError.Loading) // is this seriously how im supposed to do this? no callback?
                 {
                     rmErr = OpenVR.RenderModels.LoadRenderModel_Async(renderModelName, ref renderModelPtr);
-                    Thread.Sleep(100); // async seems to be breaking opengl?
-                    //await Task.Delay(100); // try again every 0.1 seconds
+                    Thread.Sleep(retryInterval); // async seems to be breaking opengl!?
+                    //await Task.Delay(retryInterval); // try again every 0.1 seconds
                 }
                 if (rmErr != EVRRenderModelError.None || renderModelPtr == IntPtr.Zero) throw new InvalidOperationException($"Failed to load Render Model: {renderModelName}");
                 var renderModel = (RenderModel_t)Marshal.PtrToStructure(renderModelPtr, typeof(RenderModel_t));
@@ -46,8 +58,8 @@ namespace HelloVR
                 while (rmErr == EVRRenderModelError.Loading) // is this seriously how im supposed to do this? no callback?
                 {
                     rmErr = OpenVR.RenderModels.LoadTexture_Async(renderModel.diffuseTextureId, ref texturePtr);
-                    Thread.Sleep(100); // async seems to be breaking opengl?
-                    //await Task.Delay(100); // try again every 0.1 seconds
+                    Thread.Sleep(retryInterval); // async seems to be breaking opengl?
+                    //await Task.Delay(retryInterval); // try again every 0.1 seconds
                 }
                 if (rmErr != EVRRenderModelError.None || texturePtr == IntPtr.Zero) throw new InvalidOperationException($"Failed to load texture for Render Model: {renderModelName}");
                 var diffuseTexture = (RenderModel_TextureMap_t)Marshal.PtrToStructure(texturePtr, typeof(RenderModel_TextureMap_t));
@@ -57,37 +69,33 @@ namespace HelloVR
                 OpenVR.RenderModels.FreeRenderModel(renderModelPtr);
                 OpenVR.RenderModels.FreeTexture(texturePtr);
             }
-        }
 
-        public void UpdateTracking(TrackedDevicePose_t[] devicePoses)
-        {
-            this.devicePoses = devicePoses;
+            return new GLRenderModels(scene, models);
         }
 
         public void Update()
-        {            
+        {
         }
 
-        public void Draw(Matrix4 viewProjmatrix)
+        public void Draw(Matrix4 viewProjmatrix, Vector3 eyePosIgnored)
         {
             program.UseProgram();
-            foreach (uint deviceIndex in models.Keys)
+            foreach (int deviceIndex in models.Keys)
             {
-                var pose = devicePoses[deviceIndex];
-                var model = models[deviceIndex];
-                if (!pose.bPoseIsValid) throw new InvalidOperationException("Pose is invalid");
+                if (!scene.ValidPose(deviceIndex))
+                {
+                    Console.WriteLine("Unable to render Render Model b/c it's pose is not valid.");
+                    continue;
+                }
 
-                Matrix4 devToTracking = pose.mDeviceToAbsoluteTracking.ToGLMatrix4();
-                //Matrix4 mvp = viewProjmatrix * devToTracking;
+                Matrix4 devToTracking = scene.TrackedPose(deviceIndex);
                 Matrix4 mvp = devToTracking * viewProjmatrix;
                 program.SetMatrix(mvp);
-                model.Draw();
+                models[deviceIndex].Draw();
                 GL.BindVertexArray(0);
             }
             GL.UseProgram(0);
         }
-
-        
 
         private class GLRenderModel
         {

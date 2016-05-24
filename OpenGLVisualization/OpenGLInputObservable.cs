@@ -139,6 +139,10 @@ namespace LabBox.OpenGLVisualization
                     case Key.ControlLeft:
                     case Key.ControlRight:
                         return InputType.MultiSelect;
+                    case Key.PageUp:
+                        return InputType.SpeedUp;
+                    case Key.PageDown:
+                        return InputType.SlowDown;
                     default:
                         return null;
                 }

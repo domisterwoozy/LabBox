@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL4;
 
-namespace HelloVR
+namespace HelloVR.OpenGL
 {
     public class EyeFrameBuffer
     {

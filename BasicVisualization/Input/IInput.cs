@@ -9,7 +9,10 @@ namespace LabBox.Visualization.Input
         double Weight { get; }
     }
 
-    public enum InputState { Start, Finish, Maintained }
+    public enum InputState
+    {
+        Start, Finish, Maintained
+    }
 
     public enum InputType
     {
@@ -22,6 +25,7 @@ namespace LabBox.Visualization.Input
         TurnLeft, TurnRight, TurnUp, TurnDown,
 
         // State
+        SpeedUp, SlowDown,
         Exit, Pause
     }
 

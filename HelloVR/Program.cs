@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelloVR.OpenGL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -14,7 +15,6 @@ namespace HelloVR
         {
             var window = new HelloVRWindow("Hello VR");
             window.Run();
-
         }      
     }
 }

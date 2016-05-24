@@ -51,6 +51,7 @@
     <Compile Include="MyExtensions.cs" />
     <Compile Include="Optional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="UnorderedPair.cs" />
   </ItemGroup>
   <ItemGroup>

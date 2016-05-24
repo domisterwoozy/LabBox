@@ -24,7 +24,7 @@ namespace LabBox.Visualization.Universe.ViewModel
         public float MinRange { get; set; } = 0.1f;
         public float AspectRatio { get; } = 16.0f / 9.0f;
 
-        public Vector3 Pos { get; private set; } = new Vector3(10, 10, 10);
+        public Vector3 Pos { get; private set; } = new Vector3(2, 2, 2);
         public Vector3 UpDir { get; private set; } = Vector3.J;
         public Vector3 LookAtPos { get; private set; } = Vector3.Zero;
 
@@ -67,8 +67,8 @@ namespace LabBox.Visualization.Universe.ViewModel
             var turnDownInputs = from inpt in inputs where inpt.Input == InputType.TurnDown select inpt;
             subs.Add(turnLeftInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * -HorizontalRight())));
             subs.Add(turnRightInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * HorizontalRight())));
-            subs.Add(turnUpInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * Vector3.K)));
-            subs.Add(turnDownInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * -Vector3.K)));
+            subs.Add(turnUpInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * Vector3.J)));
+            subs.Add(turnDownInputs.Subscribe(inpt => MoveLookAtPos(inpt.Weight * TurnSpeed * -Vector3.J)));
 
             // handle movement inputs
             var fwdInputs = from inpt in inputs where inpt.Input == InputType.Forward select inpt;
@@ -96,8 +96,8 @@ namespace LabBox.Visualization.Universe.ViewModel
             foreach (var sub in subs) sub.Dispose();
         }
 
-        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.K).UnitDirection;
-        private Vector3 HorizontalRight() => HorizontalForward() % Vector3.K;
+        private Vector3 HorizontalForward() => (LookAtPos - Pos).ProjectToPlane(Vector3.J).UnitDirection;
+        private Vector3 HorizontalRight() => HorizontalForward() % Vector3.J;
         private void MoveLookAtPos(Vector3 amtToMove)
         {
             LookAtPos += amtToMove;
@@ -129,8 +129,8 @@ namespace LabBox.Visualization.Universe.ViewModel
             if (currentMovement.Contains(MovementDir.Backward)) Move((1.0 / PollsPerSecond) * MoveSpeed * -HorizontalForward());
             if (currentMovement.Contains(MovementDir.Left)) Move((1.0 / PollsPerSecond) * MoveSpeed * -HorizontalRight());
             if (currentMovement.Contains(MovementDir.Right)) Move((1.0 / PollsPerSecond) * MoveSpeed * HorizontalRight());
-            if (currentMovement.Contains(MovementDir.Up)) Move((1.0 / PollsPerSecond) * MoveSpeed * Vector3.K);
-            if (currentMovement.Contains(MovementDir.Down)) Move((1.0 / PollsPerSecond) * MoveSpeed * -Vector3.K);
+            if (currentMovement.Contains(MovementDir.Up)) Move((1.0 / PollsPerSecond) * MoveSpeed * Vector3.J);
+            if (currentMovement.Contains(MovementDir.Down)) Move((1.0 / PollsPerSecond) * MoveSpeed * -Vector3.J);
         }
 
         private enum MovementDir { Forward, Backward, Left, Right, Up, Down }

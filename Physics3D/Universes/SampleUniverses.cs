@@ -20,16 +20,22 @@ namespace Physics3D.Universes
         {
             double gravConstant = 1.0;
             double earthMass = Math.Pow(10, -5);
+            double moonMass = Math.Pow(10, -10);
 
             double earthSpeed = Math.Sqrt(gravConstant * sunMass / distance); // for circular orbit
+            earthSpeed *= 1.2;
+
+            double moonSpeed = Math.Sqrt(gravConstant * sunMass / (0.8 * distance));
 
             var sun = BodyFactory.PointMass(sunMass, Vector3.Zero + Vector3.J * height, Vector3.Zero);
             sun.Dynamics.Fix();
             var earth = BodyFactory.PointMass(earthMass, distance * Vector3.I + Vector3.J * height, earthSpeed * Vector3.K);
-            earth.Dynamics.ThrustInputs(Vector3.Zero, new Vector3(1,1,1), 1); // add a slight rotation to earth
+            earth.Dynamics.ThrustInputs(Vector3.Zero, new Vector3(0.1,0.1,0.1), 1); // add a slight rotation to earth
+            var moon = BodyFactory.PointMass(moonMass, 0.8 * distance * Vector3.I + Vector3.J * height, moonSpeed * Vector3.J);
+            moon.Dynamics.ThrustInputs(Vector3.Zero, new Vector3(0.1, 0.1, 0.1), 1); // add a slight rotation to earth
 
             var uni = new BasicUniverse();
-            uni.Bodies.Add(sun, earth);
+            uni.Bodies.Add(sun, earth, moon);
             uni.ForceFields.Add(ForceFieldFactory.Gravity(sun, gravConstant * sunMass));
 
             return uni;

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HelloVR.Shaders
+namespace HelloVR.OpenGL.Shaders
 {
     public abstract class OpenGLProgram
     {
@@ -16,8 +16,8 @@ namespace HelloVR.Shaders
         public OpenGLProgram(string vertexShaderFileName, string fragmentShaderFileName)
         {
             ProgramID = GL.CreateProgram();
-            VertexShaderID = OpenGLUtil.LoadShader($"Shaders\\{vertexShaderFileName}", ShaderType.VertexShader, ProgramID);
-            FragmentShaderID = OpenGLUtil.LoadShader($"Shaders\\{fragmentShaderFileName}", ShaderType.FragmentShader, ProgramID);
+            VertexShaderID = OpenGLUtil.LoadShader($"OpenGL\\Shaders\\{vertexShaderFileName}", ShaderType.VertexShader, ProgramID);
+            FragmentShaderID = OpenGLUtil.LoadShader($"OpenGL\\Shaders\\{fragmentShaderFileName}", ShaderType.FragmentShader, ProgramID);
             GL.LinkProgram(ProgramID);
             CheckErrors();
         }

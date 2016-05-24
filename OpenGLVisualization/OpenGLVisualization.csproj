@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -135,6 +136,10 @@
     <ProjectReference Include="..\BasicVisualization\Visualization.csproj">
       <Project>{d43cf0d8-2cd3-41ec-a4bf-6ca881e616db}</Project>
       <Name>Visualization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HelloVR\HelloVR.csproj">
+      <Project>{8E0A7915-C60D-4697-8965-C5C3599E145D}</Project>
+      <Name>HelloVR</Name>
     </ProjectReference>
     <ProjectReference Include="..\Math3D\Math3D.csproj">
       <Project>{f0ff2bbc-425a-4deb-ab0d-590b54e02ef3}</Project>

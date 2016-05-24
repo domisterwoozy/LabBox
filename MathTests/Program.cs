@@ -22,9 +22,8 @@
 // ***********************************************************************
 
 using NUnitLite;
-using System;
 
-namespace MathTests
+namespace NUnitLite.Tests
 {
     public class Program
     {
@@ -34,10 +33,9 @@ namespace MathTests
         /// </summary>
         /// <remarks>Run with --help for a full list of arguments supported</remarks>
         /// <param name="args"></param>
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            new AutoRun().Execute(args);
-            Console.ReadKey();
+            return new AutoRun().Execute(args);
         }
     }
 }

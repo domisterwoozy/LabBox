@@ -1,10 +1,9 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Drawing;
 using System.IO;
 
 
-namespace HelloVR
+namespace HelloVR.OpenGL
 {
     public static class OpenGLUtil
     {

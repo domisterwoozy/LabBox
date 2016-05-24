@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 namespace LabBox.Visualization.Universe
 {
     public class RealTimePhysicsRunner : IPhysicsRunner
-    {        
+    {
+        private double lastTimeMultiplier = 1.0;
+
         public IUniverse Universe { get; }
         
-        public bool IsPaused => TimeMultiplier == 0.0f;
-        public double TimeMultiplier { get; set; } = 1.0;
+        public bool IsPaused => TimeMultiplier == 0.0f;        
         public double MaxFrameLength { get; set; } = 3 * Math.Pow(10, -3);
+
+        private double timeMult = 1.0;
+        public double TimeMultiplier { get; set; } = 1.0;
 
         public RealTimePhysicsRunner(IUniverse uni)
         {
@@ -34,12 +38,13 @@ namespace LabBox.Visualization.Universe
 
         public void ResumePhysics()
         {
-            TimeMultiplier = 1.0f;
+            TimeMultiplier = lastTimeMultiplier;
         }
 
         public void PausePhysics()
         {
-            TimeMultiplier = 0.0f;
+            lastTimeMultiplier = TimeMultiplier;
+            TimeMultiplier = 0.0f;            
         }
 
         private void PhysicsLoop()
